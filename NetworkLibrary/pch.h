@@ -7,19 +7,27 @@
 #ifndef PCH_H
 #define PCH_H
 
+
 #include "framework.h"
 #include "define.h"
 
 /// Network
+#include <WinSock2.h>	// winsock과의 재정의 문제로 가장 먼저 컴파일 되어야함
 #include <mswsock.h>
-#include <WinSock2.h>
 #include <WS2tcpip.h>
+
+/// windows
+#include <Windows.h>
 
 /// IO
 #include <iostream>
 
 /// Thread
-#include <process.h>
+#include <thread>
 
+/// container
+#include <vector>
+#include "concurrent_vector.h"
+#include "concurrent_queue.h"
 
 #endif //PCH_H
