@@ -26,9 +26,7 @@ IOCPNetwork::~IOCPNetwork()
 // 서버 솔루션으로 옮겨질 내용들
 void IOCPNetwork::Run()
 {
-	// 종료 이벤트 생성
-	HANDLE hCleanupEvent[1];
-	if(WSA_INVALID_EVENT == (hCleanupEvent[0] = WSACreateEvent()))
+	if(WSA_INVALID_EVENT == (m_hCleanupEvent[0] = WSACreateEvent()))
 	{
 		printf("WSACreateEvent() failed: %d\n", WSAGetLastError());
 		return;
@@ -125,7 +123,7 @@ bool IOCPNetwork::CreateListenSocket()
 	freeaddrinfo(addrlocal);
 
 	// 소켓 컨텍스트 생성, 등록
-	m_pListenSocketCtxt = RegisterSocketCtxt(m_listenSocket, eIOType::ACCEPT);
+	m_pListenSocketCtxt = RegisterSocketCtxt(m_listenSocket, eIOType::ACCEPT, false);
 	if(!m_pListenSocketCtxt)
 	{
 		printf("failed to register listen socket to IOCP\n");
@@ -195,16 +193,351 @@ void IOCPNetwork::Finalize()
 
 SOCKET IOCPNetwork::CreateSocket()
 {
+	SOCKET newSocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_IP, NULL, 0, WSA_FLAG_OVERLAPPED);
+	if(newSocket == INVALID_SOCKET)
+	{
+		printf("WSASocket(sdSocket) failed: %d\n", WSAGetLastError());
+		return newSocket;
+	}
 
+	int zero = 0;
+	int rt = setsockopt(newSocket, SOL_SOCKET, SO_SNDBUF, (char*)&zero, sizeof(zero));
+	if(rt==SOCKET_ERROR)
+	{
+		printf("setsockopt(SNDBUF) failed: %d\n", WSAGetLastError());
+		return(newSocket);
+	}
 
-	return NULL;
+	return newSocket;
 }
 
-SocketContext* IOCPNetwork::RegisterSocketCtxt(SOCKET socket, eIOType IOType)
+SocketContext* IOCPNetwork::RegisterSocketCtxt(SOCKET socket, eIOType IOType, bool bAddToList)
 {
-	return nullptr;
+	SocketContext* newSocketCtxt = CreateSocketCtxt(socket, IOType);
+	if(!newSocketCtxt)
+	{
+		return nullptr;
+	}
+
+	m_hIOCP = CreateIoCompletionPort((HANDLE)socket, m_hIOCP, (DWORD_PTR)newSocketCtxt, 0);
+	if(!m_hIOCP)
+	{
+		printf("CreateIoCompletionPort() failed: %d\n", GetLastError());
+		if (newSocketCtxt->pIOContext)
+			delete newSocketCtxt->pIOContext;
+		delete newSocketCtxt;
+		return nullptr;
+	}
+
+	if(bAddToList)
+	{
+		InsertCtxtList(newSocketCtxt);
+	}
+
+	return newSocketCtxt;
+}
+
+SocketContext* IOCPNetwork::CreateSocketCtxt(SOCKET socket, eIOType IOType)
+{
+	SocketContext* newSocketCtxt = new SocketContext;
+
+	EnterCriticalSection(&m_criticalSection);
+
+	if(newSocketCtxt)
+	{
+		newSocketCtxt->pIOContext = new IOContext;
+		if(newSocketCtxt->pIOContext)
+		{
+			newSocketCtxt->socket = socket;
+			newSocketCtxt->pPrevSocketCtxt = nullptr;
+			newSocketCtxt->pNextSocketCtxt = nullptr;
+
+			newSocketCtxt->pIOContext->overlapped.Internal = 0;
+			newSocketCtxt->pIOContext->overlapped.InternalHigh = 0;
+			newSocketCtxt->pIOContext->overlapped.Offset = 0;
+			newSocketCtxt->pIOContext->overlapped.OffsetHigh = 0;
+			newSocketCtxt->pIOContext->overlapped.hEvent = NULL;
+			newSocketCtxt->pIOContext->IOOperation = IOType;
+			newSocketCtxt->pIOContext->pNextIOCtxt = NULL;
+			newSocketCtxt->pIOContext->nTotalBytes = 0;
+			newSocketCtxt->pIOContext->nSentBytes = 0;
+			newSocketCtxt->pIOContext->wsabuf.buf = newSocketCtxt->pIOContext->buffer;
+			newSocketCtxt->pIOContext->wsabuf.len = sizeof(newSocketCtxt->pIOContext->buffer);
+			newSocketCtxt->pIOContext->acceptedSocket = INVALID_SOCKET;
+
+			ZeroMemory(newSocketCtxt->pIOContext->wsabuf.buf, newSocketCtxt->pIOContext->wsabuf.len);
+		}
+		else
+		{
+			delete newSocketCtxt;
+			printf("new IOContext failed: %d\n", GetLastError());
+		}
+	}
+	else
+	{
+		printf("new SocketContext failed: %d\n", GetLastError());
+		return nullptr;
+	}
+
+	LeaveCriticalSection(&m_criticalSection);
+
+	return newSocketCtxt;
 }
 
 void IOCPNetwork::WorkerThread()
 {
+	bool bSuccess = false;
+	int rt = 0;
+
+	OVERLAPPED* overlapped = nullptr;
+	SocketContext* socketCtxt = nullptr;
+	SocketContext* acceptedSocketCtxt = nullptr;
+	IOContext* IOCtxt = nullptr;
+	WSABUF rcvBuf;
+	WSABUF sndBuf;
+	DWORD nRcvByte = 0;
+	DWORD nSndByte = 0;
+	DWORD flags = 0;
+	DWORD IOSize = 0;
+
+	while(true)
+	{
+		bSuccess = GetQueuedCompletionStatus(m_hIOCP, &IOSize, (PULONG_PTR)&socketCtxt, &overlapped, INFINITE);
+		if(!bSuccess)
+		{
+			printf("GetQueuedCompletionStatus() failed: %d\n", GetLastError());
+		}
+		
+		if(!socketCtxt)
+		{
+			return;
+		}
+
+		if(m_bEndServer)
+		{
+			return;
+		}
+
+		IOCtxt = reinterpret_cast<IOContext*>(overlapped);
+		if(IOCtxt->IOOperation!=eIOType::ACCEPT
+			&& (!bSuccess || (bSuccess && (IOSize==0))))
+		{
+			CloseSocketCtxt(socketCtxt);
+			continue;
+		}
+
+		switch (IOCtxt->IOOperation)
+		{
+		case eIOType::ACCEPT:
+			{
+				rt = setsockopt(socketCtxt->pIOContext->acceptedSocket, 
+					SOL_SOCKET, 
+					SO_UPDATE_ACCEPT_CONTEXT, 
+					(char*)&m_listenSocket,
+					sizeof(m_listenSocket));
+				if(rt == SOCKET_ERROR)
+				{
+					printf("setsockopt(SO_UPDATE_ACCEPT_CONTEXT) failed to update accept socket\n");
+					WSASetEvent(m_hCleanupEvent[0]);
+					return;
+				}
+
+				acceptedSocketCtxt = RegisterSocketCtxt(socketCtxt->pIOContext->acceptedSocket, eIOType::ACCEPT, true);
+
+				if(!acceptedSocketCtxt)
+				{
+					printf("failed to update accept socket to IOCP\n");
+					WSASetEvent(m_hCleanupEvent[0]);
+					return;
+				}
+
+				// Accept와 함께 Recv가 이루어졌다면 -> 
+				if(IOSize)
+				{
+					acceptedSocketCtxt->pIOContext->IOOperation = eIOType::WRITE;
+					acceptedSocketCtxt->pIOContext->nTotalBytes = IOSize;
+					acceptedSocketCtxt->pIOContext->nSentBytes = 0;
+					acceptedSocketCtxt->pIOContext->wsabuf.len = IOSize;
+					memcpy(acceptedSocketCtxt->pIOContext->buffer, socketCtxt->pIOContext->buffer, sizeof(socketCtxt->pIOContext->buffer));
+					acceptedSocketCtxt->pIOContext->wsabuf.buf = acceptedSocketCtxt->pIOContext->buffer;
+
+					// 에코 로직
+					nRet = WSASend(
+						lpPerSocketContext->pIOContext->SocketAccept,
+						&lpAcceptSocketContext->pIOContext->wsabuf, 1,
+						&dwSendNumBytes,
+						0,
+						&(lpAcceptSocketContext->pIOContext->Overlapped), NULL);
+
+					if (nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError())) {
+						printf("WSASend() failed: %d\n", WSAGetLastError());
+						CloseClient(lpAcceptSocketContext, FALSE);
+					}
+					else if (g_bVerbose) {
+						printf("WorkerThread %d: Socket(%d) AcceptEx completed (%d bytes), Send posted\n",
+							GetCurrentThreadId(), lpPerSocketContext->Socket, dwIoSize);
+					}
+				}
+			}
+			break;
+		}
+	}
+}
+
+void IOCPNetwork::CloseSocketCtxt(SocketContext* socketCtxt)
+{
+	EnterCriticalSection(&m_criticalSection);
+
+	if (socketCtxt) {
+
+		//
+		// force the subsequent closesocket to be abortative.
+		//
+		LINGER  lingerStruct;
+
+		lingerStruct.l_onoff = 1;
+		lingerStruct.l_linger = 0;
+		setsockopt(socketCtxt->socket, SOL_SOCKET, SO_LINGER,
+			(char*)&lingerStruct, sizeof(lingerStruct));
+		
+		if (socketCtxt->pIOContext->acceptedSocket != INVALID_SOCKET) {
+			closesocket(socketCtxt->pIOContext->acceptedSocket);
+			socketCtxt->pIOContext->acceptedSocket = INVALID_SOCKET;
+		};
+
+		closesocket(socketCtxt->socket);
+		socketCtxt->socket = INVALID_SOCKET;
+		RemoveCtxtList(socketCtxt);
+		socketCtxt = nullptr;
+	}
+	else 
+	{
+		printf("CloseSocketCtxt: socketCtxt is NULL\n");
+	}
+
+	LeaveCriticalSection(&m_criticalSection);
+}
+
+void IOCPNetwork::InsertCtxtList(SocketContext* socketCtxt)
+{
+	SocketContext* pTemp;
+
+	EnterCriticalSection(&m_criticalSection);
+
+	if (m_pClientSocketCtxtList == NULL) {
+
+		//
+		// add the first node to the linked list
+		//
+		socketCtxt->pPrevSocketCtxt = nullptr;
+		socketCtxt->pNextSocketCtxt = nullptr;
+		m_pClientSocketCtxtList = socketCtxt;
+	}
+	else {
+
+		//
+		// add node to head of list
+		//
+		pTemp = m_pClientSocketCtxtList;
+
+		m_pClientSocketCtxtList = socketCtxt;
+		socketCtxt->pPrevSocketCtxt = nullptr;
+		socketCtxt->pNextSocketCtxt = pTemp;
+
+		pTemp->pPrevSocketCtxt = socketCtxt;
+	}
+
+	LeaveCriticalSection(&m_criticalSection);
+}
+
+void IOCPNetwork::RemoveCtxtList(SocketContext* socketCtxt)
+{
+	SocketContext* pPrev;
+	SocketContext* pNext;
+	IOContext*     pNextIO = nullptr;
+	IOContext*     pTempIO = nullptr;
+
+	EnterCriticalSection(&m_criticalSection);
+
+	if (socketCtxt) {
+		pPrev = socketCtxt->pPrevSocketCtxt;
+		pNext = socketCtxt->pNextSocketCtxt;
+
+		if (!pPrev && !pNext) {
+
+			//
+			// This is the only node in the list to delete
+			//
+			m_pClientSocketCtxtList = nullptr;
+		}
+		else if (!pPrev && pNext) {
+
+			//
+			// This is the start node in the list to delete
+			//
+			pNext->pPrevSocketCtxt = nullptr;
+			m_pClientSocketCtxtList = pNext;
+		}
+		else if (pPrev && !pNext) {
+
+			//
+			// This is the end node in the list to delete
+			//
+			pPrev->pNextSocketCtxt = nullptr;
+		}
+		else if (pPrev && pNext) {
+
+			//
+			// Neither start node nor end node in the list
+			//
+			pPrev->pNextSocketCtxt = pNext;
+			pNext->pPrevSocketCtxt = pPrev;
+		}
+
+		//
+		// Free all i/o context structures per socket
+		//
+		pTempIO = socketCtxt->pIOContext;
+		while(pTempIO)
+		{
+			pNextIO = (IOContext*)(pTempIO->pNextIOCtxt);
+
+			if (m_bEndServer)
+			{
+				// 종료 상황에서의 컨텍스트 해제
+				// GetQueuedCompletionStatus에 의해 해제되지 않은 컨텍스트에 대해서만 확인한다.
+				while (!HasOverlappedIoCompleted((OVERLAPPED*)pTempIO))
+					Sleep(0);
+			}
+			delete pTempIO;
+
+			pTempIO = pNextIO;
+		}
+
+		delete socketCtxt;
+		socketCtxt = nullptr;
+	}
+	else 
+	{
+		printf("RemoveCtxtList: SocketContext is NULL\n");
+	}
+
+	LeaveCriticalSection(&m_criticalSection);
+}
+
+void IOCPNetwork::FreeCtxtList()
+{
+	SocketContext* pTemp1;
+	SocketContext* pTemp2;
+
+	EnterCriticalSection(&m_criticalSection);
+
+	pTemp1 = m_pClientSocketCtxtList;
+	while (pTemp1) {
+		pTemp2 = pTemp1->pNextSocketCtxt;
+		CloseSocketCtxt(pTemp1);
+		pTemp1 = pTemp2;
+	}
+
+	LeaveCriticalSection(&m_criticalSection);
 }

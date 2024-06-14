@@ -11,7 +11,7 @@ enum class eIOType
 
 struct IOContext
 {
-	WSAOVERLAPPED overlapped;
+	OVERLAPPED overlapped;
 	char buffer[MAX_BUF_SIZE];
 	WSABUF wsabuf;
 	int nTotalBytes;

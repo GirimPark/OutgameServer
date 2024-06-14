@@ -27,29 +27,22 @@ public:
 private:
 	SOCKET CreateSocket();
 	// 소켓 컨텍스트 생성해서 iocp에 등록, 리스트에 추가
-	SocketContext* RegisterSocketCtxt(SOCKET socket, eIOType IOType);
+	SocketContext* RegisterSocketCtxt(SOCKET socket, eIOType IOType, bool bAddToList);
+
+	SocketContext* CreateSocketCtxt(SOCKET socket, eIOType IOType);
 
 	void WorkerThread();
 
-	///
-	//bool CreateListenSocket();
-	//bool CreateAcceptSocket(bool bUpdateIOCP);
-
-	//SocketContext* UpdateCompletionPort(SOCKET socket, eIOType IOType, bool bAddToList);
-
-	//void CloseClient(SocketContext* socketCtxt);
-
-	//UINT WorkerThread(LPVOID workContext);
-
-
-	//SocketContext* CtxtAllocate(SOCKET socket, eIOType IOType);
-	//void CleanupCtxtList();
-	//void AddToCtxtList(SocketContext* socketCtxt);
-	//void RemoveFromCtxtList(SocketContext* socketCtxt);
+	// 임시로 사용
+	void CloseSocketCtxt(SocketContext* socketCtxt)
+	void InsertCtxtList(SocketContext* socketCtxt);
+	void RemoveCtxtList(SocketContext* socketCtxt);
+	void FreeCtxtList();
 
 
 private:
-	// cleaupEvent은 옮겨질수도,,
+	// cleaupEvent 옮길 예정
+	// 크리티컬 섹션 삭제 예정
 	bool m_bEndServer = false;
 
 	const char* m_port = DEFAULT_PORT;
@@ -58,7 +51,7 @@ private:
 	int m_nThread = 0;
 	std::vector<std::thread*> m_threads;
 	//HANDLE m_threadHandles[MAX_WORKER_THREAD];
-	//WSAEVENT m_hCleanupEvent[1];
+	WSAEVENT m_hCleanupEvent[1];
 	SocketContext* m_pListenSocketCtxt = nullptr;
 	SocketContext* m_pClientSocketCtxtList = nullptr;
 
