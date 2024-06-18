@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2005-2021 Intel Corporation
+    Copyright (c) 2005-2023 Intel Corporation
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -54,6 +54,7 @@ namespace graph_policy_namespace {
     // functor that, given an object accepted by the port, will return the
     /// field of type K being used for matching.
     template<typename K, typename KHash=tbb_hash_compare<typename std::decay<K>::type > >
+        __TBB_requires(tbb::detail::hash_compare<KHash, K>)
     struct key_matching {
         typedef K key_type;
         typedef typename std::decay<K>::type base_key_type;
@@ -108,7 +109,7 @@ template <typename Input, typename Output, typename B>
 class function_body_leaf : public function_body< Input, Output > {
 public:
     function_body_leaf( const B &_body ) : body(_body) { }
-    Output operator()(const Input &i) override { return body(i); }
+    Output operator()(const Input &i) override { return tbb::detail::invoke(body,i); }
     B get_body() { return body; }
     function_body_leaf* clone() override {
         return new function_body_leaf< Input, Output, B >(body);
@@ -183,7 +184,7 @@ class multifunction_body_leaf : public multifunction_body<Input, OutputSet> {
 public:
     multifunction_body_leaf(const B &_body) : body(_body) { }
     void operator()(const Input &input, OutputSet &oset) override {
-        body(input, oset); // body may explicitly put() to one or more of oset.
+        tbb::detail::invoke(body, input, oset); // body may explicitly put() to one or more of oset.
     }
     void* get_body_ptr() override { return &body; }
     multifunction_body_leaf* clone() override {
@@ -217,7 +218,7 @@ template <typename Input, typename Output, typename B>
 class type_to_key_function_body_leaf : public type_to_key_function_body<Input, Output> {
 public:
     type_to_key_function_body_leaf( const B &_body ) : body(_body) { }
-    Output operator()(const Input &i) override { return body(i); }
+    Output operator()(const Input &i) override { return tbb::detail::invoke(body, i); }
     type_to_key_function_body_leaf* clone() override {
         return new type_to_key_function_body_leaf< Input, Output, B>(body);
     }
@@ -230,7 +231,7 @@ class type_to_key_function_body_leaf<Input,Output&,B> : public type_to_key_funct
 public:
     type_to_key_function_body_leaf( const B &_body ) : body(_body) { }
     const Output& operator()(const Input &i) override {
-        return body(i);
+        return tbb::detail::invoke(body, i);
     }
     type_to_key_function_body_leaf* clone() override {
         return new type_to_key_function_body_leaf< Input, Output&, B>(body);
@@ -259,13 +260,18 @@ public:
             next_task = nullptr;
         else if (next_task)
             next_task = prioritize_task(my_node.graph_reference(), *next_task);
-        finalize(ed);
+        finalize<forward_task_bypass>(ed);
         return next_task;
+    }
+
+    task* cancel(execution_data& ed) override {
+        finalize<forward_task_bypass>(ed);
+        return nullptr;
     }
 };
 
 //! A task that calls a node's apply_body_bypass function, passing in an input of type Input
-//  return the task* unless it is SUCCESSFULLY_ENQUEUED, in which case return NULL
+//  return the task* unless it is SUCCESSFULLY_ENQUEUED, in which case return nullptr
 template< typename NodeType, typename Input >
 class apply_body_task_bypass : public graph_task {
     NodeType &my_node;
@@ -283,9 +289,13 @@ public:
             next_task = nullptr;
         else if (next_task)
             next_task = prioritize_task(my_node.graph_reference(), *next_task);
-        finalize(ed);
+        finalize<apply_body_task_bypass>(ed);
         return next_task;
+    }
 
+    task* cancel(execution_data& ed) override {
+        finalize<apply_body_task_bypass>(ed);
+        return nullptr;
     }
 };
 
@@ -303,10 +313,14 @@ public:
             next_task = nullptr;
         else if (next_task)
             next_task = prioritize_task(my_node.graph_reference(), *next_task);
-        finalize(ed);
+        finalize<input_node_task_bypass>(ed);
         return next_task;
     }
 
+    task* cancel(execution_data& ed) override {
+        finalize<input_node_task_bypass>(ed);
+        return nullptr;
+    }
 };
 
 // ------------------------ end of node task bodies -----------------------------------

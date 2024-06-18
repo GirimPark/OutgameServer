@@ -1,7 +1,5 @@
 #pragma once
 
-#include <mswsock.h>
-
 enum class eIOType;
 struct SocketContext;
 
@@ -34,14 +32,13 @@ private:
 	void WorkerThread();
 
 	// 임시로 사용
-	void CloseSocketCtxt(SocketContext* socketCtxt)
+	void CloseSocketCtxt(SocketContext* socketCtxt);
 	void InsertCtxtList(SocketContext* socketCtxt);
 	void RemoveCtxtList(SocketContext* socketCtxt);
 	void FreeCtxtList();
 
 
 private:
-	// cleaupEvent 옮길 예정
 	// 크리티컬 섹션 삭제 예정
 	bool m_bEndServer = false;
 
@@ -50,13 +47,10 @@ private:
 	SOCKET m_listenSocket = INVALID_SOCKET;
 	int m_nThread = 0;
 	std::vector<std::thread*> m_threads;
-	//HANDLE m_threadHandles[MAX_WORKER_THREAD];
 	WSAEVENT m_hCleanupEvent[1];
 	SocketContext* m_pListenSocketCtxt = nullptr;
 	SocketContext* m_pClientSocketCtxtList = nullptr;
 
 	CRITICAL_SECTION m_criticalSection;
-
-	LPFN_ACCEPTEX m_fnAcceptEx;
 };
 

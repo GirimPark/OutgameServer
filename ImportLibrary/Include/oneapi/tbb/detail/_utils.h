@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2005-2021 Intel Corporation
+    Copyright (c) 2005-2023 Intel Corporation
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 #include <type_traits>
 #include <cstdint>
 #include <atomic>
+#include <functional>
 
 #include "_config.h"
 #include "_assert.h"
@@ -37,6 +38,8 @@ template<typename... T> void suppress_unused_warning(T&&...) {}
   bound is more useful than a run-time exact answer.
   @ingroup memory_allocation */
 constexpr size_t max_nfs_size = 128;
+constexpr std::size_t max_nfs_size_exp = 7;
+static_assert(1 << max_nfs_size_exp == max_nfs_size, "max_nfs_size_exp must be a log2(max_nfs_size)");
 
 //! Class that implements exponential backoff.
 class atomic_backoff {
@@ -90,25 +93,49 @@ public:
 //! Spin WHILE the condition is true.
 /** T and U should be comparable types. */
 template <typename T, typename C>
-void spin_wait_while_condition(const std::atomic<T>& location, C comp) {
+T spin_wait_while(const std::atomic<T>& location, C comp, std::memory_order order) {
     atomic_backoff backoff;
-    while (comp(location.load(std::memory_order_acquire))) {
+    T snapshot = location.load(order);
+    while (comp(snapshot)) {
         backoff.pause();
+        snapshot = location.load(order);
     }
+    return snapshot;
 }
 
 //! Spin WHILE the value of the variable is equal to a given value
 /** T and U should be comparable types. */
 template <typename T, typename U>
-void spin_wait_while_eq(const std::atomic<T>& location, const U value) {
-    spin_wait_while_condition(location, [&value](T t) { return t == value; });
+T spin_wait_while_eq(const std::atomic<T>& location, const U value, std::memory_order order = std::memory_order_acquire) {
+    return spin_wait_while(location, [&value](T t) { return t == value; }, order);
 }
 
 //! Spin UNTIL the value of the variable is equal to a given value
 /** T and U should be comparable types. */
 template<typename T, typename U>
-void spin_wait_until_eq(const std::atomic<T>& location, const U value) {
-    spin_wait_while_condition(location, [&value](T t) { return t != value; });
+T spin_wait_until_eq(const std::atomic<T>& location, const U value, std::memory_order order = std::memory_order_acquire) {
+    return spin_wait_while(location, [&value](T t) { return t != value; }, order);
+}
+
+//! Spin UNTIL the condition returns true or spinning time is up.
+/** Returns what the passed functor returned last time it was invoked. */
+template <typename Condition>
+bool timed_spin_wait_until(Condition condition) {
+    // 32 pauses + 32 yields are meausered as balanced spin time before sleep.
+    bool finish = condition();
+    for (int i = 1; !finish && i < 32; finish = condition(), i *= 2) {
+        machine_pause(i);
+    }
+    for (int i = 32; !finish && i < 64; finish = condition(), ++i) {
+        yield();
+    }
+    return finish;
+}
+
+template <typename T>
+T clamp(T value, T lower_bound, T upper_bound) {
+    __TBB_ASSERT(lower_bound <= upper_bound, "Incorrect bounds");
+    return value > lower_bound ? (value > upper_bound ? upper_bound : value) : lower_bound;
 }
 
 template <typename T>
@@ -157,7 +184,7 @@ inline ArgIntegerType modulo_power_of_two(ArgIntegerType arg, DivisorIntegerType
 //! A function to check if passed in pointer is aligned on a specific border
 template<typename T>
 constexpr bool is_aligned(T* pointer, std::uintptr_t alignment) {
-    return 0 == ((std::uintptr_t)pointer & (alignment - 1));
+    return 0 == (reinterpret_cast<std::uintptr_t>(pointer) & (alignment - 1));
 }
 
 #if TBB_USE_ASSERT
@@ -178,10 +205,7 @@ template<typename T>
 inline bool is_poisoned(const std::atomic<T*>& p) { return is_poisoned(p.load(std::memory_order_relaxed)); }
 #else
 template<typename T>
-inline void poison_pointer(T* &) {/*do nothing*/}
-
-template<typename T>
-inline void poison_pointer(std::atomic<T*>&) { /* do nothing */}
+inline void poison_pointer(T&) {/*do nothing*/}
 #endif /* !TBB_USE_ASSERT */
 
 template <std::size_t alignment = 0, typename T>
@@ -309,7 +333,35 @@ using synthesized_three_way_result = decltype(synthesized_three_way_comparator{}
                                                                                  std::declval<T2&>()));
 
 #endif // __TBB_CPP20_COMPARISONS_PRESENT
+
+// Check if the type T is implicitly OR explicitly convertible to U
+template <typename T, typename U>
+concept relaxed_convertible_to = std::constructible_from<U, T>;
+
+template <typename T, typename U>
+concept adaptive_same_as =
+#if __TBB_STRICT_CONSTRAINTS
+    std::same_as<T, U>;
+#else
+    std::convertible_to<T, U>;
+#endif
 #endif // __TBB_CPP20_CONCEPTS_PRESENT
+
+template <typename F, typename... Args>
+auto invoke(F&& f, Args&&... args)
+#if __TBB_CPP17_INVOKE_PRESENT
+    noexcept(std::is_nothrow_invocable_v<F, Args...>)
+    -> std::invoke_result_t<F, Args...>
+{
+    return std::invoke(std::forward<F>(f), std::forward<Args>(args)...);
+}
+#else // __TBB_CPP17_INVOKE_PRESENT
+    noexcept(noexcept(std::forward<F>(f)(std::forward<Args>(args)...)))
+    -> decltype(std::forward<F>(f)(std::forward<Args>(args)...))
+{
+    return std::forward<F>(f)(std::forward<Args>(args)...);
+}
+#endif // __TBB_CPP17_INVOKE_PRESENT
 
 } // namespace d0
 
@@ -319,9 +371,21 @@ class delegate_base {
 public:
     virtual bool operator()() const = 0;
     virtual ~delegate_base() {}
-}; // class delegate_base
+};
 
-}  // namespace d1
+template <typename FuncType>
+class delegated_function : public delegate_base {
+public:
+    delegated_function(FuncType& f) : my_func(f) {}
+
+    bool operator()() const override {
+        return my_func();
+    }
+
+private:
+    FuncType &my_func;
+};
+} // namespace d1
 
 } // namespace detail
 } // namespace tbb

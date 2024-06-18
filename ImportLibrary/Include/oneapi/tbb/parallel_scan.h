@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2005-2021 Intel Corporation
+    Copyright (c) 2005-2023 Intel Corporation
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,6 +50,37 @@ struct final_scan_tag {
 template<typename Range, typename Body>
 struct sum_node;
 
+#if __TBB_CPP20_CONCEPTS_PRESENT
+} // namespace d1
+namespace d0 {
+
+template <typename Body, typename Range>
+concept parallel_scan_body = splittable<Body> &&
+                             requires( Body& body, const Range& range, Body& other ) {
+                                 body(range, tbb::detail::d1::pre_scan_tag{});
+                                 body(range, tbb::detail::d1::final_scan_tag{});
+                                 body.reverse_join(other);
+                                 body.assign(other);
+                             };
+
+template <typename Function, typename Range, typename Value>
+concept parallel_scan_function = std::invocable<const std::remove_reference_t<Function>&,
+                                                const Range&, const Value&, bool> &&
+                                 std::convertible_to<std::invoke_result_t<const std::remove_reference_t<Function>&,
+                                                                          const Range&, const Value&, bool>,
+                                                     Value>;
+
+template <typename Combine, typename Value>
+concept parallel_scan_combine = std::invocable<const std::remove_reference_t<Combine>&,
+                                               const Value&, const Value&> &&
+                                std::convertible_to<std::invoke_result_t<const std::remove_reference_t<Combine>&,
+                                                                         const Value&, const Value&>,
+                                                    Value>;
+
+} // namespace d0
+namespace d1 {
+#endif // __TBB_CPP20_CONCEPTS_PRESENT
+
 //! Performs final scan for a leaf
 /** @ingroup algorithms */
 template<typename Range, typename Body>
@@ -90,7 +121,7 @@ private:
         if (m_parent) {
             auto parent = m_parent;
             m_parent = nullptr;
-            if (parent->ref_count.fetch_sub(1, std::memory_order_relaxed) == 1) {
+            if (parent->ref_count.fetch_sub(1) == 1) {
                 return parent;
             }
         }
@@ -166,7 +197,7 @@ public:
         m_allocator(alloc)
     {
         if( m_parent )
-            m_parent->ref_count.fetch_add(1, std::memory_order_relaxed);
+            m_parent->ref_count.fetch_add(1);
         // Poison fields that will be set by second pass.
         poison_pointer(m_body);
         poison_pointer(m_incoming);
@@ -174,7 +205,7 @@ public:
 
     ~sum_node() {
         if (m_parent)
-            m_parent->ref_count.fetch_sub(1, std::memory_order_relaxed);
+            m_parent->ref_count.fetch_sub(1);
     }
 private:
     sum_node* release_parent() {
@@ -182,7 +213,7 @@ private:
         if (m_parent) {
             auto parent = m_parent;
             m_parent = nullptr;
-            if (parent->ref_count.fetch_sub(1, std::memory_order_relaxed) == 1) {
+            if (parent->ref_count.fetch_sub(1) == 1) {
                 return parent;
             }
         }
@@ -255,7 +286,7 @@ private:
     sum_node_type*& m_return_slot;
     small_object_allocator m_allocator;
 public:
-    final_sum_type* m_right_zombie;
+    std::atomic<final_sum_type*> m_right_zombie;
     sum_node_type& m_result;
     std::atomic<unsigned int> ref_count{2};
     finish_scan*  m_parent;
@@ -264,17 +295,18 @@ public:
         __TBB_ASSERT( m_result.ref_count.load() == static_cast<unsigned int>((m_result.m_left!=nullptr)+(m_result.m_right!=nullptr)), nullptr );
         if( m_result.m_left )
             m_result.m_left_is_final = false;
-        if( m_right_zombie && m_sum_slot )
+        final_sum_type* right_zombie = m_right_zombie.load(std::memory_order_acquire);
+        if( right_zombie && m_sum_slot )
             (*m_sum_slot)->reverse_join(*m_result.m_left_sum);
         __TBB_ASSERT( !m_return_slot, nullptr );
-        if( m_right_zombie || m_result.m_right ) {
+        if( right_zombie || m_result.m_right ) {
             m_return_slot = &m_result;
         } else {
             m_result.self_destroy(ed);
         }
-        if( m_right_zombie && !m_sum_slot && !m_result.m_right ) {
-            m_right_zombie->self_destroy(ed);
-            m_right_zombie = nullptr;
+        if( right_zombie && !m_sum_slot && !m_result.m_right ) {
+            right_zombie->self_destroy(ed);
+            m_right_zombie.store(nullptr, std::memory_order_relaxed);
         }
         return finalize(ed);
     }
@@ -298,7 +330,7 @@ private:
         if (m_parent) {
             auto parent = m_parent;
             m_parent = nullptr;
-            if (parent->ref_count.fetch_sub(1, std::memory_order_relaxed) == 1) {
+            if (parent->ref_count.fetch_sub(1) == 1) {
                 return parent;
             }
         }
@@ -339,7 +371,7 @@ private:
         if (m_parent) {
             auto parent = m_parent;
             m_parent = nullptr;
-            if (parent->ref_count.fetch_sub(1, std::memory_order_relaxed) == 1) {
+            if (parent->ref_count.fetch_sub(1) == 1) {
                 return parent;
             }
         }
@@ -428,8 +460,9 @@ task* start_scan<Range,Body,Partitioner>::execute( execution_data& ed ) {
     if( treat_as_stolen ) {
         // Invocation is for right child that has been really stolen or needs to be virtually stolen
         small_object_allocator alloc{};
-        m_parent->m_right_zombie = alloc.new_object<final_sum_type>(m_body, alloc);
-        m_body = *m_parent->m_right_zombie;
+        final_sum_type* right_zombie = alloc.new_object<final_sum_type>(m_body, alloc);
+        m_parent->m_right_zombie.store(right_zombie, std::memory_order_release);
+        m_body = *right_zombie;
         m_is_final = false;
     }
     task* next_task = nullptr;
@@ -488,11 +521,11 @@ public:
 
     template<typename Tag>
     void operator()( const Range& r, Tag tag ) {
-        m_sum_slot = m_scan(r, m_sum_slot, tag);
+        m_sum_slot = tbb::detail::invoke(m_scan, r, m_sum_slot, tag);
     }
 
     void reverse_join( lambda_scan_body& a ) {
-        m_sum_slot = m_reverse_join(a.m_sum_slot, m_sum_slot);
+        m_sum_slot = tbb::detail::invoke(m_reverse_join, a.m_sum_slot, m_sum_slot);
     }
 
     void assign( lambda_scan_body& b ) {
@@ -527,6 +560,7 @@ public:
 //! Parallel prefix with default partitioner
 /** @ingroup algorithms **/
 template<typename Range, typename Body>
+    __TBB_requires(tbb_range<Range> && parallel_scan_body<Body, Range>)
 void parallel_scan( const Range& range, Body& body ) {
     start_scan<Range, Body, auto_partitioner>::run(range,body,__TBB_DEFAULT_PARTITIONER());
 }
@@ -534,6 +568,7 @@ void parallel_scan( const Range& range, Body& body ) {
 //! Parallel prefix with simple_partitioner
 /** @ingroup algorithms **/
 template<typename Range, typename Body>
+    __TBB_requires(tbb_range<Range> && parallel_scan_body<Body, Range>)
 void parallel_scan( const Range& range, Body& body, const simple_partitioner& partitioner ) {
     start_scan<Range, Body, simple_partitioner>::run(range, body, partitioner);
 }
@@ -541,6 +576,7 @@ void parallel_scan( const Range& range, Body& body, const simple_partitioner& pa
 //! Parallel prefix with auto_partitioner
 /** @ingroup algorithms **/
 template<typename Range, typename Body>
+    __TBB_requires(tbb_range<Range> && parallel_scan_body<Body, Range>)
 void parallel_scan( const Range& range, Body& body, const auto_partitioner& partitioner ) {
     start_scan<Range,Body,auto_partitioner>::run(range, body, partitioner);
 }
@@ -548,6 +584,8 @@ void parallel_scan( const Range& range, Body& body, const auto_partitioner& part
 //! Parallel prefix with default partitioner
 /** @ingroup algorithms **/
 template<typename Range, typename Value, typename Scan, typename ReverseJoin>
+    __TBB_requires(tbb_range<Range> && parallel_scan_function<Scan, Range, Value> &&
+                   parallel_scan_combine<ReverseJoin, Value>)
 Value parallel_scan( const Range& range, const Value& identity, const Scan& scan, const ReverseJoin& reverse_join ) {
     lambda_scan_body<Range, Value, Scan, ReverseJoin> body(identity, scan, reverse_join);
     parallel_scan(range, body, __TBB_DEFAULT_PARTITIONER());
@@ -557,6 +595,8 @@ Value parallel_scan( const Range& range, const Value& identity, const Scan& scan
 //! Parallel prefix with simple_partitioner
 /** @ingroup algorithms **/
 template<typename Range, typename Value, typename Scan, typename ReverseJoin>
+    __TBB_requires(tbb_range<Range> && parallel_scan_function<Scan, Range, Value> &&
+                   parallel_scan_combine<ReverseJoin, Value>)
 Value parallel_scan( const Range& range, const Value& identity, const Scan& scan, const ReverseJoin& reverse_join,
                      const simple_partitioner& partitioner ) {
     lambda_scan_body<Range, Value, Scan, ReverseJoin> body(identity, scan, reverse_join);
@@ -567,6 +607,8 @@ Value parallel_scan( const Range& range, const Value& identity, const Scan& scan
 //! Parallel prefix with auto_partitioner
 /** @ingroup algorithms **/
 template<typename Range, typename Value, typename Scan, typename ReverseJoin>
+    __TBB_requires(tbb_range<Range> && parallel_scan_function<Scan, Range, Value> &&
+                   parallel_scan_combine<ReverseJoin, Value>)
 Value parallel_scan( const Range& range, const Value& identity, const Scan& scan, const ReverseJoin& reverse_join,
                      const auto_partitioner& partitioner ) {
     lambda_scan_body<Range, Value, Scan, ReverseJoin> body(identity, scan, reverse_join);
@@ -581,10 +623,8 @@ inline namespace v1 {
     using detail::d1::parallel_scan;
     using detail::d1::pre_scan_tag;
     using detail::d1::final_scan_tag;
-
 } // namespace v1
 
 } // namespace tbb
 
 #endif /* __TBB_parallel_scan_H */
-

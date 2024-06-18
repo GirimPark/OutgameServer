@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2005-2021 Intel Corporation
+    Copyright (c) 2005-2023 Intel Corporation
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@
 #include "detail/_task.h"
 #include "detail/_aligned_space.h"
 #include "detail/_small_object_pool.h"
+#include "detail/_utils.h"
 
 #include "parallel_for.h"
 #include "task_group.h" // task_group_context
@@ -32,6 +33,20 @@
 
 namespace tbb {
 namespace detail {
+#if __TBB_CPP20_CONCEPTS_PRESENT
+namespace d1 {
+template <typename Item>
+class feeder;
+
+} // namespace d1
+inline namespace d0 {
+
+template <typename Body, typename ItemType, typename FeederItemType>
+concept parallel_for_each_body = std::invocable<const std::remove_reference_t<Body>&, ItemType&&> ||
+                                 std::invocable<const std::remove_reference_t<Body>&, ItemType&&, tbb::detail::d1::feeder<FeederItemType>&>;
+
+} // namespace d0
+#endif // __TBB_CPP20_CONCEPTS_PRESENT
 namespace d2 {
 template<typename Body, typename Item> class feeder_impl;
 } // namespace d2
@@ -48,7 +63,7 @@ class feeder {
     virtual void internal_add_copy(const Item& item) = 0;
     virtual void internal_add_move(Item&& item) = 0;
 
-    template<typename Body_, typename Item_> friend class detail::d2::feeder_impl;
+    template<typename Body_, typename Item_> friend class d2::feeder_impl;
 public:
     //! Add a work item to a running parallel_for_each.
     void add(const Item& item) {internal_add_copy(item);}
@@ -66,23 +81,23 @@ struct parallel_for_each_operator_selector {
 public:
     template<typename ItemArg, typename FeederArg>
     static auto call(const Body& body, ItemArg&& item, FeederArg*)
-    -> decltype(body(std::forward<ItemArg>(item)), void()) {
+    -> decltype(tbb::detail::invoke(body, std::forward<ItemArg>(item)), void()) {
         #if defined(_MSC_VER) && !defined(__INTEL_COMPILER)
         // Suppression of Microsoft non-standard extension warnings
         #pragma warning (push)
         #pragma warning (disable: 4239)
         #endif
 
-        body(std::forward<ItemArg>(item));
+        tbb::detail::invoke(body, std::forward<ItemArg>(item));
 
         #if defined(_MSC_VER) && !defined(__INTEL_COMPILER)
-        #pragma warning (push)
+        #pragma warning (pop)
         #endif
     }
 
     template<typename ItemArg, typename FeederArg>
     static auto call(const Body& body, ItemArg&& item, FeederArg* feeder)
-    -> decltype(body(std::forward<ItemArg>(item), *feeder), void()) {
+    -> decltype(tbb::detail::invoke(body, std::forward<ItemArg>(item), *feeder), void()) {
         #if defined(_MSC_VER) && !defined(__INTEL_COMPILER)
         // Suppression of Microsoft non-standard extension warnings
         #pragma warning (push)
@@ -90,10 +105,10 @@ public:
         #endif
         __TBB_ASSERT(feeder, "Feeder was not created but should be");
 
-        body(std::forward<ItemArg>(item), *feeder);
+        tbb::detail::invoke(body, std::forward<ItemArg>(item), *feeder);
 
         #if defined(_MSC_VER) && !defined(__INTEL_COMPILER)
-        #pragma warning (push)
+        #pragma warning (pop)
         #endif
     }
 };
@@ -287,7 +302,9 @@ struct input_block_handling_task : public task {
     ~input_block_handling_task() {
         for(std::size_t counter = 0; counter < max_block_size; ++counter) {
             (task_pool.begin() + counter)->~iteration_task();
-            (block_iteration_space.begin() + counter)->~Item();
+            if (counter < my_size) {
+                (block_iteration_space.begin() + counter)->~Item();
+            }
         }
     }
 
@@ -390,6 +407,34 @@ public:
 template<typename It>
 using tag = typename std::iterator_traits<It>::iterator_category;
 
+#if __TBB_CPP20_PRESENT
+template <typename It>
+struct move_iterator_dispatch_helper {
+    using type = It;
+};
+
+// Until C++23, std::move_iterator::iterator_concept always defines
+// to std::input_iterator_tag and hence std::forward_iterator concept
+// always evaluates to false, so std::move_iterator dispatch should be
+// made according to the base iterator type.
+template <typename It>
+struct move_iterator_dispatch_helper<std::move_iterator<It>> {
+    using type = It;
+};
+
+template <typename It>
+using iterator_tag_dispatch_impl =
+    std::conditional_t<std::random_access_iterator<It>,
+                       std::random_access_iterator_tag,
+                       std::conditional_t<std::forward_iterator<It>,
+                                          std::forward_iterator_tag,
+                                          std::input_iterator_tag>>;
+
+template <typename It>
+using iterator_tag_dispatch =
+    iterator_tag_dispatch_impl<typename move_iterator_dispatch_helper<It>::type>;
+
+#else
 template<typename It>
 using iterator_tag_dispatch = typename
     std::conditional<
@@ -401,10 +446,12 @@ using iterator_tag_dispatch = typename
             std::input_iterator_tag
         >::type
     >::type;
+#endif // __TBB_CPP20_PRESENT
 
 template <typename Body, typename Iterator, typename Item>
-using feeder_is_required = tbb::detail::void_t<decltype(std::declval<const Body>()(std::declval<typename std::iterator_traits<Iterator>::reference>(),
-                                                                                   std::declval<feeder<Item>&>()))>;
+using feeder_is_required = tbb::detail::void_t<decltype(tbb::detail::invoke(std::declval<const Body>(),
+                                                                            std::declval<typename std::iterator_traits<Iterator>::reference>(),
+                                                                            std::declval<feeder<Item>&>()))>;
 
 // Creates feeder object only if the body can accept it
 template <typename Iterator, typename Body, typename Item, typename = void>
@@ -557,6 +604,19 @@ template<typename Body, typename Item> Item get_item_type_impl(...); // stub
 template <typename Body, typename Item>
 using get_item_type = decltype(get_item_type_impl<Body, Item>(0));
 
+#if __TBB_CPP20_CONCEPTS_PRESENT
+template <typename Body, typename ItemType>
+using feeder_item_type = std::remove_cvref_t<get_item_type<Body, ItemType>>;
+
+template <typename Body, typename Iterator>
+concept parallel_for_each_iterator_body =
+    parallel_for_each_body<Body, iterator_reference_type<Iterator>, feeder_item_type<Body, iterator_reference_type<Iterator>>>;
+
+template <typename Body, typename Range>
+concept parallel_for_each_range_body =
+    parallel_for_each_body<Body, range_reference_type<Range>, feeder_item_type<Body, range_reference_type<Range>>>;
+#endif
+
 /** Implements parallel iteration over a range.
     @ingroup algorithms */
 template<typename Iterator, typename Body>
@@ -597,17 +657,20 @@ void run_parallel_for_each( Iterator first, Iterator last, const Body& body, tas
 //! Parallel iteration over a range, with optional addition of more work.
 /** @ingroup algorithms */
 template<typename Iterator, typename Body>
+    __TBB_requires(std::input_iterator<Iterator> && parallel_for_each_iterator_body<Body, Iterator>)
 void parallel_for_each(Iterator first, Iterator last, const Body& body) {
     task_group_context context(PARALLEL_FOR_EACH);
     run_parallel_for_each<Iterator, Body>(first, last, body, context);
 }
 
 template<typename Range, typename Body>
+    __TBB_requires(container_based_sequence<Range, std::input_iterator_tag> && parallel_for_each_range_body<Body, Range>)
 void parallel_for_each(Range& rng, const Body& body) {
     parallel_for_each(std::begin(rng), std::end(rng), body);
 }
 
 template<typename Range, typename Body>
+    __TBB_requires(container_based_sequence<Range, std::input_iterator_tag> && parallel_for_each_range_body<Body, Range>)
 void parallel_for_each(const Range& rng, const Body& body) {
     parallel_for_each(std::begin(rng), std::end(rng), body);
 }
@@ -615,16 +678,19 @@ void parallel_for_each(const Range& rng, const Body& body) {
 //! Parallel iteration over a range, with optional addition of more work and user-supplied context
 /** @ingroup algorithms */
 template<typename Iterator, typename Body>
+    __TBB_requires(std::input_iterator<Iterator> && parallel_for_each_iterator_body<Body, Iterator>)
 void parallel_for_each(Iterator first, Iterator last, const Body& body, task_group_context& context) {
     run_parallel_for_each<Iterator, Body>(first, last, body, context);
 }
 
 template<typename Range, typename Body>
+    __TBB_requires(container_based_sequence<Range, std::input_iterator_tag> && parallel_for_each_range_body<Body, Range>)
 void parallel_for_each(Range& rng, const Body& body, task_group_context& context) {
     parallel_for_each(std::begin(rng), std::end(rng), body, context);
 }
 
 template<typename Range, typename Body>
+    __TBB_requires(container_based_sequence<Range, std::input_iterator_tag> && parallel_for_each_range_body<Body, Range>)
 void parallel_for_each(const Range& rng, const Body& body, task_group_context& context) {
     parallel_for_each(std::begin(rng), std::end(rng), body, context);
 }

@@ -3,9 +3,6 @@
 
 #include "ContextStructure.h"
 
-#pragma comment(lib, "Ws2_32.lib")
-#pragma comment(lib, "Mswsock.lib")
-
 IOCPNetwork::IOCPNetwork()
 {
 	//for(int i=0; i<MAX_WORKER_THREAD; ++i)
@@ -16,6 +13,7 @@ IOCPNetwork::IOCPNetwork()
 	SYSTEM_INFO systemInfo;
 	GetSystemInfo(&systemInfo);
 	m_nThread = systemInfo.dwNumberOfProcessors * 2;
+	m_threads.resize(m_nThread);
 }
 
 IOCPNetwork::~IOCPNetwork()
@@ -40,8 +38,15 @@ void IOCPNetwork::Run()
 
 	RunWorkerThread();
 
-	CreateListenSocket();
+	if(!CreateListenSocket())
+	{
+		Finalize();
+		return;
+	}
 
+	WSAWaitForMultipleEvents(1, m_hCleanupEvent, true, WSA_INFINITE, false);
+
+	Finalize();
 }
 
 bool IOCPNetwork::Initialize()
@@ -68,10 +73,9 @@ bool IOCPNetwork::Initialize()
 
 void IOCPNetwork::RunWorkerThread()
 {
-	for(int i=0; i<m_nThread; ++i)
+	for (int i = 0; i < m_nThread; ++i)
 	{
-		std::thread thread(&IOCPNetwork::WorkerThread, this);
-		m_threads.emplace_back(&thread);
+		m_threads[i] = new std::thread(&IOCPNetwork::WorkerThread, this);
 	}
 }
 
@@ -130,26 +134,6 @@ bool IOCPNetwork::CreateListenSocket()
 		return false;
 	}
 
-	// Load AcceptEx
-	GUID acceptex_guid = WSAID_ACCEPTEX;
-	DWORD bytes = 0;
-	rt = WSAIoctl(
-		m_listenSocket,
-		SIO_GET_EXTENSION_FUNCTION_POINTER,
-		&acceptex_guid,
-		sizeof(acceptex_guid),
-		&m_fnAcceptEx,
-		sizeof(m_fnAcceptEx),
-		&bytes,
-		NULL,
-		NULL
-		);
-	if(rt == SOCKET_ERROR)
-	{
-		printf("failed to load AcceptEx: %d\n", WSAGetLastError());
-		return false;
-	}
-
 	if (!CreateAcceptSocket())
 	{
 		return false;
@@ -168,7 +152,7 @@ bool IOCPNetwork::CreateAcceptSocket()
 	}
 
 	DWORD recvNumBytes = 0;
-	int rt = m_fnAcceptEx(
+	int rt = AcceptEx(
 		m_listenSocket,
 		m_pListenSocketCtxt->pIOContext->acceptedSocket,
 		m_pListenSocketCtxt->pIOContext->buffer,
@@ -189,6 +173,65 @@ bool IOCPNetwork::CreateAcceptSocket()
 
 void IOCPNetwork::Finalize()
 {
+	m_bEndServer = true;
+
+	if(m_hIOCP)
+	{
+		for(int i=0; i<m_nThread; ++i)
+		{
+			PostQueuedCompletionStatus(m_hIOCP, 0, 0, NULL);
+			//여기서 바로 join?
+			//if(m_threads[i]->joinable())
+			//	m_threads[i]->join();
+		}
+
+		for(int i=0; i<m_nThread;++i)
+		{
+			if (m_threads[i] && m_threads[i]->joinable())
+				m_threads[i]->join();
+		}
+
+		if(m_listenSocket!=INVALID_SOCKET)
+		{
+			closesocket(m_listenSocket);
+			m_listenSocket = INVALID_SOCKET;
+		}
+
+		if(m_pListenSocketCtxt)
+		{
+			while (!HasOverlappedIoCompleted(&m_pListenSocketCtxt->pIOContext->overlapped))
+				Sleep(0);
+
+			if (m_pListenSocketCtxt->pIOContext->acceptedSocket != INVALID_SOCKET)
+			{
+				closesocket(m_pListenSocketCtxt->pIOContext->acceptedSocket);
+				m_pListenSocketCtxt->pIOContext->acceptedSocket = INVALID_SOCKET;
+			}
+
+			if (m_pListenSocketCtxt->pIOContext)
+				delete m_pListenSocketCtxt->pIOContext;
+
+			if (m_pListenSocketCtxt)
+				delete m_pListenSocketCtxt;
+			m_pListenSocketCtxt = NULL;
+		}
+
+		FreeCtxtList();
+
+		if(m_hIOCP)
+		{
+			CloseHandle(m_hIOCP);
+			m_hIOCP = NULL;
+		}
+	}
+
+	DeleteCriticalSection(&m_criticalSection);
+	if(m_hCleanupEvent[0] != WSA_INVALID_EVENT)
+	{
+		WSACloseEvent(m_hCleanupEvent[0]);
+		m_hCleanupEvent[0] = WSA_INVALID_EVENT;
+	}
+	WSACleanup();
 }
 
 SOCKET IOCPNetwork::CreateSocket()
@@ -300,27 +343,27 @@ void IOCPNetwork::WorkerThread()
 	DWORD flags = 0;
 	DWORD IOSize = 0;
 
-	while(true)
+	while (true)
 	{
 		bSuccess = GetQueuedCompletionStatus(m_hIOCP, &IOSize, (PULONG_PTR)&socketCtxt, &overlapped, INFINITE);
-		if(!bSuccess)
+		if (!bSuccess)
 		{
 			printf("GetQueuedCompletionStatus() failed: %d\n", GetLastError());
 		}
-		
-		if(!socketCtxt)
+
+		if (!socketCtxt)
 		{
 			return;
 		}
 
-		if(m_bEndServer)
+		if (m_bEndServer)
 		{
 			return;
 		}
 
 		IOCtxt = reinterpret_cast<IOContext*>(overlapped);
-		if(IOCtxt->IOOperation!=eIOType::ACCEPT
-			&& (!bSuccess || (bSuccess && (IOSize==0))))
+		if (IOCtxt->IOOperation != eIOType::ACCEPT
+			&& (!bSuccess || (bSuccess && (IOSize == 0))))
 		{
 			CloseSocketCtxt(socketCtxt);
 			continue;
@@ -329,57 +372,147 @@ void IOCPNetwork::WorkerThread()
 		switch (IOCtxt->IOOperation)
 		{
 		case eIOType::ACCEPT:
+		{
+			rt = setsockopt(socketCtxt->pIOContext->acceptedSocket,
+				SOL_SOCKET,
+				SO_UPDATE_ACCEPT_CONTEXT,
+				(char*)&m_listenSocket,
+				sizeof(m_listenSocket));
+			if (rt == SOCKET_ERROR)
 			{
-				rt = setsockopt(socketCtxt->pIOContext->acceptedSocket, 
-					SOL_SOCKET, 
-					SO_UPDATE_ACCEPT_CONTEXT, 
-					(char*)&m_listenSocket,
-					sizeof(m_listenSocket));
-				if(rt == SOCKET_ERROR)
+				printf("setsockopt(SO_UPDATE_ACCEPT_CONTEXT) failed to update accept socket\n");
+				WSASetEvent(m_hCleanupEvent[0]);
+				return;
+			}
+
+			acceptedSocketCtxt = RegisterSocketCtxt(socketCtxt->pIOContext->acceptedSocket, eIOType::ACCEPT, true);
+
+			if (!acceptedSocketCtxt)
+			{
+				printf("failed to update accept socket to IOCP\n");
+				WSASetEvent(m_hCleanupEvent[0]);
+				return;
+			}
+
+			if (IOSize)
+			{
+				// Accept와 함께 Recv가 이루어졌다면
+				acceptedSocketCtxt->pIOContext->IOOperation = eIOType::WRITE;
+				acceptedSocketCtxt->pIOContext->nTotalBytes = IOSize;
+				acceptedSocketCtxt->pIOContext->nSentBytes = 0;
+				acceptedSocketCtxt->pIOContext->wsabuf.len = IOSize;
+				memcpy(acceptedSocketCtxt->pIOContext->buffer, socketCtxt->pIOContext->buffer, sizeof(socketCtxt->pIOContext->buffer));
+				acceptedSocketCtxt->pIOContext->wsabuf.buf = acceptedSocketCtxt->pIOContext->buffer;
+
+				// 에코 로직
+				rt = WSASend(
+					socketCtxt->pIOContext->acceptedSocket,
+					&acceptedSocketCtxt->pIOContext->wsabuf, 1,
+					&nSndByte,
+					0,
+					&(acceptedSocketCtxt->pIOContext->overlapped), NULL);
+
+				if (rt == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()))
 				{
-					printf("setsockopt(SO_UPDATE_ACCEPT_CONTEXT) failed to update accept socket\n");
-					WSASetEvent(m_hCleanupEvent[0]);
-					return;
-				}
-
-				acceptedSocketCtxt = RegisterSocketCtxt(socketCtxt->pIOContext->acceptedSocket, eIOType::ACCEPT, true);
-
-				if(!acceptedSocketCtxt)
-				{
-					printf("failed to update accept socket to IOCP\n");
-					WSASetEvent(m_hCleanupEvent[0]);
-					return;
-				}
-
-				// Accept와 함께 Recv가 이루어졌다면 -> 
-				if(IOSize)
-				{
-					acceptedSocketCtxt->pIOContext->IOOperation = eIOType::WRITE;
-					acceptedSocketCtxt->pIOContext->nTotalBytes = IOSize;
-					acceptedSocketCtxt->pIOContext->nSentBytes = 0;
-					acceptedSocketCtxt->pIOContext->wsabuf.len = IOSize;
-					memcpy(acceptedSocketCtxt->pIOContext->buffer, socketCtxt->pIOContext->buffer, sizeof(socketCtxt->pIOContext->buffer));
-					acceptedSocketCtxt->pIOContext->wsabuf.buf = acceptedSocketCtxt->pIOContext->buffer;
-
-					// 에코 로직
-					nRet = WSASend(
-						lpPerSocketContext->pIOContext->SocketAccept,
-						&lpAcceptSocketContext->pIOContext->wsabuf, 1,
-						&dwSendNumBytes,
-						0,
-						&(lpAcceptSocketContext->pIOContext->Overlapped), NULL);
-
-					if (nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError())) {
-						printf("WSASend() failed: %d\n", WSAGetLastError());
-						CloseClient(lpAcceptSocketContext, FALSE);
-					}
-					else if (g_bVerbose) {
-						printf("WorkerThread %d: Socket(%d) AcceptEx completed (%d bytes), Send posted\n",
-							GetCurrentThreadId(), lpPerSocketContext->Socket, dwIoSize);
-					}
+					printf("WSASend() failed: %d\n", WSAGetLastError());
+					CloseSocketCtxt(acceptedSocketCtxt);
 				}
 			}
+			else
+			{
+				acceptedSocketCtxt->pIOContext->IOOperation = eIOType::READ;
+				nRcvByte = 0;
+				flags = 0;
+				rcvBuf.buf = acceptedSocketCtxt->pIOContext->buffer;
+				rcvBuf.len = MAX_BUF_SIZE;
+
+				rt = WSARecv(
+					acceptedSocketCtxt->socket,
+					&rcvBuf, 1,
+					&nRcvByte,
+					&flags,
+					&acceptedSocketCtxt->pIOContext->overlapped, NULL);
+				if (rt == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()))
+				{
+					printf("WSARecv() failed: %d\n", WSAGetLastError());
+					CloseSocketCtxt(acceptedSocketCtxt);
+				}
+			}
+
+			if (!CreateAcceptSocket())
+			{
+				printf("Please shut down and reboot the server.\n");
+				WSASetEvent(m_hCleanupEvent[0]);
+				return;
+			}
 			break;
+		}
+
+
+		case eIOType::READ:
+		{
+			IOCtxt->IOOperation = eIOType::WRITE;
+			IOCtxt->nTotalBytes = IOSize;
+			IOCtxt->nSentBytes = 0;
+			IOCtxt->wsabuf.len = IOSize;
+			flags = 0;
+
+			rt = WSASend(
+				socketCtxt->socket,
+				&IOCtxt->wsabuf, 1, &nSndByte,
+				flags,
+				&(IOCtxt->overlapped), NULL);
+			if (rt = SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()))
+			{
+				printf("WSASend() failed: %d\n", WSAGetLastError());
+				CloseSocketCtxt(socketCtxt);
+			}
+
+			break;
+		}
+
+
+		case eIOType::WRITE:
+		{
+			IOCtxt->IOOperation = eIOType::WRITE;
+			IOCtxt->nSentBytes += IOSize;
+			flags = 0;
+			if (IOCtxt->nSentBytes < IOCtxt->nTotalBytes) {
+				// 이전 송신을 완료되지 않았다면
+				sndBuf.buf = IOCtxt->buffer + IOCtxt->nSentBytes;
+				sndBuf.len = IOCtxt->nTotalBytes - IOCtxt->nSentBytes;
+
+				rt = WSASend(
+					socketCtxt->socket,
+					&sndBuf, 1, &nSndByte,
+					flags,
+					&(IOCtxt->overlapped), NULL);
+				if (rt == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError())) {
+					printf("WSASend() failed: %d\n", WSAGetLastError());
+					CloseSocketCtxt(socketCtxt);
+				}
+			}
+			else
+			{
+				// 이전 송신이 완료됐다면
+				IOCtxt->IOOperation = eIOType::READ;
+				nRcvByte = 0;
+				flags = 0;
+				rcvBuf.buf = IOCtxt->buffer,
+					rcvBuf.len = MAX_BUF_SIZE;
+				rt = WSARecv(
+					socketCtxt->socket,
+					&rcvBuf, 1, &nRcvByte,
+					&flags,
+					&IOCtxt->overlapped, NULL);
+				if (rt == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError())) {
+					printf("WSARecv() failed: %d\n", WSAGetLastError());
+					CloseSocketCtxt(socketCtxt);
+				}
+			}
+
+			break;
+		}
 		}
 	}
 }

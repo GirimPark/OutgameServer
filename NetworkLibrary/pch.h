@@ -26,8 +26,12 @@
 #include <thread>
 
 /// container
+//#include "tbb/concurrent_vector.h"
 #include <vector>
-#include "concurrent_vector.h"
-#include "concurrent_queue.h"
+//#include "tbb/concurrent_queue.h"
+
+//#pragma comment(lib, "Ws2_32.lib")
+//#pragma comment(lib, "Mswsock.lib")
+//#pragma comment(lib, "tbb12_debug.lib")
 
 #endif //PCH_H

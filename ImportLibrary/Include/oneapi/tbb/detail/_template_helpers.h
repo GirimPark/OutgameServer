@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2005-2021 Intel Corporation
+    Copyright (c) 2005-2023 Intel Corporation
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
 
 #include <cstddef>
 #include <cstdint>
-
+#include <utility>
 #include <type_traits>
 #include <memory>
 #include <iterator>
@@ -59,7 +59,7 @@ template <unsigned u, unsigned long long ull >
 struct select_size_t_constant {
     // Explicit cast is needed to avoid compiler warnings about possible truncation.
     // The value of the right size,   which is selected by ?:, is anyway not truncated or promoted.
-    static const std::size_t value = (std::size_t)((sizeof(std::size_t)==sizeof(u)) ? u : ull);
+    static const std::size_t value = static_cast<std::size_t>((sizeof(std::size_t)==sizeof(u)) ? u : ull);
 };
 
 // TODO: do we really need it?
@@ -182,7 +182,17 @@ using pack_element_t = typename pack_element<N, Args...>::type;
 template <typename Func>
 class raii_guard {
 public:
-    raii_guard( Func f ) : my_func(f), is_active(true) {}
+    static_assert(
+        std::is_nothrow_copy_constructible<Func>::value &&
+        std::is_nothrow_move_constructible<Func>::value,
+        "Throwing an exception during the Func copy or move construction cause an unexpected behavior."
+    );
+
+    raii_guard( Func f ) noexcept : my_func(f), is_active(true) {}
+
+    raii_guard( raii_guard&& g ) noexcept : my_func(std::move(g.my_func)), is_active(g.is_active) {
+        g.is_active = false;
+    }
 
     ~raii_guard() {
         if (is_active) {
@@ -391,4 +401,3 @@ using type_identity_t = typename type_identity<T>::type;
 } // namespace tbb
 
 #endif // __TBB_detail__template_helpers_H
-
