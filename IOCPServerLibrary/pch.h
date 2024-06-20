@@ -22,11 +22,17 @@
 /// IO
 #include <iostream>
 
+/// String
+#include <string>
+#include <string_view>
+
 /// Thread
 #include <thread>
 
-/// container
+/// Container
 #include <vector>
+#include "tbb/concurrent_queue.h"
+#include "tbb/concurrent_hash_map.h"
 
 #include "Session.h"
 

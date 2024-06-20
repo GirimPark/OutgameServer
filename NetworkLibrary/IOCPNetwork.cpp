@@ -342,6 +342,7 @@ void IOCPNetwork::WorkerThread()
 	DWORD nSndByte = 0;
 	DWORD flags = 0;
 	DWORD IOSize = 0;
+	
 
 	while (true)
 	{

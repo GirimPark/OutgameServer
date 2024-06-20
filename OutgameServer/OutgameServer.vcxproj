@@ -19,6 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IOCPNetworkLibrary\IOCPNetworkLibrary.vcxproj">
+      <Project>{b8cd1d4c-3a5e-4268-8277-532ad619ef70}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\IOCPServerLibrary\IOCPServerLibrary.vcxproj">
+      <Project>{5266bd53-59b8-4db4-b682-2fcb8f0acc1e}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\NetworkLibrary\NetworkLibrary.vcxproj">
       <Project>{4a50fd75-bbfa-4081-9186-c1fe5153c992}</Project>
     </ProjectReference>
@@ -125,8 +131,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,6 +155,7 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionPath)/ImportLibrary/Library/Release;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

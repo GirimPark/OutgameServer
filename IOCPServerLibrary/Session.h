@@ -22,8 +22,8 @@ struct OVERLAPPED_STRUCT : OVERLAPPED
 	} IOOperation;
 	WSABUF wsaBuffer;
 	char buffer[MAX_BUF_SIZE];
-	int nTotalByte;
-	int nCompletedByte;
+	DWORD nTotalByte;
+	DWORD nCompletedByte;
 };
 
 struct Session
@@ -31,7 +31,7 @@ struct Session
 	unsigned int sessionId;
 
 	SOCKET clientSocket;
-	const char* clientIP;
+	sockaddr_in clientIP;
 
 	OVERLAPPED_STRUCT sendOverlapped;
 	OVERLAPPED_STRUCT recvOverlapped;
