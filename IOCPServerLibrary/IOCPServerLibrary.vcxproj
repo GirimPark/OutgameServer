@@ -151,7 +151,7 @@
     <ClInclude Include="NetworkDefine.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ServerCore.h" />
-    <ClInclude Include="Session.h" />
+    <ClInclude Include="CompletionKey.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IOCPServerLibrary.cpp" />

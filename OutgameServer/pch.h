@@ -2,6 +2,7 @@
 #define PCH_H
 
 #define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
 
 #include "../NetworkLibrary/define.h"
 
@@ -21,7 +22,7 @@
 
 /// container
 #include <vector>
-//#include "tbb/concurrent_vector.h"	// ??????????????????????
+#include "tbb/concurrent_vector.h"	// ??????????????????????
 #include "tbb/concurrent_queue.h"
 #include "tbb/concurrent_hash_map.h"
 //#include "tbb/concurrent_map.h"
@@ -29,6 +30,6 @@
 //#include "tbb/concurrent_set.h"
 
 #include "../IOCPServerLibrary/NetworkDefine.h"
-#include "../IOCPServerLibrary/Session.h"
+#include "../IOCPServerLibrary/CompletionKey.h"
 
 #endif //PCH_H

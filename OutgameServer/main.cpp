@@ -10,6 +10,6 @@
 
 int main()
 {
-	ServerCore server("7777");
+	ServerCore server("5001");
 	server.Run();
 }

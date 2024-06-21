@@ -24,7 +24,7 @@
     <ClInclude Include="ServerCore.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Session.h">
+    <ClInclude Include="CompletionKey.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="NetworkDefine.h">

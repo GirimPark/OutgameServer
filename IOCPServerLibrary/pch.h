@@ -34,6 +34,6 @@
 #include "tbb/concurrent_queue.h"
 #include "tbb/concurrent_hash_map.h"
 
-#include "Session.h"
+#include "CompletionKey.h"
 
 #endif //PCH_H

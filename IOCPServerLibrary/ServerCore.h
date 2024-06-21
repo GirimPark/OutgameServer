@@ -2,20 +2,13 @@
 
 enum class eIOType;
 
-struct ListenContext
-{
-	OVERLAPPED acceptOverlapped;
-	SOCKET listenSocket;
-	char acceptBuffer[INIT_DATA_SIZE + 2 * (sizeof(SOCKADDR_IN) + IP_SIZE)];
-};
-
 class ServerCore
 {
 public:
 	ServerCore(const char* port);
 	~ServerCore();
 
-/// Interface
+	/// Interface
 	bool Run();
 
 private:
@@ -32,7 +25,7 @@ private:
 	bool CreateListenContext();
 
 	/// 세션 관련 함수
-	Session* CreateSession(SOCKET clientSocket);
+	Session* CreateSession();
 
 	/// IO 작업 관련 함수
 	// GetQueuedCompletionStatus
@@ -40,9 +33,9 @@ private:
 
 	//! 로직 부분으로 넘겨야 함
 	// IO 작업 처리, 후에 콜백으로 넘길 예정
+	void HandleAcceptCompletion(Session* session);
 	void HandleReadCompletion(Session* session);
 	void HandleWriteCompletion(Session* session);
-	void HandleAcceptCompletion(ListenContext* listenCtxt);
 
 	// IO 작업 게시
 	bool StartAccept();
@@ -67,7 +60,7 @@ private:
 	int m_nThread;
 	std::vector<std::thread*> m_threads;
 
-	WSAEVENT m_hCleanupEnvent[1];
+	WSAEVENT m_hCleanupEvent[1];
 
 	tbb::concurrent_hash_map<SessionId, Session*> m_sessionMap;
 
