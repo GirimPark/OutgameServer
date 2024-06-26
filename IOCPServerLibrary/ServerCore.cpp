@@ -14,17 +14,17 @@ ServerCore::ServerCore(const char* port)
 
 ServerCore::~ServerCore()
 {
-    m_sessionMap.clear();
 }
 
-bool ServerCore::Run()
+void ServerCore::Run()
 {
     InitializeCriticalSection(&m_criticalSection);
 
     if((m_hCleanupEvent[0] = WSACreateEvent()) == WSA_INVALID_EVENT)
     {
         printf("WSACreateEvent() failed: %d\n", WSAGetLastError());
-        return false;
+        Finalize();
+        return;
     }
 
     WSADATA wsaData;
@@ -32,7 +32,8 @@ bool ServerCore::Run()
     if (rt != 0)
     {
         printf("WSAStartup() faild: %d\n", rt);
-        return false;
+        Finalize();
+        return;
     }
 
     m_hIOCP = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
@@ -40,46 +41,61 @@ bool ServerCore::Run()
     {
         printf("CreateIoCompletionPort() failed to create I/O completion port: %d\n",
             GetLastError());
-        return false;
+        Finalize();
+        return;
     }
 
     // 리슨 소켓 및 컨텍스트 생성 + acceptEx 게시
     if(!CreateListenContext())
     {
         printf("Create Listen Socket Context failed\n");
-        return false;
+        Finalize();
+        return;
     }
 
     // 워커 스레드 생성/실행 + 대기
     for(int i=0; i<m_nThread; ++i)
     {
         m_threads[i] = new std::thread(&ServerCore::ProcessThread, this);
+        if(!m_threads[i])
+        {
+            printf("std::thread() failed to create process thread: %d\n",
+                GetLastError());
+            Finalize();
+            return;
+        }
     }
+
+	m_quitThread = new std::thread(&ServerCore::QuitThread, this);
 
     WSAWaitForMultipleEvents(1, m_hCleanupEvent, true, WSA_INFINITE, false);
 
     // 해제
     Finalize();
-    return true;
 }
 
 void ServerCore::Finalize()
 {
     m_bEndServer = true;
 
-    // 수신 작업 완료 대기 후 세션 해제
+	// 리슨 소켓 컨텍스트 해제
+    if(m_pListenSocketCtxt)
+    {
+        DWORD result = WaitForSingleObject(m_pListenSocketCtxt->acceptOverlapped.hEvent, INFINITE);
+        if (result != WAIT_OBJECT_0)
+        {
+            std::cerr << "Error waiting for AcceptEx to complete: " << GetLastError() << std::endl;
+        }
+
+        delete m_pListenSocketCtxt;
+    }
+        
+    // 세션 해제
     for(auto iter : m_sessionMap)
     {
-        while (!HasOverlappedIoCompleted(&iter.second->recvOverlapped))
-            Sleep(0);
-
-        delete iter.second;
+        CloseSession(iter.second->sessionId);
     }
     m_sessionMap.clear();
-
-    // 리슨 소켓 컨텍스트, 스레드, 이벤트, 세션 맵, 크리티컬 섹션, iocp 핸들
-	// 리슨 소켓 컨텍스트 해제
-    delete m_pListenSocketCtxt;
 
     if(m_hIOCP)
     {
@@ -101,6 +117,14 @@ void ServerCore::Finalize()
         {
             m_threads[i]->join();
         }
+        delete m_threads[i];
+    }
+    m_threads.clear();
+
+    if(m_quitThread && m_quitThread->joinable())
+    {
+        m_quitThread->join();
+        delete m_quitThread;
     }
 
     // 이벤트 해제
@@ -213,7 +237,7 @@ SOCKET ServerCore::CreateListenSocket()
         return NULL;
     }
 
-    rt = listen(listenSocket, 5);
+    rt = listen(listenSocket, 10);
     if (rt == SOCKET_ERROR) {
         printf("listen() failed: %d\n", WSAGetLastError());
         freeaddrinfo(addrlocal);
@@ -234,6 +258,36 @@ Session* ServerCore::CreateSession()
     ZeroMemory(&session->recvOverlapped, sizeof(OVERLAPPED));
 
     return session;
+}
+
+void ServerCore::CloseSession(SessionId sessionId)
+{
+    auto iter = m_sessionMap.find(sessionId);
+    Session* session = iter->second;
+    if(!session)
+    {
+        printf("CloseSession : can't find session");
+        return;
+    }
+
+    linger lingerStruct;
+    lingerStruct.l_onoff = 1;
+    lingerStruct.l_linger = 0;
+    setsockopt(session->clientSocket, SOL_SOCKET, SO_LINGER, (char*)&lingerStruct, sizeof(lingerStruct));
+
+    if(m_bEndServer)
+    {
+	    while (!(HasOverlappedIoCompleted(&session->recvOverlapped)))
+	        Sleep(0);
+    }
+
+    delete session;
+
+    EnterCriticalSection(&m_criticalSection);
+
+    m_sessionMap.unsafe_erase(iter);
+
+    LeaveCriticalSection(&m_criticalSection);
 }
 
 void ServerCore::ProcessThread()
@@ -268,12 +322,20 @@ void ServerCore::ProcessThread()
         listenCtxt = reinterpret_cast<ListenContext*>(completionKey);
         session = reinterpret_cast<Session*>(completionKey);
         overlappedStruct = reinterpret_cast<OVERLAPPED_STRUCT*>(overlapped);
+
         if(listenCtxt && listenCtxt->type == eCompletionKeyType::LISTEN_CONTEXT)
         {
             HandleAcceptCompletion();
         }
         else if(session && session->type == eCompletionKeyType::SESSION)
         {
+            // 좀비 클라이언트 예외처리
+            if(nTransferredByte == 0)
+            {
+                CloseSession(session->sessionId);
+                continue;
+            }
+
             // READ or WRITE
             switch (overlappedStruct->IOOperation)
             {
@@ -342,6 +404,7 @@ void ServerCore::HandleAcceptCompletion()
     if (!m_hIOCP)
     {
         printf("CreateIoCompletionPort failed to associate socket with error: %d\n", GetLastError());
+        WSASetEvent(m_hCleanupEvent[0]);
         return;
     }
 
@@ -351,13 +414,13 @@ void ServerCore::HandleAcceptCompletion()
     inet_ntop(AF_INET, &remoteAddr->sin_addr, addr, INET_ADDRSTRLEN);
     printf("Remote Address: %s\n", addr);
 
-    // 초기 데이터 처리(인증, 세션 연결, 응답)
-    ProcessInitialData(session, m_pListenSocketCtxt->acceptBuffer, INIT_DATA_SIZE);
-
     // 다른 수신, 수락 작업 게시
     StartAccept();
-
-    // 에코 로직
+    
+    /// 로직
+    // 초기 데이터 처리(인증, 세션 연결, 응답)
+    ProcessInitialData(session, m_pListenSocketCtxt->acceptBuffer, INIT_DATA_SIZE);
+    // 에코
     ZeroMemory(session->recvOverlapped.buffer, MAX_BUF_SIZE);
     memcpy(session->recvOverlapped.buffer, m_pListenSocketCtxt->acceptBuffer, INIT_DATA_SIZE);
     StartSend(session, session->recvOverlapped.buffer, INIT_DATA_SIZE);
@@ -365,18 +428,14 @@ void ServerCore::HandleAcceptCompletion()
 
 void ServerCore::HandleReadCompletion(Session* session, DWORD bytesTransferred)
 {
-    if (bytesTransferred > 0) {
-        printf("Data received: %.*s\n", bytesTransferred, session->recvOverlapped.wsaBuffer.buf);
+    if (bytesTransferred > 0) 
+    {
         StartSend(session, session->recvOverlapped.buffer, bytesTransferred);
-    } else {
-        // No data received, handle accordingly
-        printf("No data received\n");
     }
 }
 
 void ServerCore::HandleWriteCompletion(Session* session)
-{
-    printf("Data send: %s\n", session->sendOverlapped.wsaBuffer.buf);
+{ 
     StartReceive(session);
 }
 
@@ -418,6 +477,7 @@ bool ServerCore::StartReceive(Session* session)
     if(rt == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
     {
         printf("WSARecv() failed: %d\n", WSAGetLastError());
+        CloseSession(session->sessionId);
         return false;
     }
 
@@ -435,6 +495,7 @@ bool ServerCore::StartSend(Session* session, const char* data, int length)
     if (rt == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING) 
     {
         printf("WSASend() failed: %d\n", WSAGetLastError());
+        CloseSession(session->sessionId);
         return false;
     }
 
@@ -466,4 +527,20 @@ void ServerCore::ProcessInitialData(Session* session, char* data, int length)
 bool ServerCore::AuthenticateUser(const std::string_view& username, const std::string_view& password)
 {
     return true;
+}
+
+void ServerCore::QuitThread()
+{
+    while(true)
+    {
+        if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
+        {
+            SetEvent(m_hCleanupEvent[0]);
+            printf("QuitThread() : Cleanup event triggered\n");
+            break;
+        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+
 }

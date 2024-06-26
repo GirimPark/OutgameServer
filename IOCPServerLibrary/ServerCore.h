@@ -9,7 +9,7 @@ public:
 	~ServerCore();
 
 	/// Interface
-	bool Run();
+	void Run();
 
 private:
 	/// 리소스 해제
@@ -26,11 +26,12 @@ private:
 
 	/// 세션 관련 함수
 	Session* CreateSession();
+	void CloseSession(SessionId sessionId);
 
 	/// IO 작업 관련 함수
 	// GetQueuedCompletionStatus
 	void ProcessThread();
-
+	
 	//! 로직 부분으로 넘겨야 함
 	// IO 작업 처리, 후에 콜백으로 넘길 예정
 	void HandleAcceptCompletion();
@@ -47,7 +48,10 @@ private:
 	void ProcessInitialData(Session* session, char* data, int length);
 	// todo 인증
 	bool AuthenticateUser(const std::string_view& username, const std::string_view& password);
-	
+
+	// 서버 종료 자원 해제 확인용 스레드
+	void QuitThread();
+
 private:
 	HANDLE m_hIOCP;
 
@@ -61,8 +65,10 @@ private:
 
 	WSAEVENT m_hCleanupEvent[1];
 
-	tbb::concurrent_hash_map<SessionId, Session*> m_sessionMap;
+	tbb::concurrent_unordered_map<SessionId, Session*> m_sessionMap;
 
 	CRITICAL_SECTION m_criticalSection;
+
+	std::thread* m_quitThread;
 };
 
