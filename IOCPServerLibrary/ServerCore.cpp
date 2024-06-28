@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "ServerCore.h"
 
-ServerCore::ServerCore(const char* port)
+ServerCore::ServerCore(const char* port, int backlog)
     : m_bEndServer(false)
     , m_listeningPort(port)
+	, m_backlog(backlog)
 {
     SYSTEM_INFO systemInfo;
     GetSystemInfo(&systemInfo);
@@ -93,7 +94,8 @@ void ServerCore::Finalize()
     // 세션 해제
     for(auto iter : m_sessionMap)
     {
-        CloseSession(iter.second->sessionId);
+        if(iter.second)
+			CloseSession(iter.second->sessionId);
     }
     m_sessionMap.clear();
 
@@ -149,6 +151,21 @@ SOCKET ServerCore::CreateSocket()
         return newSocket;
     }
 
+    int zero = 0;
+    int rt = setsockopt(newSocket, SOL_SOCKET, SO_SNDBUF, (char*)&zero, sizeof(zero));
+    if (rt == SOCKET_ERROR)
+    {
+        printf("setsockopt(SNDBUF) failed: %d\n", WSAGetLastError());
+        return newSocket;
+    }
+
+    if(newSocket == NULL)
+    {
+        closesocket(newSocket);
+        printf("create Socket failed: %d\n", GetLastError());
+        return newSocket;
+    }
+
     return newSocket;
 }
 
@@ -165,15 +182,7 @@ bool ServerCore::CreateListenContext()
             printf("create Listen Socket failed: %d\n", GetLastError());
             return false;
         }
-
-        m_pListenSocketCtxt->acceptedSocket = CreateSocket();
-        if (!m_pListenSocketCtxt->acceptedSocket)
-        {
-            closesocket(m_pListenSocketCtxt->acceptedSocket);
-            printf("create Accepted Socket failed: %d\n", GetLastError());
-            return false;
-        }
-
+        m_pListenSocketCtxt->acceptedSocket = INVALID_SOCKET;
         m_pListenSocketCtxt->acceptOverlapped.Internal = 0;
         m_pListenSocketCtxt->acceptOverlapped.InternalHigh = 0;
         m_pListenSocketCtxt->acceptOverlapped.Offset = 0;
@@ -237,7 +246,7 @@ SOCKET ServerCore::CreateListenSocket()
         return NULL;
     }
 
-    rt = listen(listenSocket, 10);
+    rt = listen(listenSocket, 5);
     if (rt == SOCKET_ERROR) {
         printf("listen() failed: %d\n", WSAGetLastError());
         freeaddrinfo(addrlocal);
@@ -342,7 +351,6 @@ void ServerCore::ProcessThread()
             case OVERLAPPED_STRUCT::eIOType::READ:
             {
                 HandleReadCompletion(session, nTransferredByte);
-                //HandleReadCompletion(session, MAX_BUF_SIZE);
                 break;
             }
             case OVERLAPPED_STRUCT::eIOType::WRITE:
@@ -413,9 +421,6 @@ void ServerCore::HandleAcceptCompletion()
     printf("Local Address: %s\n", addr);
     inet_ntop(AF_INET, &remoteAddr->sin_addr, addr, INET_ADDRSTRLEN);
     printf("Remote Address: %s\n", addr);
-
-    // 다른 수신, 수락 작업 게시
-    StartAccept();
     
     /// 로직
     // 초기 데이터 처리(인증, 세션 연결, 응답)
@@ -424,6 +429,9 @@ void ServerCore::HandleAcceptCompletion()
     ZeroMemory(session->recvOverlapped.buffer, MAX_BUF_SIZE);
     memcpy(session->recvOverlapped.buffer, m_pListenSocketCtxt->acceptBuffer, INIT_DATA_SIZE);
     StartSend(session, session->recvOverlapped.buffer, INIT_DATA_SIZE);
+
+    // 다른 수락 작업 게시
+    StartAccept();
 }
 
 void ServerCore::HandleReadCompletion(Session* session, DWORD bytesTransferred)
@@ -441,6 +449,8 @@ void ServerCore::HandleWriteCompletion(Session* session)
 
 bool ServerCore::StartAccept()
 {
+    // 새로운 acceptedSocket 생성
+    m_pListenSocketCtxt->acceptedSocket = CreateSocket();
     if (m_pListenSocketCtxt->acceptedSocket == INVALID_SOCKET)
     {
         printf("failed to create new accept socket\n");
@@ -460,6 +470,8 @@ bool ServerCore::StartAccept()
     if (rt == SOCKET_ERROR && (WSAGetLastError() != ERROR_IO_PENDING))
     {
         printf("AcceptEx() failed: %d\n", WSAGetLastError());
+        closesocket(m_pListenSocketCtxt->acceptedSocket);
+        m_pListenSocketCtxt->acceptedSocket = INVALID_SOCKET; // 소켓 상태 초기화
         return false;
     }
 
@@ -511,7 +523,7 @@ void ServerCore::ProcessInitialData(Session* session, char* data, int length)
     if (AuthenticateUser(username, password))
     {
         // 세션 목록에 추가
-        m_sessionMap.emplace(session->sessionId, session);
+        m_sessionMap.insert({session->sessionId, session});
         responseData = "login success";
     }
     else

@@ -4,6 +4,9 @@ struct SocketPerThread
 {
 	std::thread* thread;
 	SOCKET socket;
+
+	int preRecvData = -1;
+	int sequenceData = 0;
 };
 
 class EchoClient
@@ -16,7 +19,7 @@ public:
 	void Run();
 
 private:
-	SOCKET CreateConnectedSocket();
+	SOCKET CreateConnectedSocket(int threadId);
 
 	void EchoThread(int threadId);
 

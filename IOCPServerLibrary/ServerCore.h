@@ -5,7 +5,7 @@ enum class eIOType;
 class ServerCore
 {
 public:
-	ServerCore(const char* port);
+	ServerCore(const char* port, int backlog);
 	~ServerCore();
 
 	/// Interface
@@ -59,13 +59,14 @@ private:
 
 	ListenContext* m_pListenSocketCtxt;
 	const char* m_listeningPort;
+	int m_backlog;
 
 	int m_nThread;
 	std::vector<std::thread*> m_threads;
 
 	WSAEVENT m_hCleanupEvent[1];
 
-	tbb::concurrent_unordered_map<SessionId, Session*> m_sessionMap;
+	concurrency::concurrent_unordered_map<SessionId, Session*> m_sessionMap;
 
 	CRITICAL_SECTION m_criticalSection;
 

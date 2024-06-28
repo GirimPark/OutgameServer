@@ -30,7 +30,8 @@ void EchoClient::Run()
 
 	WSADATA WSAData;
 	int rt;
-	if ((rt = WSAStartup(MAKEWORD(2, 2), &WSAData)) != 0) {
+	if ((rt = WSAStartup(MAKEWORD(2, 2), &WSAData)) != 0) 
+	{
 		printf("WSAStartup() failed: %d", rt);
 		return;
 	}
@@ -40,18 +41,19 @@ void EchoClient::Run()
 		if (m_bEndClient)
 			break;
 
-		m_clients[i].socket = CreateConnectedSocket();
+		m_clients[i].socket = CreateConnectedSocket(i);
+		if(m_clients[i].socket == INVALID_SOCKET)
+		{
+			break;
+		}
 		m_clients[i].thread = new std::thread(&EchoClient::EchoThread, this, i);
-
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
 		if(!m_clients[i].thread)
 		{
 			printf("CreateThread(%d) failed: %d\n", i, GetLastError());
 			return;
 		}
 
-		printf("connected on thread %d\n", i);
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 
 	WSAWaitForMultipleEvents(1, m_hCleanupEvent, true, WSA_INFINITE, false);
@@ -77,7 +79,7 @@ void EchoClient::Run()
 	WSACleanup();
 }
 
-SOCKET EchoClient::CreateConnectedSocket()
+SOCKET EchoClient::CreateConnectedSocket(int threadId)
 {
 	addrinfo hints = { 0 };
 	addrinfo* addr_srv = nullptr;
@@ -99,20 +101,22 @@ SOCKET EchoClient::CreateConnectedSocket()
 	}
 
 	SOCKET socket = ::socket(addr_srv->ai_family, addr_srv->ai_socktype, addr_srv->ai_protocol);
-	
-	if(socket == INVALID_SOCKET)
+ 	if(socket == INVALID_SOCKET)
 	{
 		printf("socket() failed: %d\n", WSAGetLastError());
+		return INVALID_SOCKET;
 	}
 
 	int rt = connect(socket, addr_srv->ai_addr, (int)addr_srv->ai_addrlen);
 	if(rt == SOCKET_ERROR)
 	{
-		printf("connect(thread %d) failed: %d\n", WSAGetLastError());
+		printf("connect(thread %d) failed: %d\n", threadId, WSAGetLastError());
+		return INVALID_SOCKET;
 	}
 
 	freeaddrinfo(addr_srv);
 
+	printf("connected on thread %d\n", threadId);
 	return socket;
 }
 
@@ -126,8 +130,7 @@ void EchoClient::EchoThread(int threadId)
 
 	if((inbuf) && (outbuf))
 	{
-		memset(outbuf, threadId, MAX_BUF_SIZE);
-		memcpy(outbuf, "echo", 5);
+		ZeroMemory(outbuf, MAX_BUF_SIZE);
 
 		while(true)
 		{
@@ -157,6 +160,9 @@ void EchoClient::EchoThread(int threadId)
 
 bool EchoClient::SendBuffer(int threadId, char* outbuf)
 {
+
+	memcpy(outbuf, std::to_string(m_clients[threadId].sequenceData).c_str(), std::to_string(m_clients[threadId].sequenceData).size());
+
 	bool rt = true;
 	char* bufp = outbuf;
 	int nTotalSend = 0;
@@ -187,7 +193,6 @@ bool EchoClient::SendBuffer(int threadId, char* outbuf)
 
 bool EchoClient::RecvBuffer(int threadId, char* inbuf)
 {
-	bool rt = true;
 	char* bufp = inbuf;
 	int nTotalRecv = 0;
 	int nRecv = 0;
@@ -198,19 +203,25 @@ bool EchoClient::RecvBuffer(int threadId, char* inbuf)
 		if (nRecv == SOCKET_ERROR)
 		{
 			printf("recv(thread=%d) failed: %d\n", threadId, WSAGetLastError());
-			rt = false;
-			return rt;
+			return false;
 		}
 		if (nRecv == 0) 
 		{
 			printf("connection closed\n");
-			rt = false;
-			return rt;
+			return false;
 		}
 		
 		nTotalRecv += nRecv;
 		bufp += nRecv;
 	}
 
-	return rt;
+	if(std::atoi(inbuf) != (m_clients[threadId].preRecvData + 1))
+	{
+		printf("sequence is not correct\n");
+		return false;
+	}
+	
+	m_clients[threadId].preRecvData = m_clients[threadId].sequenceData++;
+
+	return true;
 }

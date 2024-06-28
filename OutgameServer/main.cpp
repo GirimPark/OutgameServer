@@ -15,6 +15,6 @@
 
 int main()
 {
-	ServerCore server("5001");
+	ServerCore server("5001", 5);
 	server.Run();
 }
