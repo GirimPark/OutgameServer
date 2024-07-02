@@ -9,7 +9,6 @@ ServerCore::ServerCore(const char* port, int backlog)
     SYSTEM_INFO systemInfo;
     GetSystemInfo(&systemInfo);
     m_nThread = systemInfo.dwNumberOfProcessors * 2;
-    //m_nThread = 1;
     m_threads.resize(m_nThread);
 }
 
@@ -74,6 +73,12 @@ void ServerCore::Run()
     // 해제
     Finalize();
 }
+
+void ServerCore::RegisterCallback(ReceiveDataCallback callback)
+{
+    m_receiveCallbacks.emplace_back(callback);
+}
+
 
 void ServerCore::Finalize()
 {
@@ -350,11 +355,13 @@ void ServerCore::ProcessThread()
             {
             case OVERLAPPED_STRUCT::eIOType::READ:
             {
-                HandleReadCompletion(session, nTransferredByte);
+                OnReceiveData(session, session->recvOverlapped.buffer, nTransferredByte);
+                //HandleReadCompletion(session, nTransferredByte);
                 break;
             }
             case OVERLAPPED_STRUCT::eIOType::WRITE:
             {
+                //OnSendData(session);
                 HandleWriteCompletion(session);
                 break;
             }
@@ -422,16 +429,19 @@ void ServerCore::HandleAcceptCompletion()
     inet_ntop(AF_INET, &remoteAddr->sin_addr, addr, INET_ADDRSTRLEN);
     printf("Remote Address: %s\n", addr);
     
-    /// 로직
-    // 초기 데이터 처리(인증, 세션 연결, 응답)
-    ProcessInitialData(session, m_pListenSocketCtxt->acceptBuffer, INIT_DATA_SIZE);
-    // 에코
-    ZeroMemory(session->recvOverlapped.buffer, MAX_BUF_SIZE);
-    memcpy(session->recvOverlapped.buffer, m_pListenSocketCtxt->acceptBuffer, INIT_DATA_SIZE);
-    StartSend(session, session->recvOverlapped.buffer, INIT_DATA_SIZE);
-
     // 다른 수락 작업 게시
     StartAccept();
+
+    /// 로직
+    // 초기 데이터 처리(인증, 세션 연결, 응답)
+    //ProcessInitialData(session, m_pListenSocketCtxt->acceptBuffer, INIT_DATA_SIZE);
+    m_sessionMap.insert({ session->sessionId, session }); // 원래 processinitdata 함수 안에 있음, 임시로 꺼내놓기
+    // 에코
+    //ZeroMemory(session->recvOverlapped.buffer, MAX_BUF_SIZE);
+    //memcpy(session->recvOverlapped.buffer, m_pListenSocketCtxt->acceptBuffer, INIT_DATA_SIZE);
+    //StartSend(session, session->recvOverlapped.buffer, INIT_DATA_SIZE);
+
+    OnReceiveData(session, m_pListenSocketCtxt->acceptBuffer, INIT_DATA_SIZE);
 }
 
 void ServerCore::HandleReadCompletion(Session* session, DWORD bytesTransferred)
@@ -555,4 +565,10 @@ void ServerCore::QuitThread()
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
+}
+
+void ServerCore::OnReceiveData(Session* session, char* data, int nReceivedByte)
+{
+    for (const auto& callback : m_receiveCallbacks)
+        callback(session, data, nReceivedByte);
 }

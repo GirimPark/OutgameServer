@@ -1,0 +1,12 @@
+syntax = "proto3";
+package Protocol;
+
+message S2C_Echo
+{
+	string message = 1;
+}
+
+message C2S_Echo
+{
+	string message = 1;
+}

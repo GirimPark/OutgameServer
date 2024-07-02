@@ -29,6 +29,9 @@
 /// Thread
 #include <thread>
 
+/// Function
+#include <functional>
+
 /// Container
 #include <vector>
 

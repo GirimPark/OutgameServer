@@ -1,6 +1,11 @@
 #pragma once
+#include <functional>
 
 enum class eIOType;
+
+//typedef std::function<void(Session*, char*, int)> AcceptCallback;
+typedef std::function<void(Session*, char*, int)> ReceiveDataCallback;
+//typedef std::function<void(Session*)> SendDataCallback;
 
 class ServerCore
 {
@@ -10,6 +15,9 @@ public:
 
 	/// Interface
 	void Run();
+
+	/// Register Callbacks
+	void RegisterCallback(ReceiveDataCallback callback);
 
 private:
 	/// 리소스 해제
@@ -38,6 +46,7 @@ private:
 	void HandleReadCompletion(Session* session, DWORD nTransferredByte);
 	void HandleWriteCompletion(Session* session);
 
+public:
 	// IO 작업 게시
 	bool StartAccept();
 	bool StartReceive(Session* session);
@@ -49,13 +58,16 @@ private:
 	// todo 인증
 	bool AuthenticateUser(const std::string_view& username, const std::string_view& password);
 
-	// 서버 종료 자원 해제 확인용 스레드
+	/// 서버 종료 자원 해제 확인용 스레드
 	void QuitThread();
+
+	/// Callbacks
+	void OnReceiveData(Session* session, char* data, int nReceivedByte);
 
 private:
 	HANDLE m_hIOCP;
-
 	bool m_bEndServer;
+	WSAEVENT m_hCleanupEvent[1];
 
 	ListenContext* m_pListenSocketCtxt;
 	const char* m_listeningPort;
@@ -63,13 +75,12 @@ private:
 
 	int m_nThread;
 	std::vector<std::thread*> m_threads;
-
-	WSAEVENT m_hCleanupEvent[1];
+	std::thread* m_quitThread;
 
 	concurrency::concurrent_unordered_map<SessionId, Session*> m_sessionMap;
 
 	CRITICAL_SECTION m_criticalSection;
 
-	std::thread* m_quitThread;
+	std::vector<ReceiveDataCallback> m_receiveCallbacks;
 };
 

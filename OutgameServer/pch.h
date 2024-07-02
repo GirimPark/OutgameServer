@@ -24,6 +24,7 @@
 #include <vector>
 
 #include <concurrent_unordered_map.h>
+#include <concurrent_queue.h>
 
 #include "../IOCPServerLibrary/NetworkDefine.h"
 #include "../IOCPServerLibrary/CompletionKey.h"

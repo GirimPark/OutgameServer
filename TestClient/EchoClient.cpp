@@ -188,6 +188,8 @@ bool EchoClient::SendBuffer(int threadId, char* outbuf)
 		bufp += nSend;
 	}
 
+	//printf("send: %s\n", outbuf);
+
 	return rt;
 }
 
@@ -222,6 +224,8 @@ bool EchoClient::RecvBuffer(int threadId, char* inbuf)
 	}
 	
 	m_clients[threadId].preRecvData = m_clients[threadId].sequenceData++;
+
+	//printf("recv: %s\n", inbuf);
 
 	return true;
 }

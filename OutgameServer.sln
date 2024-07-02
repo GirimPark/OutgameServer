@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IOCPServerLibrary", "IOCPSe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestClient", "TestClient\TestClient.vcxproj", "{7551DDDF-16E8-459E-B54F-31C5053FA328}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PacketLibrary", "PacketLibrary\PacketLibrary.vcxproj", "{29AB2687-53AC-4A7E-8096-6AC1DDFF692D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,6 +63,14 @@ Global
 		{7551DDDF-16E8-459E-B54F-31C5053FA328}.Release|x64.Build.0 = Release|x64
 		{7551DDDF-16E8-459E-B54F-31C5053FA328}.Release|x86.ActiveCfg = Release|Win32
 		{7551DDDF-16E8-459E-B54F-31C5053FA328}.Release|x86.Build.0 = Release|Win32
+		{29AB2687-53AC-4A7E-8096-6AC1DDFF692D}.Debug|x64.ActiveCfg = Debug|x64
+		{29AB2687-53AC-4A7E-8096-6AC1DDFF692D}.Debug|x64.Build.0 = Debug|x64
+		{29AB2687-53AC-4A7E-8096-6AC1DDFF692D}.Debug|x86.ActiveCfg = Debug|Win32
+		{29AB2687-53AC-4A7E-8096-6AC1DDFF692D}.Debug|x86.Build.0 = Debug|Win32
+		{29AB2687-53AC-4A7E-8096-6AC1DDFF692D}.Release|x64.ActiveCfg = Release|x64
+		{29AB2687-53AC-4A7E-8096-6AC1DDFF692D}.Release|x64.Build.0 = Release|x64
+		{29AB2687-53AC-4A7E-8096-6AC1DDFF692D}.Release|x86.ActiveCfg = Release|Win32
+		{29AB2687-53AC-4A7E-8096-6AC1DDFF692D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
