@@ -1,33 +1,62 @@
 #include "pch.h"
 #include "PacketBuilder.h"
 
+PacketHeader PacketBuilder::CreateHeader(EPacketType type, int dataSize)
+{
+    short length = PacketHeader::Size() + dataSize;
+    return PacketHeader(length, type);
+}
+
 char* PacketBuilder::Serialize(EPacketType type, const DataPacket& dataPacket)
 {
     std::string serializedMessage;
     dataPacket.SerializeToString(&serializedMessage);
 
-    uint32_t dataSize = serializedMessage.size();
-    uint32_t length = PacketHeader::Size() + dataSize;
-    PacketHeader header(length, type);
+    short dataSize = serializedMessage.size();
+    short length = PacketHeader::Size() + dataSize;
+    PacketHeader header = CreateHeader(type, dataSize);
 
     char* packet = new char[length];
     // 헤더 직렬화
     header.Serialize(packet);
     // 데이터 복사
     std::memcpy(packet + header.Size(), serializedMessage.data(), dataSize);
-
+    
     return packet;
 }
 
-bool PacketBuilder::Deserialize(const char* buffer, size_t size, PacketHeader& header, DataPacket& dataPacket)
+bool PacketBuilder::Deserialize(const char* buffer, short size, PacketHeader& header, DataPacket& data)
+{
+    if (size < PacketHeader::Size())
+    {
+        return false; // 데이터가 너무 작음
+    }
+    header = PacketHeader::Deserialize(buffer);
+
+    if (size < header.length)
+    {
+        return false; // 데이터가 너무 작음
+    }
+    std::string rt(buffer + PacketHeader::Size(), size - PacketHeader::Size());
+    return data.ParseFromString(rt);
+}
+
+bool PacketBuilder::DeserializeHeader(const char* buffer, short size, PacketHeader& header)
 {
     if (size < PacketHeader::Size()) 
     {
-        return false; // 수신된 크기가 너무 작음
+        return false; // 데이터가 너무 작음
     }
-
     header = PacketHeader::Deserialize(buffer);
-    std::string data(buffer + PacketHeader::Size(), size - PacketHeader::Size());
+    return true;
+}
 
-    return dataPacket.ParseFromString(data);
+bool PacketBuilder::DeserializeData(const char* buffer, short size, const PacketHeader& header, DataPacket& data)
+{
+    if (size < header.length) 
+    {
+        return false; // 데이터가 너무 작음
+    }
+    std::string rt(buffer + PacketHeader::Size(), size - PacketHeader::Size());
+    return data.ParseFromString(rt);
 }

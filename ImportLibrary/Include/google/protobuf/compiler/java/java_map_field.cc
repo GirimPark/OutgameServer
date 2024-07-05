@@ -158,6 +158,13 @@ void SetMessageVariables(const FieldDescriptor* descriptor, int messageBitIndex,
           : "";
   (*variables)["on_changed"] = "onChanged();";
 
+  // For repeated fields, one bit is used for whether the array is immutable
+  // in the parsing constructor.
+  (*variables)["get_mutable_bit_parser"] =
+      GenerateGetBitMutableLocal(builderBitIndex);
+  (*variables)["set_mutable_bit_parser"] =
+      GenerateSetBitMutableLocal(builderBitIndex);
+
   (*variables)["default_entry"] =
       (*variables)["capitalized_name"] + "DefaultEntryHolder.defaultEntry";
   (*variables)["map_field_parameter"] = (*variables)["default_entry"];
@@ -777,19 +784,27 @@ void ImmutableMapFieldGenerator::GenerateBuildingCode(
                  "result.$name$_.makeImmutable();\n");
 }
 
-void ImmutableMapFieldGenerator::GenerateBuilderParsingCode(
+void ImmutableMapFieldGenerator::GenerateParsingCode(
     io::Printer* printer) const {
+  printer->Print(variables_,
+                 "if (!$get_mutable_bit_parser$) {\n"
+                 "  $name$_ = com.google.protobuf.MapField.newMapField(\n"
+                 "      $map_field_parameter$);\n"
+                 "  $set_mutable_bit_parser$;\n"
+                 "}\n");
   if (!SupportUnknownEnumValue(descriptor_->file()) &&
       GetJavaType(ValueField(descriptor_)) == JAVATYPE_ENUM) {
     printer->Print(
         variables_,
         "com.google.protobuf.ByteString bytes = input.readBytes();\n"
         "com.google.protobuf.MapEntry<$type_parameters$>\n"
-        "$name$__ = $default_entry$.getParserForType().parseFrom(bytes);\n"
+        "$name$__ = $default_entry$.getParserForType().parseFrom(bytes);\n");
+    printer->Print(
+        variables_,
         "if ($value_enum_type$.forNumber($name$__.getValue()) == null) {\n"
-        "  mergeUnknownLengthDelimitedField($number$, bytes);\n"
+        "  unknownFields.mergeLengthDelimitedField($number$, bytes);\n"
         "} else {\n"
-        "  internalGetMutable$capitalized_name$().getMutableMap().put(\n"
+        "  $name$_.getMutableMap().put(\n"
         "      $name$__.getKey(), $name$__.getValue());\n"
         "}\n");
   } else {
@@ -798,9 +813,14 @@ void ImmutableMapFieldGenerator::GenerateBuilderParsingCode(
         "com.google.protobuf.MapEntry<$type_parameters$>\n"
         "$name$__ = input.readMessage(\n"
         "    $default_entry$.getParserForType(), extensionRegistry);\n"
-        "internalGetMutable$capitalized_name$().getMutableMap().put(\n"
+        "$name$_.getMutableMap().put(\n"
         "    $name$__.getKey(), $name$__.getValue());\n");
   }
+}
+
+void ImmutableMapFieldGenerator::GenerateParsingDoneCode(
+    io::Printer* printer) const {
+  // Nothing to do here.
 }
 
 void ImmutableMapFieldGenerator::GenerateSerializationCode(

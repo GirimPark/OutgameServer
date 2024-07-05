@@ -36,5 +36,7 @@ private:
 	std::vector<SocketPerThread> m_clients;
 
 	WSAEVENT m_hCleanupEvent[1];
+
+	int m_nSendByte;
 };
 

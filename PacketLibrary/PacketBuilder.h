@@ -1,6 +1,6 @@
 #pragma once
 
-enum EPacketType;
+enum EPacketType : short;
 struct PacketHeader;
 
 typedef google::protobuf::Message DataPacket;
@@ -13,12 +13,16 @@ public:
         return instance;
     }
 
+    PacketHeader CreateHeader(EPacketType type, int dataSize);
+
     char* Serialize(EPacketType type, const DataPacket& dataPacket);
-    bool Deserialize(const char* buffer, size_t size, PacketHeader& header, DataPacket& dataPacket);
+    bool Deserialize(const char* buffer, short size, PacketHeader& header, DataPacket& data);
+    bool DeserializeHeader(const char* buffer, short size, PacketHeader& header);
+    bool DeserializeData(const char* buffer, short size, const PacketHeader& header, DataPacket& data);
 
 private:
-    PacketBuilder() {}
-    ~PacketBuilder() {}
+    PacketBuilder() = default;
+    ~PacketBuilder() = default;
 
     PacketBuilder(const PacketBuilder&) = delete;
     PacketBuilder& operator=(const PacketBuilder&) = delete;

@@ -26,25 +26,25 @@
     <ClInclude Include="Protocol.pb.h">
       <Filter>Protocol\Test</Filter>
     </ClInclude>
-    <ClInclude Include="Echo.pb.h">
-      <Filter>Protocol\Test</Filter>
-    </ClInclude>
     <ClInclude Include="PacketHeader.h" />
     <ClInclude Include="PacketBuilder.h">
       <Filter>Util</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Echo.pb.h">
+      <Filter>Protocol\Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Protocol.pb.cc">
-      <Filter>Protocol\Test</Filter>
-    </ClCompile>
-    <ClCompile Include="Echo.pb.cc">
       <Filter>Protocol\Test</Filter>
     </ClCompile>
     <ClCompile Include="PacketBuilder.cpp">
       <Filter>Util</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Echo.pb.cc">
+      <Filter>Protocol\Test</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

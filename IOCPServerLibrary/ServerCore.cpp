@@ -66,8 +66,6 @@ void ServerCore::Run()
         }
     }
 
-	m_quitThread = new std::thread(&ServerCore::QuitThread, this);
-
     WSAWaitForMultipleEvents(1, m_hCleanupEvent, true, WSA_INFINITE, false);
 
     // 해제
@@ -97,10 +95,13 @@ void ServerCore::Finalize()
     }
         
     // 세션 해제
-    for(auto iter : m_sessionMap)
+    for(int i = 0; i<m_sessionMap.size(); ++i)
     {
-        if(iter.second)
-			CloseSession(iter.second->sessionId);
+        if(m_sessionMap[i])
+        {
+			CloseSession(m_sessionMap[i]->sessionId);
+            --i;
+        }
     }
     m_sessionMap.clear();
 
@@ -128,12 +129,6 @@ void ServerCore::Finalize()
     }
     m_threads.clear();
 
-    if(m_quitThread && m_quitThread->joinable())
-    {
-        m_quitThread->join();
-        delete m_quitThread;
-    }
-
     // 이벤트 해제
     if(m_hCleanupEvent[0] != WSA_INVALID_EVENT)
     {
@@ -144,7 +139,16 @@ void ServerCore::Finalize()
     // 크리티컬 섹션 해제
     DeleteCriticalSection(&m_criticalSection);
 
+    m_receiveCallbacks.clear();
+
     WSACleanup();
+
+    delete this;
+}
+
+void ServerCore::TriggerCleanupEvent()
+{
+    SetEvent(m_hCleanupEvent[0]);
 }
 
 SOCKET ServerCore::CreateSocket()
@@ -339,7 +343,7 @@ void ServerCore::ProcessThread()
 
         if(listenCtxt && listenCtxt->type == eCompletionKeyType::LISTEN_CONTEXT)
         {
-            HandleAcceptCompletion();
+            HandleAcceptCompletion(nTransferredByte);
         }
         else if(session && session->type == eCompletionKeyType::SESSION)
         {
@@ -380,7 +384,7 @@ void ServerCore::ProcessThread()
     }
 }
 
-void ServerCore::HandleAcceptCompletion()
+void ServerCore::HandleAcceptCompletion(DWORD nTransferredByte)
 {
     sockaddr_in* localAddr = nullptr;
     sockaddr_in* remoteAddr = nullptr;
@@ -388,9 +392,9 @@ void ServerCore::HandleAcceptCompletion()
 
     GetAcceptExSockaddrs(
         m_pListenSocketCtxt->acceptBuffer,
-        INIT_DATA_SIZE,  // 초기 데이터 길이
-        sizeof(SOCKADDR_IN) + IP_SIZE,  // 로컬 주소 정보 길이
-        sizeof(SOCKADDR_IN) + IP_SIZE,  // 원격 주소 정보 길이
+        INIT_DATA_SIZE,
+        sizeof(SOCKADDR_IN) + IP_SIZE,
+        sizeof(SOCKADDR_IN) + IP_SIZE,
         (sockaddr**)&localAddr,
         &localAddrLen,
         (sockaddr**)&remoteAddr,
@@ -441,14 +445,14 @@ void ServerCore::HandleAcceptCompletion()
     //memcpy(session->recvOverlapped.buffer, m_pListenSocketCtxt->acceptBuffer, INIT_DATA_SIZE);
     //StartSend(session, session->recvOverlapped.buffer, INIT_DATA_SIZE);
 
-    OnReceiveData(session, m_pListenSocketCtxt->acceptBuffer, INIT_DATA_SIZE);
+    OnReceiveData(session, m_pListenSocketCtxt->acceptBuffer, nTransferredByte);
 }
 
 void ServerCore::HandleReadCompletion(Session* session, DWORD bytesTransferred)
 {
     if (bytesTransferred > 0) 
     {
-        StartSend(session, session->recvOverlapped.buffer, bytesTransferred);
+        StartSend(session->sessionId, session->recvOverlapped.buffer, bytesTransferred);
     }
 }
 
@@ -506,8 +510,15 @@ bool ServerCore::StartReceive(Session* session)
     return true;
 }
 
-bool ServerCore::StartSend(Session* session, const char* data, int length)
+bool ServerCore::StartSend(SessionId sessionId, const char* data, int length)
 {
+    if (m_bEndServer)
+        return false;
+
+    Session* session = m_sessionMap.find(sessionId)->second;
+    if (!session)
+        return false;
+
     session->sendOverlapped.IOOperation = OVERLAPPED_STRUCT::eIOType::WRITE;
     ZeroMemory(session->sendOverlapped.buffer, MAX_BUF_SIZE);
     memcpy(session->sendOverlapped.buffer, data, length);
@@ -549,22 +560,6 @@ void ServerCore::ProcessInitialData(Session* session, char* data, int length)
 bool ServerCore::AuthenticateUser(const std::string_view& username, const std::string_view& password)
 {
     return true;
-}
-
-void ServerCore::QuitThread()
-{
-    while(true)
-    {
-        if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
-        {
-            SetEvent(m_hCleanupEvent[0]);
-            printf("QuitThread() : Cleanup event triggered\n");
-            break;
-        }
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
-
 }
 
 void ServerCore::OnReceiveData(Session* session, char* data, int nReceivedByte)

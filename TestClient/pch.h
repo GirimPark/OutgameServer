@@ -24,4 +24,9 @@
 /// Container
 #include <vector>
 
+/// packet
+#include <google/protobuf/message.h>
+#include "../PacketLibrary/PacketHeader.h"
+#include "../PacketLibrary/PacketBuilder.h"
+
 #endif //PCH_H

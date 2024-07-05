@@ -32,7 +32,6 @@
 #define GOOGLE_PROTOBUF_GENERATED_MESSAGE_TCTABLE_IMPL_H__
 
 #include <cstdint>
-#include <cstdlib>
 #include <type_traits>
 
 #include <google/protobuf/parse_context.h>
@@ -101,9 +100,6 @@ template <size_t align>
 #endif
 void AlignFail(uintptr_t address) {
   GOOGLE_LOG(FATAL) << "Unaligned (" << align << ") access at " << address;
-  // This abort() is unreachable; it is only here to silence compiler warnings
-  // that do not know that FATAL always terminates the program.
-  abort();
 }
 
 extern template void AlignFail<4>(uintptr_t);

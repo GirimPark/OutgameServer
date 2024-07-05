@@ -13,10 +13,11 @@ enum EPacketType : short
 
 struct PacketHeader
 {
-	uint32_t length;
+	short length;
 	EPacketType type;
 
-	PacketHeader(uint32_t length, EPacketType id)
+	PacketHeader() = default;
+	PacketHeader(short length, EPacketType id)
 		: length(length), type(id) { }
 
 	// Packet to char*
@@ -29,7 +30,7 @@ struct PacketHeader
 	// char* to Packet
 	static PacketHeader Deserialize(const char* buffer)
 	{
-		uint32_t _length;
+		short _length;
 		EPacketType _type;
 
 		std::memcpy(&_length, buffer, sizeof(_length));
@@ -38,7 +39,7 @@ struct PacketHeader
 		return PacketHeader(_length, _type);
 	}
 
-	static constexpr size_t Size()
+	static constexpr short Size()
 	{
 		return sizeof(length) + sizeof(type);
 	}

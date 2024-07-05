@@ -15,8 +15,9 @@ public:
 
 	/// Interface
 	void Run();
+	void TriggerCleanupEvent();
 
-	/// Register Callbacks
+	// Register Callbacks
 	void RegisterCallback(ReceiveDataCallback callback);
 
 private:
@@ -42,7 +43,7 @@ private:
 	
 	//! 로직 부분으로 넘겨야 함
 	// IO 작업 처리, 후에 콜백으로 넘길 예정
-	void HandleAcceptCompletion();
+	void HandleAcceptCompletion(DWORD nTransferredByte);
 	void HandleReadCompletion(Session* session, DWORD nTransferredByte);
 	void HandleWriteCompletion(Session* session);
 
@@ -50,7 +51,7 @@ public:
 	// IO 작업 게시
 	bool StartAccept();
 	bool StartReceive(Session* session);
-	bool StartSend(Session* session, const char* data, int length);
+	bool StartSend(SessionId sessionId, const char* data, int length);
 
 	//! 로직 부분으로 넘겨야 함
 	// todo 초기 데이터 처리
@@ -75,7 +76,6 @@ private:
 
 	int m_nThread;
 	std::vector<std::thread*> m_threads;
-	std::thread* m_quitThread;
 
 	concurrency::concurrent_unordered_map<SessionId, Session*> m_sessionMap;
 

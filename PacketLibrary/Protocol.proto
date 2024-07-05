@@ -8,6 +8,7 @@ message BuffData
 	uint64 buffId = 1;
 	float remainTime = 2;
 	repeated uint64 victims = 3;
+	string d = 4;
 }
 
 message S_TEST
