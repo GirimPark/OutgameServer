@@ -8,6 +8,12 @@ enum EPacketType : short
 	S2C_ECHO = 0,
 	C2S_ECHO = 1,
 
+	C2S_LOGIN_REQUEST,
+	S2C_LOGIN_RESPONSE,
+
+	C2S_JOIN_REQUEST,
+	S2C_JOIN_RESPONSE,
+
 
 };
 

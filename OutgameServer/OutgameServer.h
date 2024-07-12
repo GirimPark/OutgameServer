@@ -8,25 +8,25 @@ enum class ESendType
 	UNICAST
 };
 
-struct EchoQStruct
+struct ReceiveStruct
 {
 	SessionId sessionId;
 	std::shared_ptr<DataPacket> data;
 
-	~EchoQStruct()
+	~ReceiveStruct()
 	{
 		data.reset();
 	}
 };
 
-struct SendQStrct
+struct SendStruct
 {
 	ESendType type;
 	SessionId sessionId;
 	std::shared_ptr<PacketHeader> header;
 	std::shared_ptr<DataPacket> data;
 
-	~SendQStrct()
+	~SendStruct()
 	{
 		header.reset();
 		data.reset();
@@ -47,6 +47,8 @@ private:
 	void DispatchReceivedData(Session* session, char* data, int nReceivedByte);
 	// EchoQueue 처리 스레드
 	void ProcessEchoQueue();
+	// LoginQueue 처리 스레드
+	void ProcessLoginQueue();
 	// SendQueue 처리 스레드
 	void SendThread();
 
@@ -60,8 +62,10 @@ private:
 
 	ServerCore* m_serverCore;
 
-	concurrency::concurrent_queue<std::shared_ptr<EchoQStruct>> m_recvEchoQueue;
-	concurrency::concurrent_queue<std::shared_ptr<SendQStrct>> m_sendQueue;
+	concurrency::concurrent_queue<std::shared_ptr<ReceiveStruct>> m_recvEchoQueue;
+	concurrency::concurrent_queue<std::shared_ptr<ReceiveStruct>> m_loginRequestQueue;
+
+	concurrency::concurrent_queue<std::shared_ptr<SendStruct>> m_sendQueue;
 
 	std::thread* m_coreThread;
 	std::thread* m_processThread;

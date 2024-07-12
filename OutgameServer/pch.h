@@ -21,15 +21,24 @@
 /// container
 #include <vector>
 
+/// concurrent container
 #include <concurrent_unordered_map.h>
 #include <concurrent_queue.h>
+#include <concurrent_vector.h>
 
 /// protobuf
 #include <google/protobuf/message.h>
 
+/// sql
+#include <sql.h>
+#include <sqlext.h>
+
 /// custom
-#include "../IOCPServerLibrary/NetworkDefine.h"
+#include "../IOCPServerLibrary/Define.h"
 #include "../IOCPServerLibrary/CompletionKey.h"
+#include "../IOCPServerLibrary/ServerCore.h"
+#include "../IOCPServerLibrary/DBConnectionPool.h"
+#include "../IOCPServerLibrary/DBBind.h"
 
 #include "../PacketLibrary/PacketHeader.h"
 #include "../PacketLibrary/PacketBuilder.h"

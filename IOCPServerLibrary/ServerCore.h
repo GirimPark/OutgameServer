@@ -3,7 +3,6 @@
 
 enum class eIOType;
 
-//typedef std::function<void(Session*, char*, int)> AcceptCallback;
 typedef std::function<void(Session*, char*, int)> ReceiveDataCallback;
 //typedef std::function<void(Session*)> SendDataCallback;
 
@@ -35,7 +34,9 @@ private:
 
 	/// 세션 관련 함수
 	Session* CreateSession();
-	void CloseSession(SessionId sessionId);
+	void CloseSession(Session* session);
+	void RegisterSession(Session* session);
+	void UnregisterSession(SessionId sessionId);	// 세션 맵에서 삭제만 하는 경우는 없다. 세션 자원 해제도 같이 일어나야 함. lock이 있으므로 남용 유의
 
 	/// IO 작업 관련 함수
 	// GetQueuedCompletionStatus

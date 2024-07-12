@@ -99,7 +99,7 @@ void ServerCore::Finalize()
     {
         if(m_sessionMap[i])
         {
-			CloseSession(m_sessionMap[i]->sessionId);
+			UnregisterSession(m_sessionMap[i]->sessionId);
             --i;
         }
     }
@@ -278,33 +278,41 @@ Session* ServerCore::CreateSession()
     return session;
 }
 
-void ServerCore::CloseSession(SessionId sessionId)
+void ServerCore::CloseSession(Session* session)
 {
-    auto iter = m_sessionMap.find(sessionId);
-    Session* session = iter->second;
-    if(!session)
-    {
-        printf("CloseSession : can't find session");
-        return;
-    }
-
     linger lingerStruct;
     lingerStruct.l_onoff = 1;
     lingerStruct.l_linger = 0;
     setsockopt(session->clientSocket, SOL_SOCKET, SO_LINGER, (char*)&lingerStruct, sizeof(lingerStruct));
 
-    if(m_bEndServer)
+    if (m_bEndServer)
     {
-	    while (!(HasOverlappedIoCompleted(&session->recvOverlapped)))
-	        Sleep(0);
+        while (!(HasOverlappedIoCompleted(&session->recvOverlapped)))
+            Sleep(0);
     }
 
     delete session;
+}
+
+void ServerCore::RegisterSession(Session* session)
+{
+    m_sessionMap.insert({ session->sessionId, session });
+}
+
+void ServerCore::UnregisterSession(SessionId sessionId)
+{
+    auto iter = m_sessionMap.find(sessionId);
+    Session* session = iter->second;
+    if (!session)
+    {
+        printf("UnregisterSession : can't find session");
+        return;
+    }
+
+    CloseSession(session);
 
     EnterCriticalSection(&m_criticalSection);
-
     m_sessionMap.unsafe_erase(iter);
-
     LeaveCriticalSection(&m_criticalSection);
 }
 
@@ -350,7 +358,7 @@ void ServerCore::ProcessThread()
             // 좀비 클라이언트 예외처리
             if(nTransferredByte == 0)
             {
-                CloseSession(session->sessionId);
+                UnregisterSession(session->sessionId);
                 continue;
             }
 
@@ -439,7 +447,7 @@ void ServerCore::HandleAcceptCompletion(DWORD nTransferredByte)
     /// 로직
     // 초기 데이터 처리(인증, 세션 연결, 응답)
     //ProcessInitialData(session, m_pListenSocketCtxt->acceptBuffer, INIT_DATA_SIZE);
-    m_sessionMap.insert({ session->sessionId, session }); // 원래 processinitdata 함수 안에 있음, 임시로 꺼내놓기
+    //m_sessionMap.insert({ session->sessionId, session }); // 원래 processinitdata 함수 안에 있음, 임시로 꺼내놓기
     // 에코
     //ZeroMemory(session->recvOverlapped.buffer, MAX_BUF_SIZE);
     //memcpy(session->recvOverlapped.buffer, m_pListenSocketCtxt->acceptBuffer, INIT_DATA_SIZE);
@@ -503,7 +511,7 @@ bool ServerCore::StartReceive(Session* session)
     if(rt == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
     {
         printf("WSARecv() failed: %d\n", WSAGetLastError());
-        CloseSession(session->sessionId);
+        UnregisterSession(session->sessionId);
         return false;
     }
 
@@ -528,7 +536,7 @@ bool ServerCore::StartSend(SessionId sessionId, const char* data, int length)
     if (rt == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING) 
     {
         printf("WSASend() failed: %d\n", WSAGetLastError());
-        CloseSession(session->sessionId);
+        UnregisterSession(session->sessionId);
         return false;
     }
 

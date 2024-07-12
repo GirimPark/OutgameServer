@@ -7,8 +7,8 @@ typedef google::protobuf::Message DataPacket;
 
 class PacketBuilder {
 public:
-    // Singleton
-    static PacketBuilder& Instance() {
+    static PacketBuilder& Instance()
+	{
         static PacketBuilder instance;
         return instance;
     }

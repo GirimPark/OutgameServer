@@ -13,19 +13,16 @@
     <Filter Include="Util">
       <UniqueIdentifier>{1fc2c8f9-b2e3-4ee5-bbe3-199e24b3fcb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Protocol\Packets">
+      <UniqueIdentifier>{acc91ec6-66a0-46f9-a6cc-b17534dedc46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Protocol.proto">
       <Filter>Protocol\ProtoFiles</Filter>
     </None>
-    <None Include="Echo.proto">
-      <Filter>Protocol\ProtoFiles</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Protocol.pb.h">
-      <Filter>Protocol\Test</Filter>
-    </ClInclude>
     <ClInclude Include="PacketHeader.h" />
     <ClInclude Include="PacketBuilder.h">
       <Filter>Util</Filter>
@@ -34,17 +31,21 @@
     <ClInclude Include="Echo.pb.h">
       <Filter>Protocol\Test</Filter>
     </ClInclude>
+    <ClInclude Include="Define.h" />
+    <ClInclude Include="Protocol.pb.h">
+      <Filter>Protocol\Packets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Protocol.pb.cc">
-      <Filter>Protocol\Test</Filter>
-    </ClCompile>
     <ClCompile Include="PacketBuilder.cpp">
       <Filter>Util</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Echo.pb.cc">
       <Filter>Protocol\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Protocol.pb.cc">
+      <Filter>Protocol\Packets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

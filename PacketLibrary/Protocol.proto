@@ -1,20 +1,22 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 package Protocol;
 
-
-
-message BuffData
+message S2C_Echo
 {
-	uint64 buffId = 1;
-	float remainTime = 2;
-	repeated uint64 victims = 3;
-	string d = 4;
+	string data = 1;
 }
 
-message S_TEST
+message C2S_Echo
 {
-	uint64 id = 1;
-	uint32 hp = 2;
-	uint32 attack = 3;
-	repeated BuffData buffs = 4;
+	string data = 1;
+}
+
+message C2S_Login_Request
+{
+	string username = 1;
+	string password = 2;
+}
+message S2C_Login_Response
+{
+	bool validation = 1;
 }

@@ -7,9 +7,7 @@
 #ifndef PCH_H
 #define PCH_H
 
-// 여기에 미리 컴파일하려는 헤더 추가
-#include "framework.h"
-#include "NetworkDefine.h"
+#define WIN32_LEAN_AND_MEAN
 
 /// Network
 #include <WinSock2.h>	// winsock과의 재정의 문제로 가장 먼저 컴파일 되어야함
@@ -37,7 +35,15 @@
 
 /// Concurrent Container
 #include <concurrent_unordered_map.h>
+#include <concurrent_queue.h>
+#include <concurrent_vector.h>
 
+/// Database
+#include <sql.h>
+#include <sqlext.h>
+
+/// Custom
+#include "Define.h"
 #include "CompletionKey.h"
 
 #endif //PCH_H

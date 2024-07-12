@@ -5,8 +5,6 @@ VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OutgameServer", "OutgameServer\OutgameServer.vcxproj", "{71967042-D865-4115-9E34-DB3C44633332}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetworkLibrary", "NetworkLibrary\NetworkLibrary.vcxproj", "{4A50FD75-BBFA-4081-9186-C1FE5153C992}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IOCPNetworkLibrary", "IOCPNetworkLibrary\IOCPNetworkLibrary.vcxproj", "{B8CD1D4C-3A5E-4268-8277-532AD619EF70}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IOCPServerLibrary", "IOCPServerLibrary\IOCPServerLibrary.vcxproj", "{5266BD53-59B8-4DB4-B682-2FCB8F0ACC1E}"
@@ -14,6 +12,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestClient", "TestClient\TestClient.vcxproj", "{7551DDDF-16E8-459E-B54F-31C5053FA328}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PacketLibrary", "PacketLibrary\PacketLibrary.vcxproj", "{29AB2687-53AC-4A7E-8096-6AC1DDFF692D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DatabaseTable", "DatabaseTable", "{3E1F8B4E-D44E-4AC9-9816-552C81E2E310}"
+	ProjectSection(SolutionItems) = preProject
+		DatabaseTable\User.sql = DatabaseTable\User.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,14 +34,6 @@ Global
 		{71967042-D865-4115-9E34-DB3C44633332}.Release|x64.Build.0 = Release|x64
 		{71967042-D865-4115-9E34-DB3C44633332}.Release|x86.ActiveCfg = Release|Win32
 		{71967042-D865-4115-9E34-DB3C44633332}.Release|x86.Build.0 = Release|Win32
-		{4A50FD75-BBFA-4081-9186-C1FE5153C992}.Debug|x64.ActiveCfg = Debug|x64
-		{4A50FD75-BBFA-4081-9186-C1FE5153C992}.Debug|x64.Build.0 = Debug|x64
-		{4A50FD75-BBFA-4081-9186-C1FE5153C992}.Debug|x86.ActiveCfg = Debug|Win32
-		{4A50FD75-BBFA-4081-9186-C1FE5153C992}.Debug|x86.Build.0 = Debug|Win32
-		{4A50FD75-BBFA-4081-9186-C1FE5153C992}.Release|x64.ActiveCfg = Release|x64
-		{4A50FD75-BBFA-4081-9186-C1FE5153C992}.Release|x64.Build.0 = Release|x64
-		{4A50FD75-BBFA-4081-9186-C1FE5153C992}.Release|x86.ActiveCfg = Release|Win32
-		{4A50FD75-BBFA-4081-9186-C1FE5153C992}.Release|x86.Build.0 = Release|Win32
 		{B8CD1D4C-3A5E-4268-8277-532AD619EF70}.Debug|x64.ActiveCfg = Debug|x64
 		{B8CD1D4C-3A5E-4268-8277-532AD619EF70}.Debug|x64.Build.0 = Debug|x64
 		{B8CD1D4C-3A5E-4268-8277-532AD619EF70}.Debug|x86.ActiveCfg = Debug|Win32

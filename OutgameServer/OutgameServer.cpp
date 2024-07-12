@@ -12,9 +12,10 @@
 
 #include "pch.h"
 #include "OutgameServer.h"
+#include <sstream>
 
-#include "../IOCPServerLibrary/ServerCore.h"
-#include "../PacketLibrary/Echo.pb.h"
+//#include "../PacketLibrary/Echo.pb.h"
+#include "../PacketLibrary/Protocol.pb.h"
 #ifdef _DEBUG
 #include <vld/vld.h>
 #endif
@@ -23,6 +24,57 @@
 
 int main()
 {
+	/// Database test
+	assert(DBConnectionPool::Instance().Connect(1, L"Driver={ODBC Driver 17 for SQL Server};Server=(localdb)\\MSSQLLocalDB;Database=ServerDB;Trusted_Connection=Yes;"));
+
+	// Create Table
+	{
+		std::shared_ptr<DBConnection> dbConn = DBConnectionPool::Instance().GetConnection();;
+		assert(dbConn->ExecuteFile("User.sql"));
+	}
+
+	// Add Data
+	for (int i = 0; i < 3; i++)
+	{
+		std::shared_ptr<DBConnection> dbConn = DBConnectionPool::Instance().GetConnection();
+		DBBind<2, 0> dbBind(dbConn, L"INSERT INTO [dbo].[User]([username], [password]) VALUES(?, ?)");
+
+		std::wstring username = L"test" + std::to_wstring(i + 1);
+		dbBind.BindParam(0, username.c_str(), username.size());
+		std::wstring password = L"1234";
+		dbBind.BindParam(1, password.c_str(), password.size());
+
+		assert(dbBind.Execute());
+	}
+
+	// Read
+	{
+		std::shared_ptr<DBConnection> dbConn = DBConnectionPool::Instance().GetConnection();
+
+		DBBind<1, 4> dbBind(dbConn, L"SELECT id, username, password, status FROM [dbo].[User] WHERE username = (?)");
+
+		std::wstring username = L"test2";
+		dbBind.BindParam(0, username.c_str(), username.size());
+
+		int outId = 0;
+		WCHAR outUsername[100];
+		WCHAR outPassword[100];
+		int outStatus = 0;
+		dbBind.BindCol(0, OUT outId);
+		dbBind.BindCol(1, OUT outUsername);
+		dbBind.BindCol(2, OUT outPassword);
+		dbBind.BindCol(3, OUT outStatus);
+
+		assert(dbBind.Execute());
+
+		std::wcout.imbue(std::locale("kor"));
+		while (dbConn->Fetch())
+		{
+			std::wcout << "Id: " << outId << " /Username : " << outUsername << " /Password: " << outPassword << " /Status: "<< outStatus << '\n';
+		}
+	}
+
+
 	OutgameServer server;
 	server.Start();
 }
@@ -109,9 +161,22 @@ void OutgameServer::DispatchReceivedData(Session* session, char* data, int nRece
 			auto echoRequest = std::make_shared<Protocol::C2S_Echo>();
 			if (PacketBuilder::Instance().DeserializeData(data, nReceivedByte, packetHeader, *echoRequest))
 			{
-				std::shared_ptr<EchoQStruct> echoStruct = std::make_shared<EchoQStruct>(session->sessionId, echoRequest);
-				//echoRequest.reset();
+				std::shared_ptr<ReceiveStruct> echoStruct = std::make_shared<ReceiveStruct>(session->sessionId, echoRequest);
 				m_recvEchoQueue.push(echoStruct);
+			}
+			else
+			{
+				printf("PakcetBuilder::Deserialize() failed\n");
+			}
+			break;
+		}
+		case EPacketType::C2S_LOGIN_REQUEST:
+		{
+			auto loginRequest = std::make_shared<Protocol::C2S_Login_Request>();
+			if (PacketBuilder::Instance().DeserializeData(data, nReceivedByte, packetHeader, *loginRequest))
+			{
+				std::shared_ptr<ReceiveStruct> receiveStruct = std::make_shared<ReceiveStruct>(session->sessionId, loginRequest);
+				m_loginRequestQueue.push(receiveStruct);
 			}
 			else
 			{
@@ -129,13 +194,13 @@ void OutgameServer::DispatchReceivedData(Session* session, char* data, int nRece
 
 void OutgameServer::ProcessEchoQueue()
 {
-	std::shared_ptr<EchoQStruct> echoStruct;
+	std::shared_ptr<ReceiveStruct> echoStruct;
 	while (m_bRun)
 	{
 		if (!m_recvEchoQueue.try_pop(echoStruct))
 			continue;
 		
-		std::shared_ptr<SendQStrct> sendStruct = std::make_shared<SendQStrct>();
+		std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
 		sendStruct->type = ESendType::UNICAST;
 		sendStruct->sessionId = echoStruct->sessionId;
 		sendStruct->data = echoStruct->data;
@@ -148,10 +213,14 @@ void OutgameServer::ProcessEchoQueue()
 	}
 }
 
+void OutgameServer::ProcessLoginQueue()
+{
+}
+
 void OutgameServer::SendThread()
 {
 	// todo 브로드캐스트, 유니캐스트 타입 구분해서 실행
-	std::shared_ptr<SendQStrct> sendStruct;
+	std::shared_ptr<SendStruct> sendStruct;
 	while (m_bRun)
 	{
 		if (!m_sendQueue.try_pop(sendStruct))

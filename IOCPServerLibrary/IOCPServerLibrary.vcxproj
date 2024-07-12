@@ -149,14 +149,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DBBind.h" />
+    <ClInclude Include="DBConnection.h" />
+    <ClInclude Include="DBConnectionPool.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="NetworkDefine.h" />
+    <ClInclude Include="Define.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ServerCore.h" />
     <ClInclude Include="CompletionKey.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="IOCPServerLibrary.cpp" />
+    <ClCompile Include="DBBind.cpp" />
+    <ClCompile Include="DBConnection.cpp" />
+    <ClCompile Include="DBConnectionPool.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
