@@ -1,6 +1,7 @@
 #pragma once
 
 class ServerCore;
+enum class ePostSendType;
 
 enum class ESendType
 {
@@ -10,7 +11,7 @@ enum class ESendType
 
 struct ReceiveStruct
 {
-	SessionId sessionId;
+	Session* session;
 	std::shared_ptr<DataPacket> data;
 
 	~ReceiveStruct()
@@ -22,7 +23,7 @@ struct ReceiveStruct
 struct SendStruct
 {
 	ESendType type;
-	SessionId sessionId;
+	Session* session;
 	std::shared_ptr<PacketHeader> header;
 	std::shared_ptr<DataPacket> data;
 
@@ -45,10 +46,12 @@ public:
 private:
 	// ServerCore에서 OnReceive에 실행할 콜백 함수
 	void DispatchReceivedData(Session* session, char* data, int nReceivedByte);
+
 	// EchoQueue 처리 스레드
 	void ProcessEchoQueue();
 	// LoginQueue 처리 스레드
-	void ProcessLoginQueue();
+	void ProcessLoginRequests();
+	
 	// SendQueue 처리 스레드
 	void SendThread();
 
@@ -63,12 +66,13 @@ private:
 	ServerCore* m_serverCore;
 
 	concurrency::concurrent_queue<std::shared_ptr<ReceiveStruct>> m_recvEchoQueue;
-	concurrency::concurrent_queue<std::shared_ptr<ReceiveStruct>> m_loginRequestQueue;
+	concurrency::concurrent_queue<std::shared_ptr<ReceiveStruct>> m_loginRequests;
 
 	concurrency::concurrent_queue<std::shared_ptr<SendStruct>> m_sendQueue;
 
+	int m_nProcessThread = 1;
 	std::thread* m_coreThread;
-	std::thread* m_processThread;
+	std::vector<std::thread*> m_processThreads;
 	std::thread* m_sendThread;
 	std::thread* m_quitThread;
 };

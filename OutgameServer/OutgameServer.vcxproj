@@ -32,11 +32,15 @@
   <ItemGroup>
     <ClCompile Include="OutgameServer.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="User.cpp" />
+    <ClCompile Include="UserManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h" />
     <ClInclude Include="OutgameServer.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="User.h" />
+    <ClInclude Include="UserManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

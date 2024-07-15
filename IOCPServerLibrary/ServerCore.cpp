@@ -59,8 +59,7 @@ void ServerCore::Run()
         m_threads[i] = new std::thread(&ServerCore::ProcessThread, this);
         if(!m_threads[i])
         {
-            printf("std::thread() failed to create process thread: %d\n",
-                GetLastError());
+            printf("std::thread() failed to create process thread: %d\n", GetLastError());
             Finalize();
             return;
         }
@@ -76,7 +75,6 @@ void ServerCore::RegisterCallback(ReceiveDataCallback callback)
 {
     m_receiveCallbacks.emplace_back(callback);
 }
-
 
 void ServerCore::Finalize()
 {
@@ -296,6 +294,7 @@ void ServerCore::CloseSession(Session* session)
 
 void ServerCore::RegisterSession(Session* session)
 {
+    session->state = Session::eStateType::MAINTAIN;
     m_sessionMap.insert({ session->sessionId, session });
 }
 
@@ -368,12 +367,12 @@ void ServerCore::ProcessThread()
             case OVERLAPPED_STRUCT::eIOType::READ:
             {
                 OnReceiveData(session, session->recvOverlapped.buffer, nTransferredByte);
+                StartReceive(session);
                 //HandleReadCompletion(session, nTransferredByte);
                 break;
             }
             case OVERLAPPED_STRUCT::eIOType::WRITE:
             {
-                //OnSendData(session);
                 HandleWriteCompletion(session);
                 break;
             }
@@ -460,13 +459,32 @@ void ServerCore::HandleReadCompletion(Session* session, DWORD bytesTransferred)
 {
     if (bytesTransferred > 0) 
     {
-        StartSend(session->sessionId, session->recvOverlapped.buffer, bytesTransferred);
+        StartSend(session, session->recvOverlapped.buffer, bytesTransferred);
     }
 }
 
 void ServerCore::HandleWriteCompletion(Session* session)
 { 
-    StartReceive(session);
+    switch(session->state)
+    {
+    case Session::eStateType::REGISTER:
+	    {
+        RegisterSession(session);
+        break;
+	    }
+    case Session::eStateType::CLOSE:
+	    {
+        CloseSession(session);
+        break;
+	    }
+    case Session::eStateType::UNREGISTER:
+	    {
+        UnregisterSession(session->sessionId);
+        break;
+	    }
+    default:
+    	break;
+    }
 }
 
 bool ServerCore::StartAccept()
@@ -518,13 +536,9 @@ bool ServerCore::StartReceive(Session* session)
     return true;
 }
 
-bool ServerCore::StartSend(SessionId sessionId, const char* data, int length)
+bool ServerCore::StartSend(Session* session, const char* data, int length)
 {
     if (m_bEndServer)
-        return false;
-
-    Session* session = m_sessionMap.find(sessionId)->second;
-    if (!session)
         return false;
 
     session->sendOverlapped.IOOperation = OVERLAPPED_STRUCT::eIOType::WRITE;

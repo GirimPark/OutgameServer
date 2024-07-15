@@ -31,6 +31,7 @@
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include <google/protobuf/unknown_field_set.h>
+#include <google/protobuf/wrappers.pb.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 #define PROTOBUF_INTERNAL_EXPORT_Protocol_2eproto
@@ -668,16 +669,25 @@ class S2C_Login_Response final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kValidationFieldNumber = 1,
+    kSucessFieldNumber = 1,
   };
-  // bool validation = 1;
-  void clear_validation();
-  bool validation() const;
-  void set_validation(bool value);
+  // .google.protobuf.BoolValue sucess = 1;
+  bool has_sucess() const;
   private:
-  bool _internal_validation() const;
-  void _internal_set_validation(bool value);
+  bool _internal_has_sucess() const;
   public:
+  void clear_sucess();
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue& sucess() const;
+  PROTOBUF_NODISCARD ::PROTOBUF_NAMESPACE_ID::BoolValue* release_sucess();
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* mutable_sucess();
+  void set_allocated_sucess(::PROTOBUF_NAMESPACE_ID::BoolValue* sucess);
+  private:
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue& _internal_sucess() const;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* _internal_mutable_sucess();
+  public:
+  void unsafe_arena_set_allocated_sucess(
+      ::PROTOBUF_NAMESPACE_ID::BoolValue* sucess);
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* unsafe_arena_release_sucess();
 
   // @@protoc_insertion_point(class_scope:Protocol.S2C_Login_Response)
  private:
@@ -686,7 +696,7 @@ class S2C_Login_Response final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  bool validation_;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* sucess_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Protocol_2eproto;
 };
@@ -917,24 +927,90 @@ inline void C2S_Login_Request::set_allocated_password(std::string* password) {
 
 // S2C_Login_Response
 
-// bool validation = 1;
-inline void S2C_Login_Response::clear_validation() {
-  validation_ = false;
+// .google.protobuf.BoolValue sucess = 1;
+inline bool S2C_Login_Response::_internal_has_sucess() const {
+  return this != internal_default_instance() && sucess_ != nullptr;
 }
-inline bool S2C_Login_Response::_internal_validation() const {
-  return validation_;
+inline bool S2C_Login_Response::has_sucess() const {
+  return _internal_has_sucess();
 }
-inline bool S2C_Login_Response::validation() const {
-  // @@protoc_insertion_point(field_get:Protocol.S2C_Login_Response.validation)
-  return _internal_validation();
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_Login_Response::_internal_sucess() const {
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue* p = sucess_;
+  return p != nullptr ? *p : reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::BoolValue&>(
+      ::PROTOBUF_NAMESPACE_ID::_BoolValue_default_instance_);
 }
-inline void S2C_Login_Response::_internal_set_validation(bool value) {
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_Login_Response::sucess() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_Login_Response.sucess)
+  return _internal_sucess();
+}
+inline void S2C_Login_Response::unsafe_arena_set_allocated_sucess(
+    ::PROTOBUF_NAMESPACE_ID::BoolValue* sucess) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(sucess_);
+  }
+  sucess_ = sucess;
+  if (sucess) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S2C_Login_Response.sucess)
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_Login_Response::release_sucess() {
   
-  validation_ = value;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = sucess_;
+  sucess_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
 }
-inline void S2C_Login_Response::set_validation(bool value) {
-  _internal_set_validation(value);
-  // @@protoc_insertion_point(field_set:Protocol.S2C_Login_Response.validation)
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_Login_Response::unsafe_arena_release_sucess() {
+  // @@protoc_insertion_point(field_release:Protocol.S2C_Login_Response.sucess)
+  
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = sucess_;
+  sucess_ = nullptr;
+  return temp;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_Login_Response::_internal_mutable_sucess() {
+  
+  if (sucess_ == nullptr) {
+    auto* p = CreateMaybeMessage<::PROTOBUF_NAMESPACE_ID::BoolValue>(GetArenaForAllocation());
+    sucess_ = p;
+  }
+  return sucess_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_Login_Response::mutable_sucess() {
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* _msg = _internal_mutable_sucess();
+  // @@protoc_insertion_point(field_mutable:Protocol.S2C_Login_Response.sucess)
+  return _msg;
+}
+inline void S2C_Login_Response::set_allocated_sucess(::PROTOBUF_NAMESPACE_ID::BoolValue* sucess) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(sucess_);
+  }
+  if (sucess) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(sucess));
+    if (message_arena != submessage_arena) {
+      sucess = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, sucess, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  sucess_ = sucess;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_Login_Response.sucess)
 }
 
 #ifdef __GNUC__

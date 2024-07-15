@@ -4,7 +4,6 @@
 enum class eIOType;
 
 typedef std::function<void(Session*, char*, int)> ReceiveDataCallback;
-//typedef std::function<void(Session*)> SendDataCallback;
 
 class ServerCore
 {
@@ -18,6 +17,8 @@ public:
 
 	// Register Callbacks
 	void RegisterCallback(ReceiveDataCallback callback);
+
+			
 
 private:
 	/// 리소스 해제
@@ -33,10 +34,10 @@ private:
 	SOCKET CreateListenSocket();
 
 	/// 세션 관련 함수
-	Session* CreateSession();
-	void CloseSession(Session* session);
-	void RegisterSession(Session* session);
-	void UnregisterSession(SessionId sessionId);	// 세션 맵에서 삭제만 하는 경우는 없다. 세션 자원 해제도 같이 일어나야 함. lock이 있으므로 남용 유의
+	Session* CreateSession();						// 세션 생성
+	void RegisterSession(Session* session);			// 세션 맵에 추가
+	void CloseSession(Session* session);			// 세션 자원 해제
+	void UnregisterSession(SessionId sessionId);	// 세션 맵에서 삭제+세션 자원 해제. lock이 있으므로 남용 유의
 
 	/// IO 작업 관련 함수
 	// GetQueuedCompletionStatus
@@ -52,7 +53,7 @@ public:
 	// IO 작업 게시
 	bool StartAccept();
 	bool StartReceive(Session* session);
-	bool StartSend(SessionId sessionId, const char* data, int length);
+	bool StartSend(Session* session, const char* data, int length);
 
 	//! 로직 부분으로 넘겨야 함
 	// todo 초기 데이터 처리
@@ -66,7 +67,7 @@ public:
 	/// Callbacks
 	void OnReceiveData(Session* session, char* data, int nReceivedByte);
 
-private:
+private: 
 	HANDLE m_hIOCP;
 	bool m_bEndServer;
 	WSAEVENT m_hCleanupEvent[1];

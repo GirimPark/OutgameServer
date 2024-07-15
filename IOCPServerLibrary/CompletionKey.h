@@ -32,6 +32,7 @@ struct Session
 	Session()
 	{
 		type = eCompletionKeyType::SESSION;
+		state = eStateType::MAINTAIN;
 
 		sendOverlapped.IOOperation = OVERLAPPED_STRUCT::eIOType::WRITE;
 		recvOverlapped.IOOperation = OVERLAPPED_STRUCT::eIOType::READ;
@@ -44,6 +45,14 @@ struct Session
 	}
 
 	eCompletionKeyType type;
+
+	enum class eStateType
+	{
+		MAINTAIN,
+		REGISTER,
+		CLOSE,
+		UNREGISTER
+	} state;	// Write 累诀 饶 技记 贸府
 
 	unsigned int sessionId;
 

@@ -14,7 +14,7 @@
 #include "OutgameServer.h"
 #include <sstream>
 
-//#include "../PacketLibrary/Echo.pb.h"
+#include "Define.h"
 #include "../PacketLibrary/Protocol.pb.h"
 #ifdef _DEBUG
 #include <vld/vld.h>
@@ -29,7 +29,7 @@ int main()
 
 	// Create Table
 	{
-		std::shared_ptr<DBConnection> dbConn = DBConnectionPool::Instance().GetConnection();;
+		std::shared_ptr<DBConnection> dbConn = DBConnectionPool::Instance().GetConnection();
 		assert(dbConn->ExecuteFile("User.sql"));
 	}
 
@@ -47,32 +47,32 @@ int main()
 		assert(dbBind.Execute());
 	}
 
-	// Read
-	{
-		std::shared_ptr<DBConnection> dbConn = DBConnectionPool::Instance().GetConnection();
+	//// Read
+	//{
+	//	std::shared_ptr<DBConnection> dbConn = DBConnectionPool::Instance().GetConnection();
 
-		DBBind<1, 4> dbBind(dbConn, L"SELECT id, username, password, status FROM [dbo].[User] WHERE username = (?)");
+	//	DBBind<1, 4> dbBind(dbConn, L"SELECT id, username, password, status FROM [dbo].[User] WHERE username = (?)");
 
-		std::wstring username = L"test2";
-		dbBind.BindParam(0, username.c_str(), username.size());
+	//	std::wstring username = L"test2";
+	//	dbBind.BindParam(0, username.c_str(), username.size());
 
-		int outId = 0;
-		WCHAR outUsername[100];
-		WCHAR outPassword[100];
-		int outStatus = 0;
-		dbBind.BindCol(0, OUT outId);
-		dbBind.BindCol(1, OUT outUsername);
-		dbBind.BindCol(2, OUT outPassword);
-		dbBind.BindCol(3, OUT outStatus);
+	//	int outId = 0;
+	//	WCHAR outUsername[100];
+	//	WCHAR outPassword[100];
+	//	int outStatus = 0;
+	//	dbBind.BindCol(0, OUT outId);
+	//	dbBind.BindCol(1, OUT outUsername);
+	//	dbBind.BindCol(2, OUT outPassword);
+	//	dbBind.BindCol(3, OUT outStatus);
 
-		assert(dbBind.Execute());
+	//	assert(dbBind.Execute());
 
-		std::wcout.imbue(std::locale("kor"));
-		while (dbConn->Fetch())
-		{
-			std::wcout << "Id: " << outId << " /Username : " << outUsername << " /Password: " << outPassword << " /Status: "<< outStatus << '\n';
-		}
-	}
+	//	std::wcout.imbue(std::locale("kor"));
+	//	while (dbConn->Fetch())
+	//	{
+	//		std::wcout << "Id: " << outId << " /Username : " << outUsername << " /Password: " << outPassword << " /Status: "<< outStatus << '\n';
+	//	}
+	//}
 
 
 	OutgameServer server;
@@ -81,6 +81,7 @@ int main()
 
 OutgameServer::OutgameServer()
 {
+	m_processThreads.resize(m_nProcessThread);
 }
 
 OutgameServer::~OutgameServer()
@@ -107,7 +108,7 @@ void OutgameServer::Start()
 		});
 
 	m_coreThread = new std::thread(&ServerCore::Run, m_serverCore);
-	m_processThread = new std::thread(&OutgameServer::ProcessEchoQueue, this);
+	m_processThreads[0] = new std::thread(&OutgameServer::ProcessLoginRequests, this);
 	m_sendThread = new std::thread(&OutgameServer::SendThread, this);
 	m_quitThread = new std::thread(&OutgameServer::QuitThread, this);
 
@@ -116,10 +117,12 @@ void OutgameServer::Start()
 		m_coreThread->join();
 		delete m_coreThread;
 	}
-	if (m_processThread->joinable())
+	for(const auto& processThread : m_processThreads)
 	{
-		m_processThread->join();
-		delete m_processThread;
+		if(processThread->joinable())
+		{
+			processThread->join();
+		}
 	}
 	if (m_sendThread->joinable())
 	{
@@ -161,12 +164,12 @@ void OutgameServer::DispatchReceivedData(Session* session, char* data, int nRece
 			auto echoRequest = std::make_shared<Protocol::C2S_Echo>();
 			if (PacketBuilder::Instance().DeserializeData(data, nReceivedByte, packetHeader, *echoRequest))
 			{
-				std::shared_ptr<ReceiveStruct> echoStruct = std::make_shared<ReceiveStruct>(session->sessionId, echoRequest);
+				std::shared_ptr<ReceiveStruct> echoStruct = std::make_shared<ReceiveStruct>(session, echoRequest);
 				m_recvEchoQueue.push(echoStruct);
 			}
 			else
 			{
-				printf("PakcetBuilder::Deserialize() failed\n");
+				LOG_CONTENTS("PakcetBuilder::Deserialize() failed");
 			}
 			break;
 		}
@@ -175,17 +178,17 @@ void OutgameServer::DispatchReceivedData(Session* session, char* data, int nRece
 			auto loginRequest = std::make_shared<Protocol::C2S_Login_Request>();
 			if (PacketBuilder::Instance().DeserializeData(data, nReceivedByte, packetHeader, *loginRequest))
 			{
-				std::shared_ptr<ReceiveStruct> receiveStruct = std::make_shared<ReceiveStruct>(session->sessionId, loginRequest);
-				m_loginRequestQueue.push(receiveStruct);
+				std::shared_ptr<ReceiveStruct> receiveStruct = std::make_shared<ReceiveStruct>(session, loginRequest);
+				m_loginRequests.push(receiveStruct);
 			}
 			else
 			{
-				printf("PakcetBuilder::Deserialize() failed\n");
+				LOG_CONTENTS("PakcetBuilder::Deserialize() failed");
 			}
 			break;
 		}
 		default:
-			printf("Unknown packet type\n");
+			LOG_CONTENTS("Unknown packet type");
 			break;
 		}
 	}
@@ -202,19 +205,51 @@ void OutgameServer::ProcessEchoQueue()
 		
 		std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
 		sendStruct->type = ESendType::UNICAST;
-		sendStruct->sessionId = echoStruct->sessionId;
+		sendStruct->session = echoStruct->session;
 		sendStruct->data = echoStruct->data;
 		std::string serializedString;
 		(echoStruct->data)->SerializeToString(&serializedString);
 		sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::S2C_ECHO, serializedString.size()));
 
-		//echoStruct.reset();
 		m_sendQueue.push(sendStruct);
 	}
 }
 
-void OutgameServer::ProcessLoginQueue()
+void OutgameServer::ProcessLoginRequests()
 {
+	std::shared_ptr<ReceiveStruct> loginStruct;
+	while (m_bRun)
+	{
+		if (!m_loginRequests.try_pop(loginStruct))
+			continue;
+		
+		std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
+		// type
+		sendStruct->type = ESendType::UNICAST;
+		// sessionId
+		sendStruct->session = loginStruct->session;
+		// data
+		Protocol::C2S_Login_Request* requestData = static_cast<Protocol::C2S_Login_Request*>(loginStruct->data.get());
+		std::shared_ptr<Protocol::S2C_Login_Response> response = std::make_shared<Protocol::S2C_Login_Response>();
+		// 요청 데이터 인증 확인
+		if(UserManager::Instance().AuthenticateUser(requestData->username(), requestData->password()))
+		{
+			response->mutable_sucess()->set_value(true);
+			sendStruct->session->state = Session::eStateType::REGISTER;
+		}
+		else
+		{
+			response->mutable_sucess()->set_value(false);
+			sendStruct->session->state = Session::eStateType::MAINTAIN;
+		}
+		sendStruct->data = response;
+		// header
+		std::string serializedString;
+		(sendStruct->data)->SerializeToString(&serializedString);
+		sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::S2C_LOGIN_RESPONSE, serializedString.size()));
+
+		m_sendQueue.push(sendStruct);
+	}
 }
 
 void OutgameServer::SendThread()
@@ -229,9 +264,8 @@ void OutgameServer::SendThread()
 		char* serializedPacket = PacketBuilder::Instance().Serialize(sendStruct->header->type, *sendStruct->data);
 		if (serializedPacket)
 		{
-			bool rt = m_serverCore->StartSend(sendStruct->sessionId, serializedPacket, sendStruct->header->length);
+			bool rt = m_serverCore->StartSend(sendStruct->session, serializedPacket, sendStruct->header->length);
 			delete[] serializedPacket;
-			//sendStruct.reset();
 
 			if (!rt)
 				return;

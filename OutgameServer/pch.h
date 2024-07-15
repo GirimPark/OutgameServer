@@ -34,6 +34,10 @@
 #include <sqlext.h>
 
 /// custom
+#include "Define.h"
+
+#include "UserManager.h"
+
 #include "../IOCPServerLibrary/Define.h"
 #include "../IOCPServerLibrary/CompletionKey.h"
 #include "../IOCPServerLibrary/ServerCore.h"

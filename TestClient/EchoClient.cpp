@@ -9,7 +9,7 @@
 
 #include "pch.h"
 #include "EchoClient.h"
-#include "../PacketLibrary/Echo.pb.h"
+#include "../PacketLibrary/Protocol.pb.h"
 
 EchoClient::EchoClient(const char* ip, const char* port)
     : m_bEndClient(false)

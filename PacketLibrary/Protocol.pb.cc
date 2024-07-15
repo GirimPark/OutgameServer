@@ -56,7 +56,7 @@ struct C2S_Login_RequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C2S_Login_RequestDefaultTypeInternal _C2S_Login_Request_default_instance_;
 constexpr S2C_Login_Response::S2C_Login_Response(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : validation_(false){}
+  : sucess_(nullptr){}
 struct S2C_Login_ResponseDefaultTypeInternal {
   constexpr S2C_Login_ResponseDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -100,7 +100,7 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_Login_Response, validation_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_Login_Response, sucess_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::Protocol::S2C_Echo)},
@@ -117,16 +117,21 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 };
 
 const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\016Protocol.proto\022\010Protocol\"\030\n\010S2C_Echo\022\014"
-  "\n\004data\030\001 \001(\t\"\030\n\010C2S_Echo\022\014\n\004data\030\001 \001(\t\"7"
-  "\n\021C2S_Login_Request\022\020\n\010username\030\001 \001(\t\022\020\n"
-  "\010password\030\002 \001(\t\"(\n\022S2C_Login_Response\022\022\n"
-  "\nvalidation\030\001 \001(\010b\006proto3"
+  "\n\016Protocol.proto\022\010Protocol\032\036google/proto"
+  "buf/wrappers.proto\"\030\n\010S2C_Echo\022\014\n\004data\030\001"
+  " \001(\t\"\030\n\010C2S_Echo\022\014\n\004data\030\001 \001(\t\"7\n\021C2S_Lo"
+  "gin_Request\022\020\n\010username\030\001 \001(\t\022\020\n\010passwor"
+  "d\030\002 \001(\t\"@\n\022S2C_Login_Response\022*\n\006sucess\030"
+  "\001 \001(\0132\032.google.protobuf.BoolValueb\006proto"
+  "3"
   ;
+static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Protocol_2eproto_deps[1] = {
+  &::descriptor_table_google_2fprotobuf_2fwrappers_2eproto,
+};
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Protocol_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Protocol_2eproto = {
-  false, false, 185, descriptor_table_protodef_Protocol_2eproto, "Protocol.proto", 
-  &descriptor_table_Protocol_2eproto_once, nullptr, 0, 4,
+  false, false, 241, descriptor_table_protodef_Protocol_2eproto, "Protocol.proto", 
+  &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 1, 4,
   schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
   file_level_metadata_Protocol_2eproto, file_level_enum_descriptors_Protocol_2eproto, file_level_service_descriptors_Protocol_2eproto,
 };
@@ -800,8 +805,19 @@ void C2S_Login_Request::InternalSwap(C2S_Login_Request* other) {
 
 class S2C_Login_Response::_Internal {
  public:
+  static const ::PROTOBUF_NAMESPACE_ID::BoolValue& sucess(const S2C_Login_Response* msg);
 };
 
+const ::PROTOBUF_NAMESPACE_ID::BoolValue&
+S2C_Login_Response::_Internal::sucess(const S2C_Login_Response* msg) {
+  return *msg->sucess_;
+}
+void S2C_Login_Response::clear_sucess() {
+  if (GetArenaForAllocation() == nullptr && sucess_ != nullptr) {
+    delete sucess_;
+  }
+  sucess_ = nullptr;
+}
 S2C_Login_Response::S2C_Login_Response(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
@@ -814,12 +830,16 @@ S2C_Login_Response::S2C_Login_Response(::PROTOBUF_NAMESPACE_ID::Arena* arena,
 S2C_Login_Response::S2C_Login_Response(const S2C_Login_Response& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  validation_ = from.validation_;
+  if (from._internal_has_sucess()) {
+    sucess_ = new ::PROTOBUF_NAMESPACE_ID::BoolValue(*from.sucess_);
+  } else {
+    sucess_ = nullptr;
+  }
   // @@protoc_insertion_point(copy_constructor:Protocol.S2C_Login_Response)
 }
 
 inline void S2C_Login_Response::SharedCtor() {
-validation_ = false;
+sucess_ = nullptr;
 }
 
 S2C_Login_Response::~S2C_Login_Response() {
@@ -831,6 +851,7 @@ S2C_Login_Response::~S2C_Login_Response() {
 
 inline void S2C_Login_Response::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete sucess_;
 }
 
 void S2C_Login_Response::ArenaDtor(void* object) {
@@ -849,7 +870,10 @@ void S2C_Login_Response::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  validation_ = false;
+  if (GetArenaForAllocation() == nullptr && sucess_ != nullptr) {
+    delete sucess_;
+  }
+  sucess_ = nullptr;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -859,10 +883,10 @@ const char* S2C_Login_Response::_InternalParse(const char* ptr, ::PROTOBUF_NAMES
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // bool validation = 1;
+      // .google.protobuf.BoolValue sucess = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          validation_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_sucess(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -896,10 +920,12 @@ uint8_t* S2C_Login_Response::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // bool validation = 1;
-  if (this->_internal_validation() != 0) {
+  // .google.protobuf.BoolValue sucess = 1;
+  if (this->_internal_has_sucess()) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(1, this->_internal_validation(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        1, _Internal::sucess(this), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -918,9 +944,11 @@ size_t S2C_Login_Response::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // bool validation = 1;
-  if (this->_internal_validation() != 0) {
-    total_size += 1 + 1;
+  // .google.protobuf.BoolValue sucess = 1;
+  if (this->_internal_has_sucess()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *sucess_);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
@@ -945,8 +973,8 @@ void S2C_Login_Response::MergeFrom(const S2C_Login_Response& from) {
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from._internal_validation() != 0) {
-    _internal_set_validation(from._internal_validation());
+  if (from._internal_has_sucess()) {
+    _internal_mutable_sucess()->::PROTOBUF_NAMESPACE_ID::BoolValue::MergeFrom(from._internal_sucess());
   }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -965,7 +993,7 @@ bool S2C_Login_Response::IsInitialized() const {
 void S2C_Login_Response::InternalSwap(S2C_Login_Response* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(validation_, other->validation_);
+  swap(sucess_, other->sucess_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_Login_Response::GetMetadata() const {

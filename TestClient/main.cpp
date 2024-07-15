@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "EchoClient.h"
+#include "LoginClient.h"
 
 #ifdef _DEBUG
 #pragma comment(lib, "libprotobufd.lib")
@@ -12,6 +13,6 @@
 
 int main()
 {
-	EchoClient client("localhost","5001");
+	LoginClient client("localhost","5001");
 	client.Run();
 }

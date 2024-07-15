@@ -143,10 +143,12 @@
   <ItemGroup>
     <ClInclude Include="define.h" />
     <ClInclude Include="EchoClient.h" />
+    <ClInclude Include="LoginClient.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EchoClient.cpp" />
+    <ClCompile Include="LoginClient.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp" />
   </ItemGroup>

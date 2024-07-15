@@ -28,9 +28,6 @@
       <Filter>Util</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Echo.pb.h">
-      <Filter>Protocol\Test</Filter>
-    </ClInclude>
     <ClInclude Include="Define.h" />
     <ClInclude Include="Protocol.pb.h">
       <Filter>Protocol\Packets</Filter>
@@ -41,9 +38,6 @@
       <Filter>Util</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Echo.pb.cc">
-      <Filter>Protocol\Test</Filter>
-    </ClCompile>
     <ClCompile Include="Protocol.pb.cc">
       <Filter>Protocol\Packets</Filter>
     </ClCompile>

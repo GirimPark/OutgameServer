@@ -1,6 +1,8 @@
 ﻿syntax = "proto3";
 package Protocol;
 
+import "google/protobuf/wrappers.proto";
+
 message S2C_Echo
 {
 	string data = 1;
@@ -18,5 +20,5 @@ message C2S_Login_Request
 }
 message S2C_Login_Response
 {
-	bool validation = 1;
+	google.protobuf.BoolValue sucess = 1;
 }
