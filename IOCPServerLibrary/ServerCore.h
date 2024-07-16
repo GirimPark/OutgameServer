@@ -18,7 +18,8 @@ public:
 	// Register Callbacks
 	void RegisterCallback(ReceiveDataCallback callback);
 
-			
+	bool Unicast(Session* session, const char* data, int length);
+	bool Broadcast(const char* data, int length);
 
 private:
 	/// 리소스 해제
@@ -49,25 +50,15 @@ private:
 	void HandleReadCompletion(Session* session, DWORD nTransferredByte);
 	void HandleWriteCompletion(Session* session);
 
-public:
+private: 
 	// IO 작업 게시
 	bool StartAccept();
 	bool StartReceive(Session* session);
 	bool StartSend(Session* session, const char* data, int length);
 
-	//! 로직 부분으로 넘겨야 함
-	// todo 초기 데이터 처리
-	void ProcessInitialData(Session* session, char* data, int length);
-	// todo 인증
-	bool AuthenticateUser(const std::string_view& username, const std::string_view& password);
-
-	/// 서버 종료 자원 해제 확인용 스레드
-	void QuitThread();
-
 	/// Callbacks
 	void OnReceiveData(Session* session, char* data, int nReceivedByte);
 
-private: 
 	HANDLE m_hIOCP;
 	bool m_bEndServer;
 	WSAEVENT m_hCleanupEvent[1];
@@ -77,7 +68,7 @@ private:
 	int m_backlog;
 
 	int m_nThread;
-	std::vector<std::thread*> m_threads;
+	std::vector<std::thread*> m_IOCPThreads;
 
 	concurrency::concurrent_unordered_map<SessionId, Session*> m_sessionMap;
 

@@ -12,10 +12,13 @@
 
 #include "pch.h"
 #include "OutgameServer.h"
+
+#include "UserManager.h"
+
 #include <sstream>
 
-#include "Define.h"
 #include "../PacketLibrary/Protocol.pb.h"
+
 #ifdef _DEBUG
 #include <vld/vld.h>
 #endif
@@ -42,7 +45,7 @@ int main()
 		std::wstring username = L"test" + std::to_wstring(i + 1);
 		dbBind.BindParam(0, username.c_str(), username.size());
 		std::wstring password = L"1234";
-		dbBind.BindParam(1, password.c_str(), password.size());
+		dbBind.BindParam(1, password.c_str(), password.size()); 
 
 		assert(dbBind.Execute());
 	}
@@ -74,65 +77,39 @@ int main()
 	//	}
 	//}
 
-
-	OutgameServer server;
-	server.Start();
-}
-
-OutgameServer::OutgameServer()
-{
-	m_processThreads.resize(m_nProcessThread);
-}
-
-OutgameServer::~OutgameServer()
-{
-	if(m_bRun)
-		Stop();
-
-	if (m_serverCore)
-	{
-		delete m_serverCore;
-		m_serverCore = nullptr;
-	}
+	OutgameServer::Instance().Start();
 }
 
 void OutgameServer::Start()
 {
 	m_bRun = true;
 
-	m_serverCore = new ServerCore("5001", 5);
+	m_pServerCore = new ServerCore("5001", 5);
+	m_pUserManager = new UserManager;
 
-	m_serverCore->RegisterCallback([this](Session* session, char* data, int nReceivedByte)
+	m_pServerCore->RegisterCallback([this](Session* session, char* data, int nReceivedByte)
 		{
 			DispatchReceivedData(session, data, nReceivedByte);
 		});
 
-	m_coreThread = new std::thread(&ServerCore::Run, m_serverCore);
-	m_processThreads[0] = new std::thread(&OutgameServer::ProcessLoginRequests, this);
-	m_sendThread = new std::thread(&OutgameServer::SendThread, this);
-	m_quitThread = new std::thread(&OutgameServer::QuitThread, this);
+	/// Threads
+	// Core
+	m_workers.emplace_back(new std::thread(&ServerCore::Run, m_pServerCore));					// Server Core
+	m_workers.emplace_back(new std::thread(&OutgameServer::SendThread, this));						// Send
+	m_workers.emplace_back(new std::thread(&OutgameServer::QuitThread, this));						// Quit
+	// Logic
+	m_workers.emplace_back(new std::thread(&OutgameServer::ProcessEchoQueue, this));				// Echo - Test
+	m_workers.emplace_back(new std::thread(&UserManager::HandleLoginRequest, m_pUserManager));	// Login
+	m_workers.emplace_back(new std::thread(&UserManager::BroadcastValidationPacket, m_pUserManager, std::chrono::milliseconds(5000)));
+	
 
-	if (m_coreThread->joinable())
+	for(const auto& worker : m_workers)
 	{
-		m_coreThread->join();
-		delete m_coreThread;
-	}
-	for(const auto& processThread : m_processThreads)
-	{
-		if(processThread->joinable())
+		if(worker->joinable())
 		{
-			processThread->join();
+			worker->join();
+			delete worker;
 		}
-	}
-	if (m_sendThread->joinable())
-	{
-		m_sendThread->join();
-		delete m_sendThread;
-	}
-	if (m_quitThread->joinable())
-	{
-		m_quitThread->join();
-		delete m_quitThread;
 	}
 }
 
@@ -141,13 +118,18 @@ void OutgameServer::Stop()
 	m_bRun = false;
 
 	// core 자원 해제
-	m_serverCore->TriggerCleanupEvent();
-	m_serverCore = nullptr;
+	m_pServerCore->TriggerCleanupEvent();
+	m_pServerCore = nullptr;
 
 	m_recvEchoQueue.clear();
 	m_sendQueue.clear();
 
 	google::protobuf::ShutdownProtobufLibrary();
+}
+
+void OutgameServer::InsertSendTask(std::shared_ptr<SendStruct> task)
+{
+	m_sendQueue.push(task);
 }
 
 void OutgameServer::DispatchReceivedData(Session* session, char* data, int nReceivedByte)
@@ -175,11 +157,11 @@ void OutgameServer::DispatchReceivedData(Session* session, char* data, int nRece
 		}
 		case EPacketType::C2S_LOGIN_REQUEST:
 		{
-			auto loginRequest = std::make_shared<Protocol::C2S_Login_Request>();
+			auto loginRequest = std::make_shared<Protocol::C2S_LoginRequest>();
 			if (PacketBuilder::Instance().DeserializeData(data, nReceivedByte, packetHeader, *loginRequest))
 			{
 				std::shared_ptr<ReceiveStruct> receiveStruct = std::make_shared<ReceiveStruct>(session, loginRequest);
-				m_loginRequests.push(receiveStruct);
+				m_pUserManager->InsertLoginRequest(receiveStruct);
 			}
 			else
 			{
@@ -215,46 +197,8 @@ void OutgameServer::ProcessEchoQueue()
 	}
 }
 
-void OutgameServer::ProcessLoginRequests()
-{
-	std::shared_ptr<ReceiveStruct> loginStruct;
-	while (m_bRun)
-	{
-		if (!m_loginRequests.try_pop(loginStruct))
-			continue;
-		
-		std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
-		// type
-		sendStruct->type = ESendType::UNICAST;
-		// sessionId
-		sendStruct->session = loginStruct->session;
-		// data
-		Protocol::C2S_Login_Request* requestData = static_cast<Protocol::C2S_Login_Request*>(loginStruct->data.get());
-		std::shared_ptr<Protocol::S2C_Login_Response> response = std::make_shared<Protocol::S2C_Login_Response>();
-		// 요청 데이터 인증 확인
-		if(UserManager::Instance().AuthenticateUser(requestData->username(), requestData->password()))
-		{
-			response->mutable_sucess()->set_value(true);
-			sendStruct->session->state = Session::eStateType::REGISTER;
-		}
-		else
-		{
-			response->mutable_sucess()->set_value(false);
-			sendStruct->session->state = Session::eStateType::MAINTAIN;
-		}
-		sendStruct->data = response;
-		// header
-		std::string serializedString;
-		(sendStruct->data)->SerializeToString(&serializedString);
-		sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::S2C_LOGIN_RESPONSE, serializedString.size()));
-
-		m_sendQueue.push(sendStruct);
-	}
-}
-
 void OutgameServer::SendThread()
 {
-	// todo 브로드캐스트, 유니캐스트 타입 구분해서 실행
 	std::shared_ptr<SendStruct> sendStruct;
 	while (m_bRun)
 	{
@@ -262,14 +206,36 @@ void OutgameServer::SendThread()
 			continue;
 
 		char* serializedPacket = PacketBuilder::Instance().Serialize(sendStruct->header->type, *sendStruct->data);
-		if (serializedPacket)
+		if (!serializedPacket)
 		{
-			bool rt = m_serverCore->StartSend(sendStruct->session, serializedPacket, sendStruct->header->length);
-			delete[] serializedPacket;
-
-			if (!rt)
-				return;
+			LOG_CONTENTS("Packet Serialize Failed");
+			return;
 		}
+
+		switch (sendStruct->type)
+		{
+		case ESendType::UNICAST:
+			{
+			if(!m_pServerCore->Unicast(sendStruct->session, serializedPacket, sendStruct->header->length))
+				LOG_CONTENTS("Unicast Failed");
+
+			break;
+			}
+		case ESendType::BROADCAST:
+			{
+			if (!m_pServerCore->Broadcast(serializedPacket, sendStruct->header->length))
+				LOG_CONTENTS("Bradcast Failed");
+
+			break;
+			}
+		default:
+			{
+			LOG_CONTENTS("Undefined Send Type");
+			break;
+			}
+		}
+
+		delete[] serializedPacket;
 	}
 }
 

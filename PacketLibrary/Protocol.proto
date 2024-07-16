@@ -3,6 +3,16 @@ package Protocol;
 
 import "google/protobuf/wrappers.proto";
 
+message S2C_ValidationRequest
+{
+
+}
+
+message C2S_ValidationResponse
+{
+
+}
+
 message S2C_Echo
 {
 	string data = 1;
@@ -13,12 +23,13 @@ message C2S_Echo
 	string data = 1;
 }
 
-message C2S_Login_Request
+message C2S_LoginRequest
 {
 	string username = 1;
 	string password = 2;
 }
-message S2C_Login_Response
+
+message S2C_LoginResponse
 {
 	google.protobuf.BoolValue sucess = 1;
 }

@@ -17,6 +17,28 @@
 
 PROTOBUF_PRAGMA_INIT_SEG
 namespace Protocol {
+constexpr S2C_ValidationRequest::S2C_ValidationRequest(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
+struct S2C_ValidationRequestDefaultTypeInternal {
+  constexpr S2C_ValidationRequestDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~S2C_ValidationRequestDefaultTypeInternal() {}
+  union {
+    S2C_ValidationRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S2C_ValidationRequestDefaultTypeInternal _S2C_ValidationRequest_default_instance_;
+constexpr C2S_ValidationResponse::C2S_ValidationResponse(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
+struct C2S_ValidationResponseDefaultTypeInternal {
+  constexpr C2S_ValidationResponseDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~C2S_ValidationResponseDefaultTypeInternal() {}
+  union {
+    C2S_ValidationResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C2S_ValidationResponseDefaultTypeInternal _C2S_ValidationResponse_default_instance_;
 constexpr S2C_Echo::S2C_Echo(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : data_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
@@ -41,37 +63,49 @@ struct C2S_EchoDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C2S_EchoDefaultTypeInternal _C2S_Echo_default_instance_;
-constexpr C2S_Login_Request::C2S_Login_Request(
+constexpr C2S_LoginRequest::C2S_LoginRequest(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : username_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , password_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
-struct C2S_Login_RequestDefaultTypeInternal {
-  constexpr C2S_Login_RequestDefaultTypeInternal()
+struct C2S_LoginRequestDefaultTypeInternal {
+  constexpr C2S_LoginRequestDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~C2S_Login_RequestDefaultTypeInternal() {}
+  ~C2S_LoginRequestDefaultTypeInternal() {}
   union {
-    C2S_Login_Request _instance;
+    C2S_LoginRequest _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C2S_Login_RequestDefaultTypeInternal _C2S_Login_Request_default_instance_;
-constexpr S2C_Login_Response::S2C_Login_Response(
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C2S_LoginRequestDefaultTypeInternal _C2S_LoginRequest_default_instance_;
+constexpr S2C_LoginResponse::S2C_LoginResponse(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : sucess_(nullptr){}
-struct S2C_Login_ResponseDefaultTypeInternal {
-  constexpr S2C_Login_ResponseDefaultTypeInternal()
+struct S2C_LoginResponseDefaultTypeInternal {
+  constexpr S2C_LoginResponseDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~S2C_Login_ResponseDefaultTypeInternal() {}
+  ~S2C_LoginResponseDefaultTypeInternal() {}
   union {
-    S2C_Login_Response _instance;
+    S2C_LoginResponse _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S2C_Login_ResponseDefaultTypeInternal _S2C_Login_Response_default_instance_;
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S2C_LoginResponseDefaultTypeInternal _S2C_LoginResponse_default_instance_;
 }  // namespace Protocol
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Protocol_2eproto[4];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Protocol_2eproto[6];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_Protocol_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_Protocol_2eproto = nullptr;
 
 const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_ValidationRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_ValidationResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::S2C_Echo, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -87,51 +121,56 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::C2S_Echo, data_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_Login_Request, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_LoginRequest, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_Login_Request, username_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_Login_Request, password_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_LoginRequest, username_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_LoginRequest, password_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_Login_Response, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_LoginResponse, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_Login_Response, sucess_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_LoginResponse, sucess_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, -1, sizeof(::Protocol::S2C_Echo)},
-  { 7, -1, -1, sizeof(::Protocol::C2S_Echo)},
-  { 14, -1, -1, sizeof(::Protocol::C2S_Login_Request)},
-  { 22, -1, -1, sizeof(::Protocol::S2C_Login_Response)},
+  { 0, -1, -1, sizeof(::Protocol::S2C_ValidationRequest)},
+  { 6, -1, -1, sizeof(::Protocol::C2S_ValidationResponse)},
+  { 12, -1, -1, sizeof(::Protocol::S2C_Echo)},
+  { 19, -1, -1, sizeof(::Protocol::C2S_Echo)},
+  { 26, -1, -1, sizeof(::Protocol::C2S_LoginRequest)},
+  { 34, -1, -1, sizeof(::Protocol::S2C_LoginResponse)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_ValidationRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C2S_ValidationResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_Echo_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C2S_Echo_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C2S_Login_Request_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_Login_Response_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C2S_LoginRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_LoginResponse_default_instance_),
 };
 
 const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\016Protocol.proto\022\010Protocol\032\036google/proto"
-  "buf/wrappers.proto\"\030\n\010S2C_Echo\022\014\n\004data\030\001"
-  " \001(\t\"\030\n\010C2S_Echo\022\014\n\004data\030\001 \001(\t\"7\n\021C2S_Lo"
-  "gin_Request\022\020\n\010username\030\001 \001(\t\022\020\n\010passwor"
-  "d\030\002 \001(\t\"@\n\022S2C_Login_Response\022*\n\006sucess\030"
-  "\001 \001(\0132\032.google.protobuf.BoolValueb\006proto"
-  "3"
+  "buf/wrappers.proto\"\027\n\025S2C_ValidationRequ"
+  "est\"\030\n\026C2S_ValidationResponse\"\030\n\010S2C_Ech"
+  "o\022\014\n\004data\030\001 \001(\t\"\030\n\010C2S_Echo\022\014\n\004data\030\001 \001("
+  "\t\"6\n\020C2S_LoginRequest\022\020\n\010username\030\001 \001(\t\022"
+  "\020\n\010password\030\002 \001(\t\"\?\n\021S2C_LoginResponse\022*"
+  "\n\006sucess\030\001 \001(\0132\032.google.protobuf.BoolVal"
+  "ueb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Protocol_2eproto_deps[1] = {
   &::descriptor_table_google_2fprotobuf_2fwrappers_2eproto,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Protocol_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Protocol_2eproto = {
-  false, false, 241, descriptor_table_protodef_Protocol_2eproto, "Protocol.proto", 
-  &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 1, 4,
+  false, false, 290, descriptor_table_protodef_Protocol_2eproto, "Protocol.proto", 
+  &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 1, 6,
   schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
   file_level_metadata_Protocol_2eproto, file_level_enum_descriptors_Protocol_2eproto, file_level_service_descriptors_Protocol_2eproto,
 };
@@ -142,6 +181,84 @@ PROTOBUF_ATTRIBUTE_WEAK const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable
 // Force running AddDescriptors() at dynamic initialization time.
 PROTOBUF_ATTRIBUTE_INIT_PRIORITY static ::PROTOBUF_NAMESPACE_ID::internal::AddDescriptorsRunner dynamic_init_dummy_Protocol_2eproto(&descriptor_table_Protocol_2eproto);
 namespace Protocol {
+
+// ===================================================================
+
+class S2C_ValidationRequest::_Internal {
+ public:
+};
+
+S2C_ValidationRequest::S2C_ValidationRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
+  // @@protoc_insertion_point(arena_constructor:Protocol.S2C_ValidationRequest)
+}
+S2C_ValidationRequest::S2C_ValidationRequest(const S2C_ValidationRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:Protocol.S2C_ValidationRequest)
+}
+
+
+
+
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData S2C_ValidationRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*S2C_ValidationRequest::GetClassData() const { return &_class_data_; }
+
+
+
+
+
+
+
+::PROTOBUF_NAMESPACE_ID::Metadata S2C_ValidationRequest::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
+      file_level_metadata_Protocol_2eproto[0]);
+}
+
+// ===================================================================
+
+class C2S_ValidationResponse::_Internal {
+ public:
+};
+
+C2S_ValidationResponse::C2S_ValidationResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
+  // @@protoc_insertion_point(arena_constructor:Protocol.C2S_ValidationResponse)
+}
+C2S_ValidationResponse::C2S_ValidationResponse(const C2S_ValidationResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:Protocol.C2S_ValidationResponse)
+}
+
+
+
+
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData C2S_ValidationResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C2S_ValidationResponse::GetClassData() const { return &_class_data_; }
+
+
+
+
+
+
+
+::PROTOBUF_NAMESPACE_ID::Metadata C2S_ValidationResponse::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
+      file_level_metadata_Protocol_2eproto[1]);
+}
 
 // ===================================================================
 
@@ -343,7 +460,7 @@ void S2C_Echo::InternalSwap(S2C_Echo* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_Echo::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[0]);
+      file_level_metadata_Protocol_2eproto[2]);
 }
 
 // ===================================================================
@@ -546,25 +663,25 @@ void C2S_Echo::InternalSwap(C2S_Echo* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_Echo::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[1]);
+      file_level_metadata_Protocol_2eproto[3]);
 }
 
 // ===================================================================
 
-class C2S_Login_Request::_Internal {
+class C2S_LoginRequest::_Internal {
  public:
 };
 
-C2S_Login_Request::C2S_Login_Request(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+C2S_LoginRequest::C2S_LoginRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
   }
-  // @@protoc_insertion_point(arena_constructor:Protocol.C2S_Login_Request)
+  // @@protoc_insertion_point(arena_constructor:Protocol.C2S_LoginRequest)
 }
-C2S_Login_Request::C2S_Login_Request(const C2S_Login_Request& from)
+C2S_LoginRequest::C2S_LoginRequest(const C2S_LoginRequest& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   username_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
@@ -583,10 +700,10 @@ C2S_Login_Request::C2S_Login_Request(const C2S_Login_Request& from)
     password_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_password(), 
       GetArenaForAllocation());
   }
-  // @@protoc_insertion_point(copy_constructor:Protocol.C2S_Login_Request)
+  // @@protoc_insertion_point(copy_constructor:Protocol.C2S_LoginRequest)
 }
 
-inline void C2S_Login_Request::SharedCtor() {
+inline void C2S_LoginRequest::SharedCtor() {
 username_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
   username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
@@ -597,31 +714,31 @@ password_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlr
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
-C2S_Login_Request::~C2S_Login_Request() {
-  // @@protoc_insertion_point(destructor:Protocol.C2S_Login_Request)
+C2S_LoginRequest::~C2S_LoginRequest() {
+  // @@protoc_insertion_point(destructor:Protocol.C2S_LoginRequest)
   if (GetArenaForAllocation() != nullptr) return;
   SharedDtor();
   _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-inline void C2S_Login_Request::SharedDtor() {
+inline void C2S_LoginRequest::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   username_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   password_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
-void C2S_Login_Request::ArenaDtor(void* object) {
-  C2S_Login_Request* _this = reinterpret_cast< C2S_Login_Request* >(object);
+void C2S_LoginRequest::ArenaDtor(void* object) {
+  C2S_LoginRequest* _this = reinterpret_cast< C2S_LoginRequest* >(object);
   (void)_this;
 }
-void C2S_Login_Request::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+void C2S_LoginRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 }
-void C2S_Login_Request::SetCachedSize(int size) const {
+void C2S_LoginRequest::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 
-void C2S_Login_Request::Clear() {
-// @@protoc_insertion_point(message_clear_start:Protocol.C2S_Login_Request)
+void C2S_LoginRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.C2S_LoginRequest)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -631,7 +748,7 @@ void C2S_Login_Request::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* C2S_Login_Request::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* C2S_LoginRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
@@ -642,7 +759,7 @@ const char* C2S_Login_Request::_InternalParse(const char* ptr, ::PROTOBUF_NAMESP
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           auto str = _internal_mutable_username();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C2S_Login_Request.username"));
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C2S_LoginRequest.username"));
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -652,7 +769,7 @@ const char* C2S_Login_Request::_InternalParse(const char* ptr, ::PROTOBUF_NAMESP
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           auto str = _internal_mutable_password();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C2S_Login_Request.password"));
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C2S_LoginRequest.password"));
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -680,9 +797,9 @@ failure:
 #undef CHK_
 }
 
-uint8_t* C2S_Login_Request::_InternalSerialize(
+uint8_t* C2S_LoginRequest::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:Protocol.C2S_Login_Request)
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.C2S_LoginRequest)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -691,7 +808,7 @@ uint8_t* C2S_Login_Request::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_username().data(), static_cast<int>(this->_internal_username().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "Protocol.C2S_Login_Request.username");
+      "Protocol.C2S_LoginRequest.username");
     target = stream->WriteStringMaybeAliased(
         1, this->_internal_username(), target);
   }
@@ -701,7 +818,7 @@ uint8_t* C2S_Login_Request::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_password().data(), static_cast<int>(this->_internal_password().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "Protocol.C2S_Login_Request.password");
+      "Protocol.C2S_LoginRequest.password");
     target = stream->WriteStringMaybeAliased(
         2, this->_internal_password(), target);
   }
@@ -710,12 +827,12 @@ uint8_t* C2S_Login_Request::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:Protocol.C2S_Login_Request)
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.C2S_LoginRequest)
   return target;
 }
 
-size_t C2S_Login_Request::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:Protocol.C2S_Login_Request)
+size_t C2S_LoginRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.C2S_LoginRequest)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
@@ -739,21 +856,21 @@ size_t C2S_Login_Request::ByteSizeLong() const {
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData C2S_Login_Request::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData C2S_LoginRequest::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
-    C2S_Login_Request::MergeImpl
+    C2S_LoginRequest::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C2S_Login_Request::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C2S_LoginRequest::GetClassData() const { return &_class_data_; }
 
-void C2S_Login_Request::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+void C2S_LoginRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
                       const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-  static_cast<C2S_Login_Request *>(to)->MergeFrom(
-      static_cast<const C2S_Login_Request &>(from));
+  static_cast<C2S_LoginRequest *>(to)->MergeFrom(
+      static_cast<const C2S_LoginRequest &>(from));
 }
 
 
-void C2S_Login_Request::MergeFrom(const C2S_Login_Request& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.C2S_Login_Request)
+void C2S_LoginRequest::MergeFrom(const C2S_LoginRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.C2S_LoginRequest)
   GOOGLE_DCHECK_NE(&from, this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -767,18 +884,18 @@ void C2S_Login_Request::MergeFrom(const C2S_Login_Request& from) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void C2S_Login_Request::CopyFrom(const C2S_Login_Request& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.C2S_Login_Request)
+void C2S_LoginRequest::CopyFrom(const C2S_LoginRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.C2S_LoginRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool C2S_Login_Request::IsInitialized() const {
+bool C2S_LoginRequest::IsInitialized() const {
   return true;
 }
 
-void C2S_Login_Request::InternalSwap(C2S_Login_Request* other) {
+void C2S_LoginRequest::InternalSwap(C2S_LoginRequest* other) {
   using std::swap;
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
@@ -795,39 +912,39 @@ void C2S_Login_Request::InternalSwap(C2S_Login_Request* other) {
   );
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata C2S_Login_Request::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata C2S_LoginRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[2]);
+      file_level_metadata_Protocol_2eproto[4]);
 }
 
 // ===================================================================
 
-class S2C_Login_Response::_Internal {
+class S2C_LoginResponse::_Internal {
  public:
-  static const ::PROTOBUF_NAMESPACE_ID::BoolValue& sucess(const S2C_Login_Response* msg);
+  static const ::PROTOBUF_NAMESPACE_ID::BoolValue& sucess(const S2C_LoginResponse* msg);
 };
 
 const ::PROTOBUF_NAMESPACE_ID::BoolValue&
-S2C_Login_Response::_Internal::sucess(const S2C_Login_Response* msg) {
+S2C_LoginResponse::_Internal::sucess(const S2C_LoginResponse* msg) {
   return *msg->sucess_;
 }
-void S2C_Login_Response::clear_sucess() {
+void S2C_LoginResponse::clear_sucess() {
   if (GetArenaForAllocation() == nullptr && sucess_ != nullptr) {
     delete sucess_;
   }
   sucess_ = nullptr;
 }
-S2C_Login_Response::S2C_Login_Response(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+S2C_LoginResponse::S2C_LoginResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
   }
-  // @@protoc_insertion_point(arena_constructor:Protocol.S2C_Login_Response)
+  // @@protoc_insertion_point(arena_constructor:Protocol.S2C_LoginResponse)
 }
-S2C_Login_Response::S2C_Login_Response(const S2C_Login_Response& from)
+S2C_LoginResponse::S2C_LoginResponse(const S2C_LoginResponse& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   if (from._internal_has_sucess()) {
@@ -835,37 +952,37 @@ S2C_Login_Response::S2C_Login_Response(const S2C_Login_Response& from)
   } else {
     sucess_ = nullptr;
   }
-  // @@protoc_insertion_point(copy_constructor:Protocol.S2C_Login_Response)
+  // @@protoc_insertion_point(copy_constructor:Protocol.S2C_LoginResponse)
 }
 
-inline void S2C_Login_Response::SharedCtor() {
+inline void S2C_LoginResponse::SharedCtor() {
 sucess_ = nullptr;
 }
 
-S2C_Login_Response::~S2C_Login_Response() {
-  // @@protoc_insertion_point(destructor:Protocol.S2C_Login_Response)
+S2C_LoginResponse::~S2C_LoginResponse() {
+  // @@protoc_insertion_point(destructor:Protocol.S2C_LoginResponse)
   if (GetArenaForAllocation() != nullptr) return;
   SharedDtor();
   _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-inline void S2C_Login_Response::SharedDtor() {
+inline void S2C_LoginResponse::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   if (this != internal_default_instance()) delete sucess_;
 }
 
-void S2C_Login_Response::ArenaDtor(void* object) {
-  S2C_Login_Response* _this = reinterpret_cast< S2C_Login_Response* >(object);
+void S2C_LoginResponse::ArenaDtor(void* object) {
+  S2C_LoginResponse* _this = reinterpret_cast< S2C_LoginResponse* >(object);
   (void)_this;
 }
-void S2C_Login_Response::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+void S2C_LoginResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 }
-void S2C_Login_Response::SetCachedSize(int size) const {
+void S2C_LoginResponse::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 
-void S2C_Login_Response::Clear() {
-// @@protoc_insertion_point(message_clear_start:Protocol.S2C_Login_Response)
+void S2C_LoginResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.S2C_LoginResponse)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -877,7 +994,7 @@ void S2C_Login_Response::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* S2C_Login_Response::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* S2C_LoginResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
@@ -914,9 +1031,9 @@ failure:
 #undef CHK_
 }
 
-uint8_t* S2C_Login_Response::_InternalSerialize(
+uint8_t* S2C_LoginResponse::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S2C_Login_Response)
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S2C_LoginResponse)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -932,12 +1049,12 @@ uint8_t* S2C_Login_Response::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S2C_Login_Response)
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S2C_LoginResponse)
   return target;
 }
 
-size_t S2C_Login_Response::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:Protocol.S2C_Login_Response)
+size_t S2C_LoginResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.S2C_LoginResponse)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
@@ -954,21 +1071,21 @@ size_t S2C_Login_Response::ByteSizeLong() const {
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData S2C_Login_Response::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData S2C_LoginResponse::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
-    S2C_Login_Response::MergeImpl
+    S2C_LoginResponse::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*S2C_Login_Response::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*S2C_LoginResponse::GetClassData() const { return &_class_data_; }
 
-void S2C_Login_Response::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+void S2C_LoginResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
                       const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-  static_cast<S2C_Login_Response *>(to)->MergeFrom(
-      static_cast<const S2C_Login_Response &>(from));
+  static_cast<S2C_LoginResponse *>(to)->MergeFrom(
+      static_cast<const S2C_LoginResponse &>(from));
 }
 
 
-void S2C_Login_Response::MergeFrom(const S2C_Login_Response& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S2C_Login_Response)
+void S2C_LoginResponse::MergeFrom(const S2C_LoginResponse& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S2C_LoginResponse)
   GOOGLE_DCHECK_NE(&from, this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -979,43 +1096,49 @@ void S2C_Login_Response::MergeFrom(const S2C_Login_Response& from) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void S2C_Login_Response::CopyFrom(const S2C_Login_Response& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S2C_Login_Response)
+void S2C_LoginResponse::CopyFrom(const S2C_LoginResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S2C_LoginResponse)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool S2C_Login_Response::IsInitialized() const {
+bool S2C_LoginResponse::IsInitialized() const {
   return true;
 }
 
-void S2C_Login_Response::InternalSwap(S2C_Login_Response* other) {
+void S2C_LoginResponse::InternalSwap(S2C_LoginResponse* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(sucess_, other->sucess_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata S2C_Login_Response::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata S2C_LoginResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[3]);
+      file_level_metadata_Protocol_2eproto[5]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
+template<> PROTOBUF_NOINLINE ::Protocol::S2C_ValidationRequest* Arena::CreateMaybeMessage< ::Protocol::S2C_ValidationRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::S2C_ValidationRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::C2S_ValidationResponse* Arena::CreateMaybeMessage< ::Protocol::C2S_ValidationResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::C2S_ValidationResponse >(arena);
+}
 template<> PROTOBUF_NOINLINE ::Protocol::S2C_Echo* Arena::CreateMaybeMessage< ::Protocol::S2C_Echo >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::S2C_Echo >(arena);
 }
 template<> PROTOBUF_NOINLINE ::Protocol::C2S_Echo* Arena::CreateMaybeMessage< ::Protocol::C2S_Echo >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::C2S_Echo >(arena);
 }
-template<> PROTOBUF_NOINLINE ::Protocol::C2S_Login_Request* Arena::CreateMaybeMessage< ::Protocol::C2S_Login_Request >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::Protocol::C2S_Login_Request >(arena);
+template<> PROTOBUF_NOINLINE ::Protocol::C2S_LoginRequest* Arena::CreateMaybeMessage< ::Protocol::C2S_LoginRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::C2S_LoginRequest >(arena);
 }
-template<> PROTOBUF_NOINLINE ::Protocol::S2C_Login_Response* Arena::CreateMaybeMessage< ::Protocol::S2C_Login_Response >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::Protocol::S2C_Login_Response >(arena);
+template<> PROTOBUF_NOINLINE ::Protocol::S2C_LoginResponse* Arena::CreateMaybeMessage< ::Protocol::S2C_LoginResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::S2C_LoginResponse >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

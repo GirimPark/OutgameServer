@@ -9,7 +9,7 @@ ServerCore::ServerCore(const char* port, int backlog)
     SYSTEM_INFO systemInfo;
     GetSystemInfo(&systemInfo);
     m_nThread = systemInfo.dwNumberOfProcessors * 2;
-    m_threads.resize(m_nThread);
+    m_IOCPThreads.resize(m_nThread);
 }
 
 ServerCore::~ServerCore()
@@ -56,8 +56,8 @@ void ServerCore::Run()
     // 워커 스레드 생성/실행 + 대기
     for(int i=0; i<m_nThread; ++i)
     {
-        m_threads[i] = new std::thread(&ServerCore::ProcessThread, this);
-        if(!m_threads[i])
+        m_IOCPThreads[i] = new std::thread(&ServerCore::ProcessThread, this);
+        if(!m_IOCPThreads[i])
         {
             printf("std::thread() failed to create process thread: %d\n", GetLastError());
             Finalize();
@@ -119,13 +119,13 @@ void ServerCore::Finalize()
     // 스레드 해제
     for (int i = 0; i < m_nThread; ++i)
     {
-        if (m_threads[i] && m_threads[i]->joinable())
+        if (m_IOCPThreads[i] && m_IOCPThreads[i]->joinable())
         {
-            m_threads[i]->join();
+            m_IOCPThreads[i]->join();
         }
-        delete m_threads[i];
+        delete m_IOCPThreads[i];
     }
-    m_threads.clear();
+    m_IOCPThreads.clear();
 
     // 이벤트 해제
     if(m_hCleanupEvent[0] != WSA_INVALID_EVENT)
@@ -296,6 +296,8 @@ void ServerCore::RegisterSession(Session* session)
 {
     session->state = Session::eStateType::MAINTAIN;
     m_sessionMap.insert({ session->sessionId, session });
+
+    // todo 유저 객체를 만들고 세션과 연결하기
 }
 
 void ServerCore::UnregisterSession(SessionId sessionId)
@@ -313,6 +315,8 @@ void ServerCore::UnregisterSession(SessionId sessionId)
     EnterCriticalSection(&m_criticalSection);
     m_sessionMap.unsafe_erase(iter);
     LeaveCriticalSection(&m_criticalSection);
+
+    // todo 유저 객체 삭제하기
 }
 
 void ServerCore::ProcessThread()
@@ -439,20 +443,12 @@ void ServerCore::HandleAcceptCompletion(DWORD nTransferredByte)
     printf("Local Address: %s\n", addr);
     inet_ntop(AF_INET, &remoteAddr->sin_addr, addr, INET_ADDRSTRLEN);
     printf("Remote Address: %s\n", addr);
-    
-    // 다른 수락 작업 게시
-    StartAccept();
 
-    /// 로직
-    // 초기 데이터 처리(인증, 세션 연결, 응답)
-    //ProcessInitialData(session, m_pListenSocketCtxt->acceptBuffer, INIT_DATA_SIZE);
-    //m_sessionMap.insert({ session->sessionId, session }); // 원래 processinitdata 함수 안에 있음, 임시로 꺼내놓기
-    // 에코
-    //ZeroMemory(session->recvOverlapped.buffer, MAX_BUF_SIZE);
-    //memcpy(session->recvOverlapped.buffer, m_pListenSocketCtxt->acceptBuffer, INIT_DATA_SIZE);
-    //StartSend(session, session->recvOverlapped.buffer, INIT_DATA_SIZE);
 
     OnReceiveData(session, m_pListenSocketCtxt->acceptBuffer, nTransferredByte);
+
+    // 다른 수락 작업 게시
+    StartAccept();
 }
 
 void ServerCore::HandleReadCompletion(Session* session, DWORD bytesTransferred)
@@ -485,6 +481,21 @@ void ServerCore::HandleWriteCompletion(Session* session)
     default:
     	break;
     }
+}
+
+bool ServerCore::Unicast(Session* session, const char* data, int length)
+{
+    return StartSend(session, data, length);
+}
+
+bool ServerCore::Broadcast(const char* data, int length)
+{
+    for(const auto& session : m_sessionMap)
+    {
+        if (!StartSend(session.second, data, length))
+            return false;
+    }
+    return true;
 }
 
 bool ServerCore::StartAccept()
@@ -554,33 +565,6 @@ bool ServerCore::StartSend(Session* session, const char* data, int length)
         return false;
     }
 
-    return true;
-}
-
-void ServerCore::ProcessInitialData(Session* session, char* data, int length)
-{
-    const char* responseData;
-
-    std::string username(data, data + 50);
-    std::string password(data + 50, data + 100);
-    if (AuthenticateUser(username, password))
-    {
-        // 세션 목록에 추가
-        m_sessionMap.insert({session->sessionId, session});
-        responseData = "login success";
-    }
-    else
-    {
-        // Accept는 마저 처리해야 함. 연결 후 로그인 실패 응답 -> 연결 해제
-        responseData = "login failed";
-    }
-
-    // 송신 작업 게시
-    //StartSend(session, responseData, 20);
-}
-
-bool ServerCore::AuthenticateUser(const std::string_view& username, const std::string_view& password)
-{
     return true;
 }
 

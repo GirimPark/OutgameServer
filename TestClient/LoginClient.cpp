@@ -34,7 +34,7 @@ void LoginClient::Run()
 
 
     /// Send
-    Protocol::C2S_Login_Request loginRequest;
+    Protocol::C2S_LoginRequest loginRequest;
     loginRequest.set_username(username);
     loginRequest.set_password(password);
 
@@ -87,7 +87,7 @@ void LoginClient::Run()
             if (header.length > recvByte)
                 continue;
 
-            Protocol::S2C_Login_Response loginResponse;
+            Protocol::S2C_LoginResponse loginResponse;
             PacketBuilder::Instance().DeserializeData(recvBuf, sizeof(recvBuf), header, loginResponse);
             cout << loginResponse.sucess().value() << endl;
             break;

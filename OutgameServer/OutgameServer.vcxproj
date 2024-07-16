@@ -39,6 +39,7 @@
     <ClInclude Include="Define.h" />
     <ClInclude Include="OutgameServer.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="SharedStructure.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="UserManager.h" />
   </ItemGroup>

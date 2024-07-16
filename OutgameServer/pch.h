@@ -12,6 +12,8 @@
 /// windows
 #include <Windows.h>
 
+#include <memory>
+
 /// IO
 #include <iostream>
 
@@ -35,8 +37,9 @@
 
 /// custom
 #include "Define.h"
+#include "SharedStructure.h"
 
-#include "UserManager.h"
+#include "OutgameServer.h"
 
 #include "../IOCPServerLibrary/Define.h"
 #include "../IOCPServerLibrary/CompletionKey.h"
@@ -46,6 +49,6 @@
 
 #include "../PacketLibrary/PacketHeader.h"
 #include "../PacketLibrary/PacketBuilder.h"
-
+#include "../PacketLibrary/Protocol.pb.h"
 
 #endif //PCH_H
