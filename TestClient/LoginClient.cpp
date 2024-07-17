@@ -23,81 +23,21 @@ void LoginClient::Run()
         return;
     }
 
-    socket = CreateConnectedSocket();
-
     /// Input
-    string username, password;
     cout << "User Name: ";
-    cin >> username;
+    cin >> m_username;
     cout << "Password: ";
-    cin >> password;
+    cin >> m_password;
 
+    m_socket = CreateConnectedSocket();
 
-    /// Send
-    Protocol::C2S_LoginRequest loginRequest;
-    loginRequest.set_username(username);
-    loginRequest.set_password(password);
+    std::thread sendThread(&LoginClient::SendThread, this);
+    std::thread receiveThread(&LoginClient::ReceiveThread, this);
 
-    char* sendBuf = PacketBuilder::Instance().Serialize(EPacketType::C2S_LOGIN_REQUEST, loginRequest);
-    int sendByte = 0;
-    int totalSendByte = PacketHeader::Size() + loginRequest.ByteSizeLong();
-
-    while(sendByte < totalSendByte)
-    {
-        int nSend = send(socket, sendBuf + sendByte, totalSendByte - sendByte, 0);
-        if(nSend == SOCKET_ERROR)
-        {
-            printf("send() failed: %d\n", WSAGetLastError());
-            return;
-        }
-        if(nSend == 0)
-        {
-            printf("connection closed\n");
-            return;
-        }
-
-        sendByte += nSend;
-    }
-
-    /// Recv
-    char recvBuf[256];
-
-    int recvByte = 0;
-
-    while(true)
-    {
-        int nRecv = recv(socket, recvBuf + recvByte, sizeof(recvBuf) - recvByte, 0);
-        if(nRecv == SOCKET_ERROR)
-        {
-            printf("recv() failed: %d\n", WSAGetLastError());
-            break;
-        }
-        if(nRecv == 0)
-        {
-            printf("connection closed\n");
-            break;
-        }
-
-        recvByte += nRecv;
-
-        if(recvByte > PacketHeader::Size())
-        {
-            PacketHeader header;
-            PacketBuilder::Instance().DeserializeHeader(recvBuf, sizeof(recvBuf), header);
-            if (header.length > recvByte)
-                continue;
-
-            Protocol::S2C_LoginResponse loginResponse;
-            PacketBuilder::Instance().DeserializeData(recvBuf, sizeof(recvBuf), header, loginResponse);
-            cout << loginResponse.sucess().value() << endl;
-            break;
-        }
-    }
-
-    while(true)
-    {
-        int a = 0;
-    }
+    if (sendThread.joinable())
+        sendThread.join();
+    if (receiveThread.joinable())
+        receiveThread.join();
 }
 
 SOCKET LoginClient::CreateConnectedSocket()
@@ -141,5 +81,126 @@ SOCKET LoginClient::CreateConnectedSocket()
     freeaddrinfo(addr_srv);
 
     printf("connected\n");
+
+
+    /// 초기 송신
+    Protocol::C2S_LoginRequest loginRequest;
+    loginRequest.set_username(m_username);
+    loginRequest.set_password(m_password);
+
+    char* sendBuf = PacketBuilder::Instance().Serialize(EPacketType::C2S_LOGIN_REQUEST, loginRequest);
+    int sendByte = 0;
+    int totalSendByte = PacketHeader::Size() + loginRequest.ByteSizeLong();
+
+    while (sendByte < totalSendByte)
+    {
+        int nSend = send(socket, sendBuf + sendByte, totalSendByte - sendByte, 0);
+        if (nSend == SOCKET_ERROR)
+        {
+            printf("send() failed: %d\n", WSAGetLastError());
+            break;
+        }
+        if (nSend == 0)
+        {
+            printf("connection closed\n");
+            break;
+        }
+
+        sendByte += nSend;
+    }
+
+
     return socket;
+}
+
+void LoginClient::SendThread()
+{
+    Protocol::C2S_ValidationResponse validationResponse;
+    char* sendBuf = PacketBuilder::Instance().Serialize(EPacketType::C2S_VALIDATION_RESPONSE, validationResponse);
+    int sendByte = 0;
+    int totalSendByte = PacketHeader::Size() + validationResponse.ByteSizeLong();
+
+	while (true)
+    {
+        ClientStruct test;
+        if (!m_sendQueue.try_pop(test))
+            continue;
+
+        int nSend = send(m_socket, sendBuf + sendByte, totalSendByte - sendByte, 0);
+        if (nSend == SOCKET_ERROR)
+        {
+            printf("send() failed: %d\n", WSAGetLastError());
+            break;
+        }
+        if (nSend == 0)
+        {
+            printf("connection closed\n");
+            break;
+        }
+
+        sendByte += nSend;
+
+        if(sendByte >= totalSendByte)
+        {
+            sendBuf = PacketBuilder::Instance().Serialize(EPacketType::C2S_VALIDATION_RESPONSE, validationResponse);
+            sendByte = 0;
+            totalSendByte = PacketHeader::Size() + validationResponse.ByteSizeLong();;
+        }
+    }
+}
+
+void LoginClient::ReceiveThread()
+{
+    while (true)
+    {
+        char recvBuf[256];
+        int recvByte = 0;
+
+        int nRecv = recv(m_socket, recvBuf + recvByte, sizeof(recvBuf) - recvByte, 0);
+        if (nRecv == SOCKET_ERROR)
+        {
+            printf("recv() failed: %d\n", WSAGetLastError());
+            break;
+        }
+        if (nRecv == 0)
+        {
+            printf("connection closed\n");
+            break;
+        }
+
+        recvByte += nRecv;
+
+        if (recvByte >= PacketHeader::Size())
+        {
+            PacketHeader header;
+            PacketBuilder::Instance().DeserializeHeader(recvBuf, sizeof(recvBuf), header);
+            if (header.length > recvByte)
+                continue;
+
+            switch (header.type)
+            {
+            case EPacketType::S2C_LOGIN_RESPONSE:
+            {
+                Protocol::S2C_LoginResponse loginResponse;
+                PacketBuilder::Instance().DeserializeData(recvBuf, sizeof(recvBuf), header, loginResponse);
+                cout << loginResponse.sucess().value() << endl;
+            }
+            case EPacketType::S2C_VALIDATION_REQUEST:
+            {
+                ClientStruct test;
+                test.header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::C2S_VALIDATION_RESPONSE, 0));
+                test.header->type = EPacketType::C2S_VALIDATION_RESPONSE;
+                test.header->length = PacketHeader::Size();
+                test.data = std::make_shared<Protocol::C2S_ValidationResponse>();
+
+                m_sendQueue.push(test);
+                
+                Protocol::C2S_ValidationResponse validationResponse;
+                
+            }
+            }
+            
+            
+        }
+    }
 }

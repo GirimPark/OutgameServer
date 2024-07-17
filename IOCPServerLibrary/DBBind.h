@@ -20,7 +20,7 @@ template<int ParamCount, int ColumnCount>
 class DBBind
 {
 public:
-	DBBind(std::shared_ptr<DBConnection> dbConnection, const WCHAR* query)
+	DBBind(DBConnection* dbConnection, const WCHAR* query)
 		: m_DBConnection(dbConnection), m_query(query)
 	{
 		::memset(m_paramIndex, 0, sizeof(m_paramIndex));
@@ -104,7 +104,7 @@ public:
 	}
 
 private:
-	std::shared_ptr<DBConnection> m_DBConnection;
+	DBConnection* m_DBConnection;
 	const WCHAR* m_query;
 	SQLLEN m_paramIndex[ParamCount > 0 ? ParamCount : 1];
 	SQLLEN m_columnIndex[ColumnCount > 0 ? ColumnCount : 1];

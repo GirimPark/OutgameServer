@@ -1,4 +1,11 @@
 #pragma once
+#include <concurrent_queue.h>
+
+struct ClientStruct
+{
+	std::shared_ptr<PacketHeader> header;
+	std::shared_ptr<DataPacket> data;
+};
 
 class LoginClient
 {
@@ -11,8 +18,16 @@ public:
 private:
 	SOCKET CreateConnectedSocket();
 
+	void SendThread();
+	void ReceiveThread();
+
 private:
 	const char* m_connectIP;
 	const char* m_port;
-	SOCKET socket;
+	SOCKET m_socket;
+
+	std::string m_username;
+	std::string m_password;
+
+	concurrency::concurrent_queue<ClientStruct> m_sendQueue;
 };

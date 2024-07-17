@@ -2,6 +2,8 @@
 
 #include "DBConnection.h"
 
+#include <mutex>
+
 class DBConnectionPool
 {
 public:
@@ -14,13 +16,12 @@ public:
 	bool Connect(int connectionCount, const WCHAR* connectionString);
 	void Clear();
 
-	std::shared_ptr<DBConnection> GetConnection();
-	void ReturnConnection(std::shared_ptr<DBConnection> connection);	// 일단 사용 X
+	DBConnection* GetConnection();
+	void ReturnConnection(DBConnection* connection);
 
 private:
 	SQLHENV m_environment;
-	concurrency::concurrent_vector<std::shared_ptr<DBConnection>> m_connections;
-
+	concurrency::concurrent_vector<DBConnection*> m_connections;
 
 	DBConnectionPool() = default;
 	~DBConnectionPool()

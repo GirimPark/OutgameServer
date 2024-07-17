@@ -7,14 +7,16 @@ enum EUserStateType
 	IN_GAME
 };
 
+/// 이후 USerPool로 관리될 예정
+///	User 객체는 ONLINE, IN_GAME 상태일 때만 유효하게 관리한다.
 class User
 {
 public:
-	User() = default;
-	~User() = default;
+	User(Session* session, std::string_view name);
+	~User();
 
-	EUserStateType GetStatus() { return m_status; }
-	void UpdateStatus(EUserStateType status);
+	EUserStateType GetState() const { return m_state; }
+	void UpdateStatus(EUserStateType state);
 
 	std::chrono::steady_clock::time_point GetLastValidationTime() { return m_lastValidationTime; }
 	void UpdateLastValidationTime(std::chrono::steady_clock::time_point timePoint) { m_lastValidationTime = timePoint; }
@@ -23,8 +25,7 @@ private:
 	Session* m_session;
 
 	std::string m_name;
-	std::string m_password;
-	EUserStateType m_status;
+	EUserStateType m_state;
 
 	std::chrono::steady_clock::time_point m_lastValidationTime;
 

@@ -7,8 +7,8 @@ typedef unsigned int SessionId;
 class UserManager
 {
 public:
-    UserManager() = default;
-    ~UserManager() = default;
+    UserManager();
+    ~UserManager();
 
     // 타임아웃 설정
     void SetTimeout(std::chrono::milliseconds timeout) { m_userTimeout = timeout; }
@@ -25,7 +25,10 @@ public:
 
 private:
     // 로그인 입력 정보 인증
-    bool AuthenticateUser(const std::string_view& username, const std::string_view& password);
+    bool AuthenticateUser(Session* session, const std::string_view& username, const std::string_view& password);
+    // 새 유저 생성(todo 풀에서 할당 받는 형태로 변경)
+    void CreateActiveUser(Session* session, std::string_view name);
+
     // 유저 유효성 검사 및 목록 정리
     void UpdateActiveUserMap();
 
@@ -37,6 +40,6 @@ private:
 
     std::chrono::milliseconds m_userTimeout;
 
-    std::mutex m_mutex;
+    CRITICAL_SECTION m_criticalSection;
 };
 

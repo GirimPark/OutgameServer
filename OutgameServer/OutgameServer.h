@@ -19,6 +19,8 @@ public:
 
 	void InsertSendTask(std::shared_ptr<SendStruct> task);
 
+	ServerCore* GetServerCore() const { return m_pServerCore; }
+
 private:
 	// ServerCore에서 OnReceive에 실행할 콜백 함수
 	void DispatchReceivedData(Session* session, char* data, int nReceivedByte);

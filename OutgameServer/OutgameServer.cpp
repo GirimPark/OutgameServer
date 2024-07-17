@@ -32,14 +32,15 @@ int main()
 
 	// Create Table
 	{
-		std::shared_ptr<DBConnection> dbConn = DBConnectionPool::Instance().GetConnection();
+		DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
 		assert(dbConn->ExecuteFile("User.sql"));
+		DBConnectionPool::Instance().ReturnConnection(dbConn);
 	}
 
 	// Add Data
 	for (int i = 0; i < 3; i++)
 	{
-		std::shared_ptr<DBConnection> dbConn = DBConnectionPool::Instance().GetConnection();
+		DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
 		DBBind<2, 0> dbBind(dbConn, L"INSERT INTO [dbo].[User]([username], [password]) VALUES(?, ?)");
 
 		std::wstring username = L"test" + std::to_wstring(i + 1);
@@ -48,6 +49,7 @@ int main()
 		dbBind.BindParam(1, password.c_str(), password.size()); 
 
 		assert(dbBind.Execute());
+		DBConnectionPool::Instance().ReturnConnection(dbConn);
 	}
 
 	//// Read
@@ -100,7 +102,8 @@ void OutgameServer::Start()
 	// Logic
 	m_workers.emplace_back(new std::thread(&OutgameServer::ProcessEchoQueue, this));				// Echo - Test
 	m_workers.emplace_back(new std::thread(&UserManager::HandleLoginRequest, m_pUserManager));	// Login
-	m_workers.emplace_back(new std::thread(&UserManager::BroadcastValidationPacket, m_pUserManager, std::chrono::milliseconds(5000)));
+	m_workers.emplace_back(new std::thread(&UserManager::BroadcastValidationPacket, m_pUserManager, std::chrono::milliseconds(5000)));	// Validation Request
+	m_workers.emplace_back(new std::thread(&UserManager::HandleValidationResponse, m_pUserManager));	// Validation Response
 	
 
 	for(const auto& worker : m_workers)
@@ -134,15 +137,15 @@ void OutgameServer::InsertSendTask(std::shared_ptr<SendStruct> task)
 
 void OutgameServer::DispatchReceivedData(Session* session, char* data, int nReceivedByte)
 {
-	// todo: 알맞은 처리 큐에 넣기
 	PacketHeader packetHeader;
 
 	if (PacketBuilder::Instance().DeserializeHeader(data, nReceivedByte, packetHeader))
 	{
 		switch (packetHeader.type)
 		{
+		// echo
 		case EPacketType::C2S_ECHO:
-		{
+		{ 
 			auto echoRequest = std::make_shared<Protocol::C2S_Echo>();
 			if (PacketBuilder::Instance().DeserializeData(data, nReceivedByte, packetHeader, *echoRequest))
 			{
@@ -151,10 +154,26 @@ void OutgameServer::DispatchReceivedData(Session* session, char* data, int nRece
 			}
 			else
 			{
-				LOG_CONTENTS("PakcetBuilder::Deserialize() failed");
+				LOG_CONTENTS("C2S_ECHO: PakcetBuilder::Deserialize() failed");
 			}
 			break;
 		}
+		// validation
+		case EPacketType::C2S_VALIDATION_RESPONSE:
+		{
+			auto validationResponse = std::make_shared<Protocol::C2S_ValidationResponse>();
+			if (PacketBuilder::Instance().DeserializeData(data, nReceivedByte, packetHeader, *validationResponse))
+			{
+				std::shared_ptr<ReceiveStruct> receiveStruct = std::make_shared<ReceiveStruct>(session, validationResponse);
+				m_pUserManager->InsertValidationResponse(receiveStruct);
+			}
+			else
+			{
+				LOG_CONTENTS("C2S_VALIDATION_RESPONSE: PakcetBuilder::Deserialize() failed");
+			}
+			break;
+		}
+		// login
 		case EPacketType::C2S_LOGIN_REQUEST:
 		{
 			auto loginRequest = std::make_shared<Protocol::C2S_LoginRequest>();
@@ -165,7 +184,7 @@ void OutgameServer::DispatchReceivedData(Session* session, char* data, int nRece
 			}
 			else
 			{
-				LOG_CONTENTS("PakcetBuilder::Deserialize() failed");
+				LOG_CONTENTS("C2S_LOGIN_REQUEST: PakcetBuilder::Deserialize() failed");
 			}
 			break;
 		}
