@@ -253,7 +253,7 @@ SOCKET ServerCore::CreateListenSocket()
         return NULL;
     }
 
-    rt = listen(listenSocket, 5);
+    rt = listen(listenSocket, m_backlog);
     if (rt == SOCKET_ERROR) {
         printf("listen() failed: %d\n", WSAGetLastError());
         freeaddrinfo(addrlocal);
@@ -276,8 +276,11 @@ Session* ServerCore::CreateSession()
     return session;
 }
 
-void ServerCore::CloseSession(Session* session)
+void ServerCore::CloseSession(Session* session, bool needLock)
 {
+    if(needLock)
+		EnterCriticalSection(&m_criticalSection);
+
     linger lingerStruct;
     lingerStruct.l_onoff = 1;
     lingerStruct.l_linger = 0;
@@ -289,6 +292,9 @@ void ServerCore::CloseSession(Session* session)
             Sleep(0);
     }
 
+    if(needLock)
+		LeaveCriticalSection(&m_criticalSection);
+
     delete session;
 }
 
@@ -296,27 +302,27 @@ void ServerCore::RegisterSession(Session* session)
 {
     session->state = Session::eStateType::MAINTAIN;
     m_sessionMap.insert({ session->sessionId, session });
-
-    // todo 유저 객체를 만들고 세션과 연결하기
 }
 
 void ServerCore::UnregisterSession(SessionId sessionId)
 {
     auto iter = m_sessionMap.find(sessionId);
-    Session* session = iter->second;
-    if (!session)
+    if (iter == m_sessionMap.end())
     {
-        printf("UnregisterSession : can't find session");
+        printf("UnregisterSession : can't find session\n");
+        return;
+    }
+    Session* session = iter->second;
+    if(!session)
+    {
+        printf("UnregisterSession : unvalid session\n");
         return;
     }
 
-    CloseSession(session);
-
     EnterCriticalSection(&m_criticalSection);
     m_sessionMap.unsafe_erase(iter);
+    CloseSession(session, false);
     LeaveCriticalSection(&m_criticalSection);
-
-    // todo 유저 객체 삭제하기
 }
 
 void ServerCore::ProcessThread()
@@ -387,9 +393,10 @@ void ServerCore::ProcessThread()
             }
             }
         }
-        else
+        else if(session->type == eCompletionKeyType::SESSION && !session)
         {
-            printf("Completion Key 타입 캐스팅 실패\n");
+            printf("이미 해제된 세션\n");
+            continue;
         }
         
     }
@@ -444,11 +451,11 @@ void ServerCore::HandleAcceptCompletion(DWORD nTransferredByte)
     inet_ntop(AF_INET, &remoteAddr->sin_addr, addr, INET_ADDRSTRLEN);
     printf("Remote Address: %s\n", addr);
 
-
     OnReceiveData(session, m_pListenSocketCtxt->acceptBuffer, nTransferredByte);
 
     // 다른 수락 작업 게시
     StartAccept();
+    StartReceive(session);
 }
 
 void ServerCore::HandleReadCompletion(Session* session, DWORD bytesTransferred)
@@ -485,6 +492,9 @@ void ServerCore::HandleWriteCompletion(Session* session)
 
 bool ServerCore::Unicast(Session* session, const char* data, int length)
 {
+    if (!session)
+        return false;
+
     return StartSend(session, data, length);
 }
 
@@ -492,6 +502,9 @@ bool ServerCore::Broadcast(const char* data, int length)
 {
     for(const auto& session : m_sessionMap)
     {
+        if (!session.second)
+            continue;
+
         if (!StartSend(session.second, data, length))
             return false;
     }

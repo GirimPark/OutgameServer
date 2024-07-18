@@ -38,6 +38,7 @@ void DBConnectionPool::Clear()
 	for (const auto& connection : m_connections)
 	{
 		connection->Clear();
+		delete connection;
 	}
 	m_connections.clear();
 }

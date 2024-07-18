@@ -29,5 +29,5 @@ private:
 	std::string m_username;
 	std::string m_password;
 
-	concurrency::concurrent_queue<ClientStruct> m_sendQueue;
+	concurrency::concurrent_queue<std::shared_ptr<ClientStruct>> m_sendQueue;
 };

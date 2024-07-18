@@ -48,7 +48,7 @@ struct TableStruct_Protocol_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[6]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[7]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -71,6 +71,9 @@ extern S2C_EchoDefaultTypeInternal _S2C_Echo_default_instance_;
 class S2C_LoginResponse;
 struct S2C_LoginResponseDefaultTypeInternal;
 extern S2C_LoginResponseDefaultTypeInternal _S2C_LoginResponse_default_instance_;
+class S2C_SessionExpiredNotification;
+struct S2C_SessionExpiredNotificationDefaultTypeInternal;
+extern S2C_SessionExpiredNotificationDefaultTypeInternal _S2C_SessionExpiredNotification_default_instance_;
 class S2C_ValidationRequest;
 struct S2C_ValidationRequestDefaultTypeInternal;
 extern S2C_ValidationRequestDefaultTypeInternal _S2C_ValidationRequest_default_instance_;
@@ -81,6 +84,7 @@ template<> ::Protocol::C2S_LoginRequest* Arena::CreateMaybeMessage<::Protocol::C
 template<> ::Protocol::C2S_ValidationResponse* Arena::CreateMaybeMessage<::Protocol::C2S_ValidationResponse>(Arena*);
 template<> ::Protocol::S2C_Echo* Arena::CreateMaybeMessage<::Protocol::S2C_Echo>(Arena*);
 template<> ::Protocol::S2C_LoginResponse* Arena::CreateMaybeMessage<::Protocol::S2C_LoginResponse>(Arena*);
+template<> ::Protocol::S2C_SessionExpiredNotification* Arena::CreateMaybeMessage<::Protocol::S2C_SessionExpiredNotification>(Arena*);
 template<> ::Protocol::S2C_ValidationRequest* Arena::CreateMaybeMessage<::Protocol::S2C_ValidationRequest>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace Protocol {
@@ -323,6 +327,124 @@ class C2S_ValidationResponse final :
 };
 // -------------------------------------------------------------------
 
+class S2C_SessionExpiredNotification final :
+    public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:Protocol.S2C_SessionExpiredNotification) */ {
+ public:
+  inline S2C_SessionExpiredNotification() : S2C_SessionExpiredNotification(nullptr) {}
+  explicit constexpr S2C_SessionExpiredNotification(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S2C_SessionExpiredNotification(const S2C_SessionExpiredNotification& from);
+  S2C_SessionExpiredNotification(S2C_SessionExpiredNotification&& from) noexcept
+    : S2C_SessionExpiredNotification() {
+    *this = ::std::move(from);
+  }
+
+  inline S2C_SessionExpiredNotification& operator=(const S2C_SessionExpiredNotification& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S2C_SessionExpiredNotification& operator=(S2C_SessionExpiredNotification&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S2C_SessionExpiredNotification& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S2C_SessionExpiredNotification* internal_default_instance() {
+    return reinterpret_cast<const S2C_SessionExpiredNotification*>(
+               &_S2C_SessionExpiredNotification_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  friend void swap(S2C_SessionExpiredNotification& a, S2C_SessionExpiredNotification& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S2C_SessionExpiredNotification* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S2C_SessionExpiredNotification* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S2C_SessionExpiredNotification* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S2C_SessionExpiredNotification>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyFrom;
+  inline void CopyFrom(const S2C_SessionExpiredNotification& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl(this, from);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeFrom;
+  void MergeFrom(const S2C_SessionExpiredNotification& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl(this, from);
+  }
+  public:
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S2C_SessionExpiredNotification";
+  }
+  protected:
+  explicit S2C_SessionExpiredNotification(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:Protocol.S2C_SessionExpiredNotification)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
 class S2C_Echo final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S2C_Echo) */ {
  public:
@@ -371,7 +493,7 @@ class S2C_Echo final :
                &_S2C_Echo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    3;
 
   friend void swap(S2C_Echo& a, S2C_Echo& b) {
     a.Swap(&b);
@@ -522,7 +644,7 @@ class C2S_Echo final :
                &_C2S_Echo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    4;
 
   friend void swap(C2S_Echo& a, C2S_Echo& b) {
     a.Swap(&b);
@@ -673,7 +795,7 @@ class C2S_LoginRequest final :
                &_C2S_LoginRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    5;
 
   friend void swap(C2S_LoginRequest& a, C2S_LoginRequest& b) {
     a.Swap(&b);
@@ -840,7 +962,7 @@ class S2C_LoginResponse final :
                &_S2C_LoginResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    6;
 
   friend void swap(S2C_LoginResponse& a, S2C_LoginResponse& b) {
     a.Swap(&b);
@@ -959,6 +1081,10 @@ class S2C_LoginResponse final :
 // -------------------------------------------------------------------
 
 // C2S_ValidationResponse
+
+// -------------------------------------------------------------------
+
+// S2C_SessionExpiredNotification
 
 // -------------------------------------------------------------------
 
@@ -1269,6 +1395,8 @@ inline void S2C_LoginResponse::set_allocated_sucess(::PROTOBUF_NAMESPACE_ID::Boo
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

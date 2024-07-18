@@ -1,8 +1,6 @@
 #pragma once
 #pragma pack (push, 1)
 
-#include <iostream>
-
 enum EPacketType : short
 {
 	S2C_ECHO = 0,
@@ -10,6 +8,8 @@ enum EPacketType : short
 
 	S2C_VALIDATION_REQUEST,
 	C2S_VALIDATION_RESPONSE,
+
+	S2C_SESSION_EXPIRED_NOTIFICATION,
 
 	C2S_LOGIN_REQUEST,
 	S2C_LOGIN_RESPONSE,

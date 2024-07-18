@@ -39,6 +39,17 @@ struct C2S_ValidationResponseDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C2S_ValidationResponseDefaultTypeInternal _C2S_ValidationResponse_default_instance_;
+constexpr S2C_SessionExpiredNotification::S2C_SessionExpiredNotification(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
+struct S2C_SessionExpiredNotificationDefaultTypeInternal {
+  constexpr S2C_SessionExpiredNotificationDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~S2C_SessionExpiredNotificationDefaultTypeInternal() {}
+  union {
+    S2C_SessionExpiredNotification _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S2C_SessionExpiredNotificationDefaultTypeInternal _S2C_SessionExpiredNotification_default_instance_;
 constexpr S2C_Echo::S2C_Echo(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : data_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
@@ -89,7 +100,7 @@ struct S2C_LoginResponseDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S2C_LoginResponseDefaultTypeInternal _S2C_LoginResponse_default_instance_;
 }  // namespace Protocol
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Protocol_2eproto[6];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Protocol_2eproto[7];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_Protocol_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_Protocol_2eproto = nullptr;
 
@@ -102,6 +113,12 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _inlined_string_donated_
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::C2S_ValidationResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_SessionExpiredNotification, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
@@ -139,15 +156,17 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::Protocol::S2C_ValidationRequest)},
   { 6, -1, -1, sizeof(::Protocol::C2S_ValidationResponse)},
-  { 12, -1, -1, sizeof(::Protocol::S2C_Echo)},
-  { 19, -1, -1, sizeof(::Protocol::C2S_Echo)},
-  { 26, -1, -1, sizeof(::Protocol::C2S_LoginRequest)},
-  { 34, -1, -1, sizeof(::Protocol::S2C_LoginResponse)},
+  { 12, -1, -1, sizeof(::Protocol::S2C_SessionExpiredNotification)},
+  { 18, -1, -1, sizeof(::Protocol::S2C_Echo)},
+  { 25, -1, -1, sizeof(::Protocol::C2S_Echo)},
+  { 32, -1, -1, sizeof(::Protocol::C2S_LoginRequest)},
+  { 40, -1, -1, sizeof(::Protocol::S2C_LoginResponse)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_ValidationRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C2S_ValidationResponse_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_SessionExpiredNotification_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_Echo_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C2S_Echo_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C2S_LoginRequest_default_instance_),
@@ -157,20 +176,21 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\016Protocol.proto\022\010Protocol\032\036google/proto"
   "buf/wrappers.proto\"\027\n\025S2C_ValidationRequ"
-  "est\"\030\n\026C2S_ValidationResponse\"\030\n\010S2C_Ech"
-  "o\022\014\n\004data\030\001 \001(\t\"\030\n\010C2S_Echo\022\014\n\004data\030\001 \001("
-  "\t\"6\n\020C2S_LoginRequest\022\020\n\010username\030\001 \001(\t\022"
-  "\020\n\010password\030\002 \001(\t\"\?\n\021S2C_LoginResponse\022*"
-  "\n\006sucess\030\001 \001(\0132\032.google.protobuf.BoolVal"
-  "ueb\006proto3"
+  "est\"\030\n\026C2S_ValidationResponse\" \n\036S2C_Ses"
+  "sionExpiredNotification\"\030\n\010S2C_Echo\022\014\n\004d"
+  "ata\030\001 \001(\t\"\030\n\010C2S_Echo\022\014\n\004data\030\001 \001(\t\"6\n\020C"
+  "2S_LoginRequest\022\020\n\010username\030\001 \001(\t\022\020\n\010pas"
+  "sword\030\002 \001(\t\"\?\n\021S2C_LoginResponse\022*\n\006suce"
+  "ss\030\001 \001(\0132\032.google.protobuf.BoolValueb\006pr"
+  "oto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Protocol_2eproto_deps[1] = {
   &::descriptor_table_google_2fprotobuf_2fwrappers_2eproto,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Protocol_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Protocol_2eproto = {
-  false, false, 290, descriptor_table_protodef_Protocol_2eproto, "Protocol.proto", 
-  &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 1, 6,
+  false, false, 324, descriptor_table_protodef_Protocol_2eproto, "Protocol.proto", 
+  &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 1, 7,
   schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
   file_level_metadata_Protocol_2eproto, file_level_enum_descriptors_Protocol_2eproto, file_level_service_descriptors_Protocol_2eproto,
 };
@@ -258,6 +278,45 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C2S_ValidationResponse::GetCla
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
       file_level_metadata_Protocol_2eproto[1]);
+}
+
+// ===================================================================
+
+class S2C_SessionExpiredNotification::_Internal {
+ public:
+};
+
+S2C_SessionExpiredNotification::S2C_SessionExpiredNotification(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
+  // @@protoc_insertion_point(arena_constructor:Protocol.S2C_SessionExpiredNotification)
+}
+S2C_SessionExpiredNotification::S2C_SessionExpiredNotification(const S2C_SessionExpiredNotification& from)
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:Protocol.S2C_SessionExpiredNotification)
+}
+
+
+
+
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData S2C_SessionExpiredNotification::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*S2C_SessionExpiredNotification::GetClassData() const { return &_class_data_; }
+
+
+
+
+
+
+
+::PROTOBUF_NAMESPACE_ID::Metadata S2C_SessionExpiredNotification::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
+      file_level_metadata_Protocol_2eproto[2]);
 }
 
 // ===================================================================
@@ -460,7 +519,7 @@ void S2C_Echo::InternalSwap(S2C_Echo* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_Echo::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[2]);
+      file_level_metadata_Protocol_2eproto[3]);
 }
 
 // ===================================================================
@@ -663,7 +722,7 @@ void C2S_Echo::InternalSwap(C2S_Echo* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_Echo::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[3]);
+      file_level_metadata_Protocol_2eproto[4]);
 }
 
 // ===================================================================
@@ -915,7 +974,7 @@ void C2S_LoginRequest::InternalSwap(C2S_LoginRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_LoginRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[4]);
+      file_level_metadata_Protocol_2eproto[5]);
 }
 
 // ===================================================================
@@ -1116,7 +1175,7 @@ void S2C_LoginResponse::InternalSwap(S2C_LoginResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_LoginResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[5]);
+      file_level_metadata_Protocol_2eproto[6]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -1127,6 +1186,9 @@ template<> PROTOBUF_NOINLINE ::Protocol::S2C_ValidationRequest* Arena::CreateMay
 }
 template<> PROTOBUF_NOINLINE ::Protocol::C2S_ValidationResponse* Arena::CreateMaybeMessage< ::Protocol::C2S_ValidationResponse >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::C2S_ValidationResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::S2C_SessionExpiredNotification* Arena::CreateMaybeMessage< ::Protocol::S2C_SessionExpiredNotification >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::S2C_SessionExpiredNotification >(arena);
 }
 template<> PROTOBUF_NOINLINE ::Protocol::S2C_Echo* Arena::CreateMaybeMessage< ::Protocol::S2C_Echo >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::S2C_Echo >(arena);

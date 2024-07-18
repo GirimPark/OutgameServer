@@ -88,6 +88,7 @@ void OutgameServer::Start()
 
 	m_pServerCore = new ServerCore("5001", 5);
 	m_pUserManager = new UserManager;
+	m_pUserManager->SetTimeout(std::chrono::milliseconds(3000));
 
 	m_pServerCore->RegisterCallback([this](Session* session, char* data, int nReceivedByte)
 		{
@@ -102,18 +103,19 @@ void OutgameServer::Start()
 	// Logic
 	m_workers.emplace_back(new std::thread(&OutgameServer::ProcessEchoQueue, this));				// Echo - Test
 	m_workers.emplace_back(new std::thread(&UserManager::HandleLoginRequest, m_pUserManager));	// Login
-	m_workers.emplace_back(new std::thread(&UserManager::BroadcastValidationPacket, m_pUserManager, std::chrono::milliseconds(5000)));	// Validation Request
+	m_workers.emplace_back(new std::thread(&UserManager::BroadcastValidationPacket, m_pUserManager, std::chrono::milliseconds(1000)));	// Validation Request
 	m_workers.emplace_back(new std::thread(&UserManager::HandleValidationResponse, m_pUserManager));	// Validation Response
 	
 
 	for(const auto& worker : m_workers)
 	{
-		if(worker->joinable())
+		if(worker->joinable()) 
 		{
 			worker->join();
 			delete worker;
 		}
 	}
+	m_workers.clear();
 }
 
 void OutgameServer::Stop()
@@ -123,6 +125,8 @@ void OutgameServer::Stop()
 	// core 자원 해제
 	m_pServerCore->TriggerCleanupEvent();
 	m_pServerCore = nullptr;
+
+	delete m_pUserManager;
 
 	m_recvEchoQueue.clear();
 	m_sendQueue.clear();
@@ -243,7 +247,7 @@ void OutgameServer::SendThread()
 		case ESendType::BROADCAST:
 			{
 			if (!m_pServerCore->Broadcast(serializedPacket, sendStruct->header->length))
-				LOG_CONTENTS("Bradcast Failed");
+				LOG_CONTENTS("Broadcast Failed");
 
 			break;
 			}

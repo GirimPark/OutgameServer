@@ -11,6 +11,15 @@ UserManager::UserManager()
 UserManager::~UserManager()
 {
 	DeleteCriticalSection(&m_criticalSection);
+
+	for(auto& user : m_activeUserMap)
+	{
+		delete user.second;
+	}
+	m_activeUserMap.clear();
+
+	m_loginRequests.clear();
+	m_validationResponses.clear();
 }
 
 void UserManager::CreateActiveUser(Session* session, std::string_view name)
@@ -53,7 +62,7 @@ void UserManager::BroadcastValidationPacket(std::chrono::milliseconds period)
 		
 		std::string serializedString;
 		(sendStruct->data)->SerializeToString(&serializedString);
-		sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::S2C_LOGIN_RESPONSE, serializedString.size()));
+		sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::S2C_VALIDATION_REQUEST, serializedString.size()));
 
 		OutgameServer::Instance().InsertSendTask(sendStruct);
 
@@ -86,7 +95,7 @@ void UserManager::HandleLoginRequest()
 		else
 		{
 			response->mutable_sucess()->set_value(false);
-			sendStruct->session->state = Session::eStateType::MAINTAIN;
+			sendStruct->session->state = Session::eStateType::CLOSE;
 		}
 		sendStruct->data = response;
 		// header
@@ -106,7 +115,10 @@ void UserManager::HandleValidationResponse()
 		if (!m_validationResponses.try_pop(validationStruct))
 			continue;
 
+		EnterCriticalSection(&m_criticalSection);
 		m_activeUserMap[validationStruct->session->sessionId]->UpdateLastValidationTime(std::chrono::steady_clock::now());
+		LeaveCriticalSection(&m_criticalSection);
+		LOG_CONTENTS("User Validation Packet Alived");
 	}
 }
 
@@ -174,12 +186,25 @@ void UserManager::UpdateActiveUserMap()
 	{
 		auto now = std::chrono::steady_clock::now();
 		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - it->second->GetLastValidationTime());
+		// 세션 만료 시간이 지났다면
 		if(duration > m_userTimeout || it->second->GetState() == EUserStateType::OFFLINE)
 		{
-			it->second->UpdateStatus(EUserStateType::OFFLINE);
+			it->second->UpdateState(EUserStateType::OFFLINE);
 
+			// 세션 만료 통지 패킷 송신
+			std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
+			sendStruct->type = ESendType::UNICAST;
+			sendStruct->session = it->second->GetSession();
+			sendStruct->session->state = Session::eStateType::UNREGISTER;
+			sendStruct->data = std::make_shared<Protocol::S2C_SessionExpiredNotification>();
+			std::string serializedString;
+			(sendStruct->data)->SerializeToString(&serializedString);
+			sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::S2C_SESSION_EXPIRED_NOTIFICATION, serializedString.size()));
+
+			OutgameServer::Instance().InsertSendTask(sendStruct);
+
+			delete it->second;
 			EnterCriticalSection(&m_criticalSection);
-			delete it->second;	// todo 이후 풀에 반환하는 형태로 수정
 			it = m_activeUserMap.unsafe_erase(it);
 			LeaveCriticalSection(&m_criticalSection);
 		}

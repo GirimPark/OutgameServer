@@ -13,6 +13,11 @@ message C2S_ValidationResponse
 
 }
 
+message S2C_SessionExpiredNotification
+{
+
+}
+
 message S2C_Echo
 {
 	string data = 1;

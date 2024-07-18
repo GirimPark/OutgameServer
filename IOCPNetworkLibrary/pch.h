@@ -10,4 +10,11 @@
 // 여기에 미리 컴파일하려는 헤더 추가
 #include "framework.h"
 
+#include <WinSock2.h>
+#include <mswsock.h>
+#include <WS2tcpip.h>
+
+/// windows
+#include <Windows.h>
+
 #endif //PCH_H

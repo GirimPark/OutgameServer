@@ -115,37 +115,37 @@ SOCKET LoginClient::CreateConnectedSocket()
 
 void LoginClient::SendThread()
 {
-    Protocol::C2S_ValidationResponse validationResponse;
-    char* sendBuf = PacketBuilder::Instance().Serialize(EPacketType::C2S_VALIDATION_RESPONSE, validationResponse);
     int sendByte = 0;
-    int totalSendByte = PacketHeader::Size() + validationResponse.ByteSizeLong();
 
+	std::shared_ptr<ClientStruct> test;
 	while (true)
     {
-        ClientStruct test;
         if (!m_sendQueue.try_pop(test))
             continue;
 
-        int nSend = send(m_socket, sendBuf + sendByte, totalSendByte - sendByte, 0);
-        if (nSend == SOCKET_ERROR)
+        char* serializedPacket = PacketBuilder::Instance().Serialize(test->header->type, *test->data);
+
+        while(sendByte < test->header->length)
         {
-            printf("send() failed: %d\n", WSAGetLastError());
-            break;
-        }
-        if (nSend == 0)
-        {
-            printf("connection closed\n");
-            break;
+	        int nSend = send(m_socket, serializedPacket + sendByte, test->header->length - sendByte, 0);
+		        
+	        if (nSend == SOCKET_ERROR)
+	        {
+	            printf("send() failed: %d\n", WSAGetLastError());
+	            return;
+	        }
+	        if (nSend == 0)
+	        {
+	            printf("connection closed\n");
+                return;
+	        }
+
+	        sendByte += nSend;
         }
 
-        sendByte += nSend;
-
-        if(sendByte >= totalSendByte)
-        {
-            sendBuf = PacketBuilder::Instance().Serialize(EPacketType::C2S_VALIDATION_RESPONSE, validationResponse);
-            sendByte = 0;
-            totalSendByte = PacketHeader::Size() + validationResponse.ByteSizeLong();;
-        }
+        cout << "Validation Response Send" << endl;
+        delete[] serializedPacket;
+        sendByte = 0;
     }
 }
 
@@ -184,19 +184,25 @@ void LoginClient::ReceiveThread()
                 Protocol::S2C_LoginResponse loginResponse;
                 PacketBuilder::Instance().DeserializeData(recvBuf, sizeof(recvBuf), header, loginResponse);
                 cout << loginResponse.sucess().value() << endl;
+
+                break;
             }
             case EPacketType::S2C_VALIDATION_REQUEST:
             {
-                ClientStruct test;
-                test.header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::C2S_VALIDATION_RESPONSE, 0));
-                test.header->type = EPacketType::C2S_VALIDATION_RESPONSE;
-                test.header->length = PacketHeader::Size();
-                test.data = std::make_shared<Protocol::C2S_ValidationResponse>();
-
+                std::shared_ptr<ClientStruct> test = std::make_shared<ClientStruct>();
+                test->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::C2S_VALIDATION_RESPONSE, 0));
+                test->header->type = EPacketType::C2S_VALIDATION_RESPONSE;
+                test->header->length = PacketHeader::Size();
+                test->data = std::make_shared<Protocol::C2S_ValidationResponse>();
                 m_sendQueue.push(test);
-                
-                Protocol::C2S_ValidationResponse validationResponse;
-                
+
+                break;
+            }
+            case EPacketType::S2C_SESSION_EXPIRED_NOTIFICATION:
+            {
+                cout << "세션이 만료되었습니다" << endl;
+
+                break;
             }
             }
             

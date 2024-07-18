@@ -1,4 +1,5 @@
 #pragma once
+
 class IOCPNetworkAPI
 {
 public:
@@ -6,15 +7,18 @@ public:
 	~IOCPNetworkAPI();
 
 	void Initialize();
+	void Finalize();
 
-	void Accept();
+	bool StartAccept();
+	bool StartReceive();
+	bool StartSend();
 
-	void Recv();
-	void Send();
-
-
+	SOCKET CreateSocket();
+	SOCKET CreateListenSocket();
 
 private:
-
+	HANDLE m_hIOCP;
+	const char* m_listeningPort;
+	int m_backlog;
 };
 

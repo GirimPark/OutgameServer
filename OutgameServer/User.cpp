@@ -10,17 +10,10 @@ User::User(Session* session, std::string_view name)
 {
 }
 
-// todo 풀에 반환하는 형태로 변경
-User::~User()
-{
-	OutgameServer::Instance().GetServerCore()->UnregisterSession(m_session->sessionId);
-}
-
-void User::UpdateStatus(EUserStateType state)
+void User::UpdateState(EUserStateType state)
 {
 	m_state = state;
 
-	//todo DBUpdate
 	std::wstring wUsername = std::wstring(m_name.begin(), m_name.end());
 	int dbState = state;
 	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
