@@ -75,6 +75,9 @@ void UserManager::HandleLoginRequest()
 	std::shared_ptr<ReceiveStruct> loginStruct;
 	while (OutgameServer::Instance().IsRunning())
 	{
+		if (m_loginRequests.empty())
+			continue;
+
 		if (!m_loginRequests.try_pop(loginStruct))
 			continue;
 
@@ -112,6 +115,9 @@ void UserManager::HandleValidationResponse()
 	std::shared_ptr<ReceiveStruct> validationStruct;
 	while (OutgameServer::Instance().IsRunning())
 	{
+		if (m_validationResponses.empty())
+			continue;
+
 		if (!m_validationResponses.try_pop(validationStruct))
 			continue;
 
@@ -140,12 +146,14 @@ bool UserManager::AuthenticateUser(Session* session, const std::string_view& use
 	if (!loginRequestBind.Execute())
 	{
 		LOG_CONTENTS("loginRequest Execute Failed");
+		DBConnectionPool::Instance().ReturnConnection(dbConn);
 		return false;
 	}
 
 	if (!loginRequestBind.Fetch())
 	{
 		LOG_CONTENTS("유효하지 않은 ID");
+		DBConnectionPool::Instance().ReturnConnection(dbConn);
 		return false;
 	}
 

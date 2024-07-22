@@ -80,6 +80,8 @@ SOCKET LoginClient::CreateConnectedSocket()
 
     freeaddrinfo(addr_srv);
 
+    printf("connected\n");
+
 
     /// 초기 송신
     Protocol::C2S_LoginRequest loginRequest;
@@ -115,30 +117,30 @@ void LoginClient::SendThread()
 {
     int sendByte = 0;
 
-	std::shared_ptr<ClientStruct> test;
-	while (true)
+    std::shared_ptr<ClientStruct> test;
+    while (true)
     {
         if (!m_sendQueue.try_pop(test))
             continue;
 
         char* serializedPacket = PacketBuilder::Instance().Serialize(test->header->type, *test->data);
 
-        while(sendByte < test->header->length)
+        while (sendByte < test->header->length)
         {
-	        int nSend = send(m_socket, serializedPacket + sendByte, test->header->length - sendByte, 0);
-		        
-	        if (nSend == SOCKET_ERROR)
-	        {
-	            printf("send() failed: %d\n", WSAGetLastError());
-	            return;
-	        }
-	        if (nSend == 0)
-	        {
-	            printf("connection closed\n");
-                return;
-	        }
+            int nSend = send(m_socket, serializedPacket + sendByte, test->header->length - sendByte, 0);
 
-	        sendByte += nSend;
+            if (nSend == SOCKET_ERROR)
+            {
+                printf("send() failed: %d\n", WSAGetLastError());
+                return;
+            }
+            if (nSend == 0)
+            {
+                printf("connection closed\n");
+                return;
+            }
+
+            sendByte += nSend;
         }
 
         cout << "Validation Response Send" << endl;
@@ -182,7 +184,7 @@ void LoginClient::ReceiveThread()
                 Protocol::S2C_LoginResponse loginResponse;
                 PacketBuilder::Instance().DeserializeData(recvBuf, sizeof(recvBuf), header, loginResponse);
                 cout << loginResponse.sucess().value() << endl;
-                printf("connected\n");
+
                 break;
             }
             case EPacketType::S2C_VALIDATION_REQUEST:
@@ -202,12 +204,9 @@ void LoginClient::ReceiveThread()
 
                 break;
             }
-            default:
-	        {
-                cout << "패킷 헤더가 이상해용..." << endl;
-                break;
-	        }
             }
+
+
         }
     }
 }

@@ -28,7 +28,7 @@
 int main()
 {
 	/// Database test
-	assert(DBConnectionPool::Instance().Connect(1, L"Driver={ODBC Driver 17 for SQL Server};Server=(localdb)\\MSSQLLocalDB;Database=ServerDB;Trusted_Connection=Yes;"));
+	assert(DBConnectionPool::Instance().Connect(5, L"Driver={ODBC Driver 17 for SQL Server};Server=(localdb)\\MSSQLLocalDB;Database=ServerDB;Trusted_Connection=Yes;"));
 
 	// Create Table
 	{
@@ -205,9 +205,12 @@ void OutgameServer::ProcessEchoQueue()
 	std::shared_ptr<ReceiveStruct> echoStruct;
 	while (m_bRun)
 	{
+		if (m_recvEchoQueue.empty())
+			continue;
+
 		if (!m_recvEchoQueue.try_pop(echoStruct))
 			continue;
-		
+
 		std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
 		sendStruct->type = ESendType::UNICAST;
 		sendStruct->session = echoStruct->session;
@@ -225,6 +228,9 @@ void OutgameServer::SendThread()
 	std::shared_ptr<SendStruct> sendStruct;
 	while (m_bRun)
 	{
+		if (m_sendQueue.empty())
+			continue;
+
 		if (!m_sendQueue.try_pop(sendStruct))
 			continue;
 

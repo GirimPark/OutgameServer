@@ -46,8 +46,6 @@
 
 /// Custom
 #include "Define.h"
-#include "Session.h"
-
-#include "../IOCPNetworkLibrary/IOCPNetworkAPI.h"
+#include "CompletionKey.h"
 
 #endif //PCH_H
