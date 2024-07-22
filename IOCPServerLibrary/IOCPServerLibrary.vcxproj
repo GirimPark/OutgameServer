@@ -156,7 +156,7 @@
     <ClInclude Include="Define.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ServerCore.h" />
-    <ClInclude Include="CompletionKey.h" />
+    <ClInclude Include="Session.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DBBind.cpp" />

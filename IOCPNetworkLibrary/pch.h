@@ -17,4 +17,9 @@
 /// windows
 #include <Windows.h>
 
+#include <iostream>
+
+#include "Define.h"
+#include "ListenContext.h"
+
 #endif //PCH_H

@@ -42,7 +42,7 @@
 #include "OutgameServer.h"
 
 #include "../IOCPServerLibrary/Define.h"
-#include "../IOCPServerLibrary/CompletionKey.h"
+#include "../IOCPServerLibrary/Session.h"
 #include "../IOCPServerLibrary/ServerCore.h"
 #include "../IOCPServerLibrary/DBConnectionPool.h"
 #include "../IOCPServerLibrary/DBBind.h"

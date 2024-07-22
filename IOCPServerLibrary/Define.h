@@ -1,12 +1,10 @@
 #pragma once
 
+#include "../IOCPNetworkLibrary/Define.h"
+
 typedef unsigned int SessionId;
 
-#define MAX_BUF_SIZE 2048
 #define MAX_THREAD 64
-#define IP_SIZE 16
-#define INIT_DATA_SIZE 2048 //256
-
 #define WVARCHAR_MAX 4000
 #define BINARY_MAX 8000
 

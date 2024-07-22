@@ -24,7 +24,7 @@
     <ClInclude Include="Define.h">
       <Filter>Config</Filter>
     </ClInclude>
-    <ClInclude Include="CompletionKey.h">
+    <ClInclude Include="Session.h">
       <Filter>Config</Filter>
     </ClInclude>
     <ClInclude Include="DBConnection.h">

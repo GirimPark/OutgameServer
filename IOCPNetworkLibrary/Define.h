@@ -1,5 +1,9 @@
 #pragma once
 
+#define MAX_BUF_SIZE 2048
+#define IP_SIZE 16
+#define INIT_DATA_SIZE 2048 //256
+
 #define LOG_NETWORK_CORE(message) \
 {\
 	std::string file = __FILE__;\

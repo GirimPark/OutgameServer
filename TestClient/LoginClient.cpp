@@ -80,8 +80,6 @@ SOCKET LoginClient::CreateConnectedSocket()
 
     freeaddrinfo(addr_srv);
 
-    printf("connected\n");
-
 
     /// 초기 송신
     Protocol::C2S_LoginRequest loginRequest;
@@ -184,7 +182,7 @@ void LoginClient::ReceiveThread()
                 Protocol::S2C_LoginResponse loginResponse;
                 PacketBuilder::Instance().DeserializeData(recvBuf, sizeof(recvBuf), header, loginResponse);
                 cout << loginResponse.sucess().value() << endl;
-
+                printf("connected\n");
                 break;
             }
             case EPacketType::S2C_VALIDATION_REQUEST:
@@ -204,9 +202,12 @@ void LoginClient::ReceiveThread()
 
                 break;
             }
+            default:
+	        {
+                cout << "패킷 헤더가 이상해용..." << endl;
+                break;
+	        }
             }
-            
-            
         }
     }
 }

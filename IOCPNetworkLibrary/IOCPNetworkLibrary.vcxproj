@@ -146,6 +146,7 @@
     <ClInclude Include="Define.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="IOCPNetworkAPI.h" />
+    <ClInclude Include="ListenContext.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>

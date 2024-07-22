@@ -18,21 +18,13 @@ public:
 	// Register Callbacks
 	void RegisterCallback(ReceiveDataCallback callback);
 
+	// send 게시
 	bool Unicast(Session* session, const char* data, int length);
 	bool Broadcast(const char* data, int length);
 
 private:
 	/// 리소스 해제
 	void Finalize();
-
-	/// 소켓 관련 함수
-	// 소켓 생성, 옵션 설정(전송 버퍼링 X)
-	SOCKET CreateSocket();	///api
-
-	// 리슨 소켓 컨텍스트 생성
-	bool CreateListenContext();
-	// 리슨 소켓 생성 + acceptEx 게시
-	SOCKET CreateListenSocket();	///api
 
 	/// 세션 관련 함수
 	Session* CreateSession();						// 세션 생성
@@ -41,31 +33,23 @@ private:
 	void UnregisterSession(SessionId sessionId);	// 세션 맵에서 삭제+세션 자원 해제. lock이 있으므로 남용 유의
 
 	/// IO 작업 관련 함수
-	// GetQueuedCompletionStatus
-	void ProcessThread();
-	
-	//! 로직 부분으로 넘겨야 함
-	// IO 작업 처리, 후에 콜백으로 넘길 예정
-	void HandleAcceptCompletion(DWORD nTransferredByte);
-	void HandleReadCompletion(Session* session, DWORD nTransferredByte);
-	void HandleWriteCompletion(Session* session);
+	bool StartSend(Session* session, const char* data, int length);	// IOCPNetworkAPI::StartSend 래핑
 
-private: 
-	// IO 작업 게시
-	bool StartAccept();	/// api
-	bool StartReceive(Session* session);	/// api
-	bool StartSend(Session* session, const char* data, int length);	/// api
+	void ProcessThread();	// GetQueuedCompletionStatus
+
+	void HandleAcceptCompletion(DWORD nTransferredByte);
+	void HandleWriteCompletion(Session* session);
 
 	/// Callbacks
 	void OnReceiveData(Session* session, char* data, int nReceivedByte);
 
-	HANDLE m_hIOCP;	/// api
+private:
 	bool m_bEndServer;
+
+	HANDLE m_hIOCP;
 	WSAEVENT m_hCleanupEvent[1];
 
 	ListenContext* m_pListenSocketCtxt;
-	const char* m_listeningPort;	/// api
-	int m_backlog;	/// api
 
 	int m_nThread;
 	std::vector<std::thread*> m_IOCPThreads;
