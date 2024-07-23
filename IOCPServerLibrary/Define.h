@@ -23,3 +23,19 @@ typedef unsigned int SessionId;
 	file = file.substr(file.find_last_of("/\\") + 1);\
 	printf("[Database] FILE : %s, LINE : %d\n[Database] MESSAGE : %s\n\n", file.c_str(), __LINE__, message);\
 }
+
+#define CRASH(cause)						\
+{											\
+	unsigned int* crash = nullptr;				\
+	__analysis_assume(crash != nullptr);	\
+	*crash = 0xDEADBEEF;					\
+}
+
+#define ASSERT_CRASH(expr)			\
+{									\
+	if (!(expr))					\
+	{								\
+		CRASH("ASSERT_CRASH");		\
+		__analysis_assume(expr);	\
+	}								\
+}

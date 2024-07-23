@@ -19,7 +19,7 @@ public:
 
     // 주기적으로 유저 검증용 패킷 보내는 스레드(S2C)
     void BroadcastValidationPacket(std::chrono::milliseconds period);
-    // 작업 큐 처리 스레드(C2S)
+    // 수신 패킷 처리
     void HandleLoginRequest();
     void HandleValidationResponse();
 

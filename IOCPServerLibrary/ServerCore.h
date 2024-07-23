@@ -13,7 +13,7 @@ public:
 
 	/// Interface
 	void Run();
-	void TriggerCleanupEvent();
+	void TriggerShutdown();
 
 	// Register Callbacks
 	void RegisterCallback(ReceiveDataCallback callback);
@@ -57,8 +57,7 @@ private:
 	void OnReceiveData(Session* session, char* data, int nReceivedByte);
 
 	HANDLE m_hIOCP;
-	bool m_bEndServer;
-	WSAEVENT m_hCleanupEvent[1];
+	std::atomic<bool> m_bEndServer;
 
 	ListenContext* m_pListenSocketCtxt;
 	const char* m_listeningPort;

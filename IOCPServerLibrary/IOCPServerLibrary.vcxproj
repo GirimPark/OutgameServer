@@ -170,11 +170,6 @@
     </ClCompile>
     <ClCompile Include="ServerCore.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\IOCPNetworkLibrary\IOCPNetworkLibrary.vcxproj">
-      <Project>{b8cd1d4c-3a5e-4268-8277-532ad619ef70}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

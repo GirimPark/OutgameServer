@@ -46,7 +46,7 @@ void DBConnectionPool::Clear()
 // 반드시 유효한 커넥션을 반환한다.
 DBConnection* DBConnectionPool::GetConnection()
 {
-	assert(!m_connections.empty());
+	ASSERT_CRASH(!m_connections.empty());
 
 	while(true)
 	{

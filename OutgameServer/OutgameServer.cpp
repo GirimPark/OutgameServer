@@ -23,17 +23,15 @@
 #include <vld/vld.h>
 #endif
 
-
-
 int main()
 {
 	/// Database test
-	assert(DBConnectionPool::Instance().Connect(5, L"Driver={ODBC Driver 17 for SQL Server};Server=(localdb)\\MSSQLLocalDB;Database=ServerDB;Trusted_Connection=Yes;"));
+	ASSERT_CRASH(DBConnectionPool::Instance().Connect(5, L"Driver={ODBC Driver 17 for SQL Server};Server=(localdb)\\MSSQLLocalDB;Database=ServerDB;Trusted_Connection=Yes;"));
 
 	// Create Table
 	{
 		DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
-		assert(dbConn->ExecuteFile("User.sql"));
+		ASSERT_CRASH(dbConn->ExecuteFile("User.sql"));
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
 	}
 
@@ -48,7 +46,7 @@ int main()
 		std::wstring password = L"1234";
 		dbBind.BindParam(1, password.c_str(), password.size()); 
 
-		assert(dbBind.Execute());
+		ASSERT_CRASH(dbBind.Execute());
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
 	}
 
@@ -101,10 +99,10 @@ void OutgameServer::Start()
 	m_workers.emplace_back(new std::thread(&OutgameServer::SendThread, this));						// Send
 	m_workers.emplace_back(new std::thread(&OutgameServer::QuitThread, this));						// Quit
 	// Logic
-	m_workers.emplace_back(new std::thread(&OutgameServer::ProcessEchoQueue, this));				// Echo - Test
-	m_workers.emplace_back(new std::thread(&UserManager::HandleLoginRequest, m_pUserManager));	// Login
+	//m_workers.emplace_back(new std::thread(&OutgameServer::ProcessEchoQueue, this));				// Echo - Test
+	//m_workers.emplace_back(new std::thread(&UserManager::HandleLoginRequest, m_pUserManager));	// Login
 	m_workers.emplace_back(new std::thread(&UserManager::BroadcastValidationPacket, m_pUserManager, std::chrono::milliseconds(1000)));	// Validation Request
-	m_workers.emplace_back(new std::thread(&UserManager::HandleValidationResponse, m_pUserManager));	// Validation Response
+	//m_workers.emplace_back(new std::thread(&UserManager::HandleValidationResponse, m_pUserManager));	// Validation Response
 	
 
 	for(const auto& worker : m_workers)
@@ -116,22 +114,26 @@ void OutgameServer::Start()
 		}
 	}
 	m_workers.clear();
+
+	Stop();
 }
 
 void OutgameServer::Stop()
 {
-	m_bRun = false;
-
 	// core 자원 해제
-	m_pServerCore->TriggerCleanupEvent();
-	m_pServerCore = nullptr;
-
 	delete m_pUserManager;
 
 	m_recvEchoQueue.clear();
 	m_sendQueue.clear();
 
 	google::protobuf::ShutdownProtobufLibrary();
+}
+
+void OutgameServer::TriggerShutdown()
+{
+	m_bRun = false;
+	m_pServerCore->TriggerShutdown();
+	m_pServerCore = nullptr;
 }
 
 void OutgameServer::InsertSendTask(std::shared_ptr<SendStruct> task)
@@ -274,8 +276,7 @@ void OutgameServer::QuitThread()
 	{
 		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
 		{
-			m_bRun = false;
-			Stop();
+			TriggerShutdown();
 			printf("QuitThread() : Cleanup event triggered\n");
 			break;
 		}

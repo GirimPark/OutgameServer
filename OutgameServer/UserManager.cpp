@@ -33,7 +33,7 @@ void UserManager::CreateActiveUser(Session* session, std::string_view name)
 	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
 	DBBind<1, 0> updateStateBind(dbConn, L"UPDATE [dbo].[User] SET state = 1 WHERE username = (?)");
 	updateStateBind.BindParam(0, wUsername.c_str(), wUsername.size());
-	assert(updateStateBind.Execute());
+	ASSERT_CRASH(updateStateBind.Execute());
 	DBConnectionPool::Instance().ReturnConnection(dbConn);
 }
 

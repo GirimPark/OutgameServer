@@ -16,6 +16,7 @@ public:
 	void Stop();
 
 	bool IsRunning() { return m_bRun; }
+	void TriggerShutdown();
 
 	void InsertSendTask(std::shared_ptr<SendStruct> task);
 
@@ -41,7 +42,6 @@ private:
 	UserManager* m_pUserManager;
 
 	concurrency::concurrent_queue<std::shared_ptr<ReceiveStruct>> m_recvEchoQueue;
-
 	concurrency::concurrent_queue<std::shared_ptr<SendStruct>> m_sendQueue;
 
 	std::vector<std::thread*> m_workers;

@@ -20,8 +20,6 @@
 /// IO
 #include <iostream>
 
-#include <cassert>
-
 /// String
 #include <string>
 #include <string_view>

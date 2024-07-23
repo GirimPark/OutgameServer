@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include <cassert>
 #include "DBConnection.h"
 
 // Bind 수가 유효한지 확인하는 재귀적 구조체
@@ -39,7 +38,7 @@ public:
 
 	bool Execute()
 	{
-		assert(Validata());
+		ASSERT_CRASH(Validata());
 		return m_DBConnection->Execute(m_query);
 	}
 

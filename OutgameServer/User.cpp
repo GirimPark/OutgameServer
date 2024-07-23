@@ -20,6 +20,6 @@ void User::UpdateState(EUserStateType state)
 	DBBind<2, 0> updateStateBind(dbConn, L"UPDATE [dbo].[User] SET state = (?) WHERE username = (?)");
 	updateStateBind.BindParam(0,  dbState);
 	updateStateBind.BindParam(1, wUsername.c_str(), wUsername.size());
-	assert(updateStateBind.Execute());
+	ASSERT_CRASH(updateStateBind.Execute());
 	DBConnectionPool::Instance().ReturnConnection(dbConn);
 }

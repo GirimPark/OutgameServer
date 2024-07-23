@@ -20,13 +20,6 @@ void ServerCore::Run()
 {
     InitializeCriticalSection(&m_criticalSection);
 
-    if((m_hCleanupEvent[0] = WSACreateEvent()) == WSA_INVALID_EVENT)
-    {
-        printf("WSACreateEvent() failed: %d\n", WSAGetLastError());
-        Finalize();
-        return;
-    }
-
     WSADATA wsaData;
     int rt = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (rt != 0)
@@ -65,7 +58,11 @@ void ServerCore::Run()
         }
     }
 
-    WSAWaitForMultipleEvents(1, m_hCleanupEvent, true, WSA_INFINITE, false);
+    for(int i=0; i<m_nThread; ++i)
+    {
+        if (m_IOCPThreads[i]->joinable())
+            m_IOCPThreads[i]->join();
+    }
 
     // 해제
     Finalize();
@@ -105,12 +102,6 @@ void ServerCore::Finalize()
 
     if(m_hIOCP)
     {
-        // 스레드 종료
-	    for(int i=0; i<m_nThread; ++i)
-	    {
-            PostQueuedCompletionStatus(m_hIOCP, 0, 0, NULL);
-	    }
-
         // IOCP 핸들 해제
         CloseHandle(m_hIOCP);
         m_hIOCP = NULL;
@@ -127,13 +118,6 @@ void ServerCore::Finalize()
     }
     m_IOCPThreads.clear();
 
-    // 이벤트 해제
-    if(m_hCleanupEvent[0] != WSA_INVALID_EVENT)
-    {
-        WSACloseEvent(m_hCleanupEvent[0]);
-        m_hCleanupEvent[0] = WSA_INVALID_EVENT;
-    }
-
     // 크리티컬 섹션 해제
     DeleteCriticalSection(&m_criticalSection);
 
@@ -144,9 +128,18 @@ void ServerCore::Finalize()
     delete this;
 }
 
-void ServerCore::TriggerCleanupEvent()
+void ServerCore::TriggerShutdown()
 {
-    SetEvent(m_hCleanupEvent[0]);
+    m_bEndServer = true;
+
+    if (m_hIOCP)
+    {
+        // 스레드 종료, ProcessThread는 GetQueuedCompletionStatus에서 무한 대기하므로 별도로 처리가 필요하다.
+        for (int i = 0; i < m_nThread; ++i)
+        {
+            PostQueuedCompletionStatus(m_hIOCP, 0, 0, NULL);
+        }
+    }
 }
 
 SOCKET ServerCore::CreateSocket()
@@ -338,7 +331,7 @@ void ServerCore::ProcessThread()
     DWORD flags = 0;
     DWORD nTransferredByte = 0;
 
-    while(true)
+    while(!m_bEndServer)
     {
         bSuccess = GetQueuedCompletionStatus(m_hIOCP, &nTransferredByte, &completionKey, &overlapped, INFINITE);
         if(!bSuccess)
@@ -428,7 +421,7 @@ void ServerCore::HandleAcceptCompletion(DWORD nTransferredByte)
     if (rt == SOCKET_ERROR)
     {
         printf("setsockopt(SO_UPDATE_ACCEPT_CONTEXT) failed to update accept socket : %d\n", GetLastError());
-        WSASetEvent(m_hCleanupEvent[0]);
+        m_bEndServer = true;
         return;
     }
 
@@ -441,7 +434,7 @@ void ServerCore::HandleAcceptCompletion(DWORD nTransferredByte)
     if (!m_hIOCP)
     {
         printf("CreateIoCompletionPort failed to associate socket with error: %d\n", GetLastError());
-        WSASetEvent(m_hCleanupEvent[0]);
+        m_bEndServer = true;
         return;
     }
 
@@ -500,13 +493,18 @@ bool ServerCore::Unicast(Session* session, const char* data, int length)
 
 bool ServerCore::Broadcast(const char* data, int length)
 {
+    if (m_sessionMap.empty())
+        return true;
+
     for(const auto& session : m_sessionMap)
     {
         if (!session.second)
             continue;
 
         if (!StartSend(session.second, data, length))
+        {
             return false;
+        }
     }
     return true;
 }
