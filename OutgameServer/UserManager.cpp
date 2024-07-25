@@ -6,6 +6,15 @@
 UserManager::UserManager()
 {
 	InitializeCriticalSection(&m_criticalSection);
+
+	OutgameServer::Instance().RegisterPacketHanlder(EPacketType::C2S_VALIDATION_RESPONSE, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
+	{
+			HandleValidationResponse(receiveStruct);
+	});
+	OutgameServer::Instance().RegisterPacketHanlder(EPacketType::C2S_LOGIN_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
+		{
+			HandleLoginRequest(receiveStruct);
+		});
 }
 
 UserManager::~UserManager()
@@ -17,9 +26,6 @@ UserManager::~UserManager()
 		delete user.second;
 	}
 	m_activeUserMap.clear();
-
-	m_loginRequests.clear();
-	m_validationResponses.clear();
 }
 
 void UserManager::CreateActiveUser(Session* session, std::string_view name)
@@ -35,16 +41,6 @@ void UserManager::CreateActiveUser(Session* session, std::string_view name)
 	updateStateBind.BindParam(0, wUsername.c_str(), wUsername.size());
 	ASSERT_CRASH(updateStateBind.Execute());
 	DBConnectionPool::Instance().ReturnConnection(dbConn);
-}
-
-void UserManager::InsertLoginRequest(std::shared_ptr<ReceiveStruct> task)
-{
-	m_loginRequests.push(task);
-}
-
-void UserManager::InsertValidationResponse(std::shared_ptr<ReceiveStruct> task)
-{
-	m_validationResponses.push(task);
 }
 
 void UserManager::BroadcastValidationPacket(std::chrono::milliseconds period)
@@ -70,61 +66,55 @@ void UserManager::BroadcastValidationPacket(std::chrono::milliseconds period)
 	}
 }
 
-void UserManager::HandleLoginRequest()
+void UserManager::HandleLoginRequest(std::shared_ptr<ReceiveStruct> receiveStructure)
 {
-	std::shared_ptr<ReceiveStruct> loginStruct;
-	while (OutgameServer::Instance().IsRunning())
+	auto loginRequest = std::make_shared<Protocol::C2S_LoginRequest>();
+	if(!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *loginRequest))
 	{
-		if (m_loginRequests.empty())
-			continue;
-
-		if (!m_loginRequests.try_pop(loginStruct))
-			continue;
-
-		std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
-		// type
-		sendStruct->type = ESendType::UNICAST;
-		// session
-		sendStruct->session = loginStruct->session;
-		// data
-		Protocol::C2S_LoginRequest* requestData = static_cast<Protocol::C2S_LoginRequest*>(loginStruct->data.get());
-		std::shared_ptr<Protocol::S2C_LoginResponse> response = std::make_shared<Protocol::S2C_LoginResponse>();
-		// 요청 데이터 인증 확인
-		if (AuthenticateUser(sendStruct->session, requestData->username(), requestData->password()))
-		{
-			response->mutable_sucess()->set_value(true);
-			sendStruct->session->state = Session::eStateType::REGISTER;
-		}
-		else
-		{
-			response->mutable_sucess()->set_value(false);
-			sendStruct->session->state = Session::eStateType::CLOSE;
-		}
-		sendStruct->data = response;
-		// header
-		std::string serializedString;
-		(sendStruct->data)->SerializeToString(&serializedString);
-		sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::S2C_LOGIN_RESPONSE, serializedString.size()));
-
-		OutgameServer::Instance().InsertSendTask(sendStruct);
+		LOG_CONTENTS("C2S_LOGIN_REQUEST: PakcetBuilder::Deserialize() failed");
+		return;
 	}
+
+	std::shared_ptr<SendStruct> sendStruct =std::make_shared<SendStruct>();
+	// type
+	sendStruct->type = ESendType::UNICAST;
+	// session
+	sendStruct->session = receiveStructure->session;
+	// data
+	std::shared_ptr<Protocol::S2C_LoginResponse> response =std::make_shared<Protocol::S2C_LoginResponse>();
+	// 요청 데이터 인증 확인
+	if (AuthenticateUser(sendStruct->session, loginRequest->username(), loginRequest->password()))
+	{
+		response->mutable_sucess()->set_value(true);
+		sendStruct->session->state =Session::eStateType::REGISTER;
+	}
+	else
+	{
+		response->mutable_sucess()->set_value(false);
+		sendStruct->session->state = Session::eStateType::CLOSE;
+	}
+	sendStruct->data = response;
+	// header
+	std::string serializedString;
+	(sendStruct->data)->SerializeToString(&serializedString);
+	sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::S2C_LOGIN_RESPONSE, serializedString.size()));
+
+	OutgameServer::Instance().InsertSendTask(sendStruct);
 }
 
-void UserManager::HandleValidationResponse()
+void UserManager::HandleValidationResponse(std::shared_ptr<ReceiveStruct> receiveStructure)
 {
-	std::shared_ptr<ReceiveStruct> validationStruct;
-	while (OutgameServer::Instance().IsRunning())
+	auto validationResponse = std::make_shared<Protocol::C2S_ValidationResponse>();
+	if(PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *validationResponse))
 	{
-		if (m_validationResponses.empty())
-			continue;
-
-		if (!m_validationResponses.try_pop(validationStruct))
-			continue;
-
+		//? 여기에 이렇게 락 걸어도..... 되나.... 이것만 스레드를 따로 뺄까?
 		EnterCriticalSection(&m_criticalSection);
-		m_activeUserMap[validationStruct->session->sessionId]->UpdateLastValidationTime(std::chrono::steady_clock::now());
+		m_activeUserMap[receiveStructure->session->sessionId]->UpdateLastValidationTime(std::chrono::steady_clock::now());
 		LeaveCriticalSection(&m_criticalSection);
-		LOG_CONTENTS("User Validation Packet Alived");
+	}
+	else
+	{
+		LOG_CONTENTS("C2S_VALIDATION_RESPONSE: PakcetBuilder::Deserialize() failed");
 	}
 }
 

@@ -1,7 +1,11 @@
 #pragma once
 
+#include "PacketHandler.h"
+
 class ServerCore;
 class UserManager;
+class PacketHandler;
+
 
 class OutgameServer
 {
@@ -18,20 +22,14 @@ public:
 	bool IsRunning() { return m_bRun; }
 	void TriggerShutdown();
 
+	void RegisterPacketHanlder(EPacketType headerType, PacketHandlerCallback callback);
 	void InsertSendTask(std::shared_ptr<SendStruct> task);
 
 	ServerCore* GetServerCore() const { return m_pServerCore; }
 
 private:
-	// ServerCore에서 OnReceive에 실행할 콜백 함수
-	void DispatchReceivedData(Session* session, char* data, int nReceivedByte);
-
-	// EchoQueue 처리 스레드
-	void ProcessEchoQueue();
-	
 	// SendQueue 처리 스레드
 	void SendThread();
-
 	// 자원 해제 확인용 스레드
 	void QuitThread();
 
@@ -40,8 +38,9 @@ private:
 
 	ServerCore* m_pServerCore;
 	UserManager* m_pUserManager;
+	PacketHandler* m_pPacketHandler;
 
-	concurrency::concurrent_queue<std::shared_ptr<ReceiveStruct>> m_recvEchoQueue;
+	//concurrency::concurrent_queue<std::shared_ptr<ReceiveStruct>> m_recvQueue;
 	concurrency::concurrent_queue<std::shared_ptr<SendStruct>> m_sendQueue;
 
 	std::vector<std::thread*> m_workers;

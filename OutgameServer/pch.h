@@ -39,7 +39,9 @@
 #include "Define.h"
 #include "SharedStructure.h"
 
-#include "OutgameServer.h"
+#include "../PacketLibrary/PacketHeader.h"
+#include "../PacketLibrary/PacketBuilder.h"
+#include "../PacketLibrary/Protocol.pb.h"
 
 #include "../IOCPServerLibrary/Define.h"
 #include "../IOCPServerLibrary/CompletionKey.h"
@@ -47,8 +49,6 @@
 #include "../IOCPServerLibrary/DBConnectionPool.h"
 #include "../IOCPServerLibrary/DBBind.h"
 
-#include "../PacketLibrary/PacketHeader.h"
-#include "../PacketLibrary/PacketBuilder.h"
-#include "../PacketLibrary/Protocol.pb.h"
+#include "OutgameServer.h"
 
 #endif //PCH_H

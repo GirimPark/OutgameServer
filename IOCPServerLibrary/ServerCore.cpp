@@ -377,7 +377,7 @@ void ServerCore::ProcessThread()
             case OVERLAPPED_STRUCT::eIOType::WRITE:
             {
                 HandleWriteCompletion(session);
-                break;
+                break; 
             }
             default:
             {

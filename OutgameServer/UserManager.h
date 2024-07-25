@@ -13,15 +13,11 @@ public:
     // 타임아웃 설정
     void SetTimeout(std::chrono::milliseconds timeout) { m_userTimeout = timeout; }
 
-    // 작업 큐 접근
-    void InsertLoginRequest(std::shared_ptr<ReceiveStruct> task);
-    void InsertValidationResponse(std::shared_ptr<ReceiveStruct> task);
-
     // 주기적으로 유저 검증용 패킷 보내는 스레드(S2C)
     void BroadcastValidationPacket(std::chrono::milliseconds period);
     // 수신 패킷 처리
-    void HandleLoginRequest();
-    void HandleValidationResponse();
+    void HandleLoginRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
+    void HandleValidationResponse(std::shared_ptr<ReceiveStruct> receiveStructure);
 
 private:
     // 로그인 입력 정보 인증
@@ -34,9 +30,6 @@ private:
 
 private:
     concurrency::concurrent_unordered_map<SessionId, User*> m_activeUserMap;
-
-    concurrency::concurrent_queue<std::shared_ptr<ReceiveStruct>> m_loginRequests;
-    concurrency::concurrent_queue<std::shared_ptr<ReceiveStruct>> m_validationResponses;
 
     std::chrono::milliseconds m_userTimeout;
 

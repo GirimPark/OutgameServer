@@ -16,6 +16,9 @@
     <Filter Include="DBTables">
       <UniqueIdentifier>{1ace958a-7954-41cb-97d7-3665101cceb4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{33080799-5001-4bcb-8a7a-96f0bda48a81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -29,6 +32,12 @@
     </ClCompile>
     <ClCompile Include="UserManager.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketHandler.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketDataFactory.cpp">
+      <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +58,12 @@
     </ClInclude>
     <ClInclude Include="SharedStructure.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketHandler.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketDataFactory.h">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

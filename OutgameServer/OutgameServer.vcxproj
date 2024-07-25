@@ -31,6 +31,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OutgameServer.cpp" />
+    <ClCompile Include="PacketDataFactory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="PacketHandler.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="User.cpp" />
     <ClCompile Include="UserManager.cpp" />
@@ -38,6 +42,10 @@
   <ItemGroup>
     <ClInclude Include="Define.h" />
     <ClInclude Include="OutgameServer.h" />
+    <ClInclude Include="PacketDataFactory.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="PacketHandler.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SharedStructure.h" />
     <ClInclude Include="User.h" />

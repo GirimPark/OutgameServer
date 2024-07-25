@@ -4,7 +4,7 @@
 struct ClientStruct
 {
 	std::shared_ptr<PacketHeader> header;
-	std::shared_ptr<DataPacket> data;
+	std::shared_ptr<PacketData> data;
 };
 
 class LoginClient

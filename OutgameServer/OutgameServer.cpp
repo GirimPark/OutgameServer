@@ -13,11 +13,15 @@
 #include "pch.h"
 #include "OutgameServer.h"
 
+#include <memory>
+
 #include "UserManager.h"
+#include "PacketHandler.h"
 
 #include <sstream>
 
-#include "../PacketLibrary/Protocol.pb.h"
+#include "PacketDataFactory.h"
+
 
 #ifdef _DEBUG
 #include <vld/vld.h>
@@ -85,12 +89,13 @@ void OutgameServer::Start()
 	m_bRun = true;
 
 	m_pServerCore = new ServerCore("5001", 5);
+	m_pPacketHandler = new PacketHandler;
 	m_pUserManager = new UserManager;
 	m_pUserManager->SetTimeout(std::chrono::milliseconds(3000));
 
 	m_pServerCore->RegisterCallback([this](Session* session, char* data, int nReceivedByte)
 		{
-			DispatchReceivedData(session, data, nReceivedByte);
+			m_pPacketHandler->HandlePacket(session, data, nReceivedByte);
 		});
 
 	/// Threads
@@ -98,11 +103,8 @@ void OutgameServer::Start()
 	m_workers.emplace_back(new std::thread(&ServerCore::Run, m_pServerCore));					// Server Core
 	m_workers.emplace_back(new std::thread(&OutgameServer::SendThread, this));						// Send
 	m_workers.emplace_back(new std::thread(&OutgameServer::QuitThread, this));						// Quit
-	// Logic
-	//m_workers.emplace_back(new std::thread(&OutgameServer::ProcessEchoQueue, this));				// Echo - Test
-	//m_workers.emplace_back(new std::thread(&UserManager::HandleLoginRequest, m_pUserManager));	// Login
+
 	m_workers.emplace_back(new std::thread(&UserManager::BroadcastValidationPacket, m_pUserManager, std::chrono::milliseconds(1000)));	// Validation Request
-	//m_workers.emplace_back(new std::thread(&UserManager::HandleValidationResponse, m_pUserManager));	// Validation Response
 	
 
 	for(const auto& worker : m_workers)
@@ -121,9 +123,9 @@ void OutgameServer::Start()
 void OutgameServer::Stop()
 {
 	// core 자원 해제
+	delete m_pPacketHandler;
 	delete m_pUserManager;
 
-	m_recvEchoQueue.clear();
 	m_sendQueue.clear();
 
 	google::protobuf::ShutdownProtobufLibrary();
@@ -136,93 +138,14 @@ void OutgameServer::TriggerShutdown()
 	m_pServerCore = nullptr;
 }
 
+void OutgameServer::RegisterPacketHanlder(EPacketType headerType, PacketHandlerCallback callback)
+{
+	m_pPacketHandler->RegisterHandler(headerType, callback);
+}
+
 void OutgameServer::InsertSendTask(std::shared_ptr<SendStruct> task)
 {
 	m_sendQueue.push(task);
-}
-
-void OutgameServer::DispatchReceivedData(Session* session, char* data, int nReceivedByte)
-{
-	PacketHeader packetHeader;
-
-	if (PacketBuilder::Instance().DeserializeHeader(data, nReceivedByte, packetHeader))
-	{
-		switch (packetHeader.type)
-		{
-		// echo
-		case EPacketType::C2S_ECHO:
-		{ 
-			auto echoRequest = std::make_shared<Protocol::C2S_Echo>();
-			if (PacketBuilder::Instance().DeserializeData(data, nReceivedByte, packetHeader, *echoRequest))
-			{
-				std::shared_ptr<ReceiveStruct> echoStruct = std::make_shared<ReceiveStruct>(session, echoRequest);
-				m_recvEchoQueue.push(echoStruct);
-			}
-			else
-			{
-				LOG_CONTENTS("C2S_ECHO: PakcetBuilder::Deserialize() failed");
-			}
-			break;
-		}
-		// validation
-		case EPacketType::C2S_VALIDATION_RESPONSE:
-		{
-			auto validationResponse = std::make_shared<Protocol::C2S_ValidationResponse>();
-			if (PacketBuilder::Instance().DeserializeData(data, nReceivedByte, packetHeader, *validationResponse))
-			{
-				std::shared_ptr<ReceiveStruct> receiveStruct = std::make_shared<ReceiveStruct>(session, validationResponse);
-				m_pUserManager->InsertValidationResponse(receiveStruct);
-			}
-			else
-			{
-				LOG_CONTENTS("C2S_VALIDATION_RESPONSE: PakcetBuilder::Deserialize() failed");
-			}
-			break;
-		}
-		// login
-		case EPacketType::C2S_LOGIN_REQUEST:
-		{
-			auto loginRequest = std::make_shared<Protocol::C2S_LoginRequest>();
-			if (PacketBuilder::Instance().DeserializeData(data, nReceivedByte, packetHeader, *loginRequest))
-			{
-				std::shared_ptr<ReceiveStruct> receiveStruct = std::make_shared<ReceiveStruct>(session, loginRequest);
-				m_pUserManager->InsertLoginRequest(receiveStruct);
-			}
-			else
-			{
-				LOG_CONTENTS("C2S_LOGIN_REQUEST: PakcetBuilder::Deserialize() failed");
-			}
-			break;
-		}
-		default:
-			LOG_CONTENTS("Unknown packet type");
-			break;
-		}
-	}
-
-}
-
-void OutgameServer::ProcessEchoQueue()
-{
-	std::shared_ptr<ReceiveStruct> echoStruct;
-	while (m_bRun)
-	{
-		if (m_recvEchoQueue.empty())
-			continue;
-
-		if (!m_recvEchoQueue.try_pop(echoStruct))
-			continue;
-
-		std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
-		sendStruct->type = ESendType::UNICAST;
-		sendStruct->session = echoStruct->session;
-		sendStruct->data = echoStruct->data;
-		std::string serializedString;
-		(echoStruct->data)->SerializeToString(&serializedString);
-		sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::S2C_ECHO, serializedString.size()));
-
-		m_sendQueue.push(sendStruct);
-	}
 }
 
 void OutgameServer::SendThread()

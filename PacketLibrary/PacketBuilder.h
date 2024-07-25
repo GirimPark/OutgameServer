@@ -3,7 +3,7 @@
 enum EPacketType : short;
 struct PacketHeader;
 
-typedef google::protobuf::Message DataPacket;
+typedef google::protobuf::Message PacketData;
 
 class PacketBuilder {
 public:
@@ -15,10 +15,10 @@ public:
 
     PacketHeader CreateHeader(EPacketType type, int dataSize);
 
-    char* Serialize(EPacketType type, const DataPacket& dataPacket);
-    bool Deserialize(const char* buffer, short size, PacketHeader& header, DataPacket& data);
+    char* Serialize(EPacketType type, const PacketData& dataPacket);
+    bool Deserialize(const char* buffer, short size, PacketHeader& header, PacketData& data);
     bool DeserializeHeader(const char* buffer, short size, PacketHeader& header);
-    bool DeserializeData(const char* buffer, short size, const PacketHeader& header, DataPacket& data);
+    bool DeserializeData(const char* buffer, short size, const PacketHeader& header, PacketData& data);
 
 private:
     PacketBuilder() = default;

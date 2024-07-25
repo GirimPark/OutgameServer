@@ -7,7 +7,7 @@ PacketHeader PacketBuilder::CreateHeader(EPacketType type, int dataSize)
     return PacketHeader(length, type);
 }
 
-char* PacketBuilder::Serialize(EPacketType type, const DataPacket& dataPacket)
+char* PacketBuilder::Serialize(EPacketType type, const PacketData& dataPacket)
 {
     std::string serializedMessage;
     dataPacket.SerializeToString(&serializedMessage);
@@ -25,7 +25,7 @@ char* PacketBuilder::Serialize(EPacketType type, const DataPacket& dataPacket)
     return packet;
 }
 
-bool PacketBuilder::Deserialize(const char* buffer, short size, PacketHeader& header, DataPacket& data)
+bool PacketBuilder::Deserialize(const char* buffer, short size, PacketHeader& header, PacketData& data)
 {
     if (size < PacketHeader::Size())
     {
@@ -51,7 +51,7 @@ bool PacketBuilder::DeserializeHeader(const char* buffer, short size, PacketHead
     return true;
 }
 
-bool PacketBuilder::DeserializeData(const char* buffer, short size, const PacketHeader& header, DataPacket& data)
+bool PacketBuilder::DeserializeData(const char* buffer, short size, const PacketHeader& header, PacketData& data)
 {
     if (size < header.length) 
     {

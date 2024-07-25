@@ -2,7 +2,7 @@
 
 struct Session;
 struct PacketHeader;
-typedef google::protobuf::Message DataPacket;
+typedef google::protobuf::Message PacketData;
 
 enum class ESendType
 {
@@ -12,13 +12,10 @@ enum class ESendType
 
 struct ReceiveStruct
 {
+	std::shared_ptr<PacketHeader> header;
 	Session* session;
-	std::shared_ptr<DataPacket> data;
-
-	~ReceiveStruct()
-	{
-		data.reset();
-	}
+	char* data;
+	int nReceivedByte;
 };
 
 struct SendStruct
@@ -26,7 +23,7 @@ struct SendStruct
 	ESendType type;
 	Session* session;
 	std::shared_ptr<PacketHeader> header;
-	std::shared_ptr<DataPacket> data;
+	std::shared_ptr<PacketData> data;
 
 	~SendStruct()
 	{
