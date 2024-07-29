@@ -30,7 +30,9 @@
 int main()
 {
 	/// Database test
-	ASSERT_CRASH(DBConnectionPool::Instance().Connect(5, L"Driver={ODBC Driver 17 for SQL Server};Server=(localdb)\\MSSQLLocalDB;Database=ServerDB;Trusted_Connection=Yes;"));
+	ASSERT_CRASH(DBConnectionPool::Instance().Connect(5, L"Driver={SQL Server};Server=localhost\\SQLEXPRESS;Database=ServerDB;Trusted_Connection=Yes;"));
+	//Server=(localdb)\\MSSQLLocalDB;Database=ServerDB;Trusted_Connection=Yes;
+	//L"Driver={ODBC Driver 18 for SQL Server};Server=localhost\\SQLEXPRESS;Database=ServerDB;Trusted_Connection=Yes;"
 
 	// Create Table
 	{

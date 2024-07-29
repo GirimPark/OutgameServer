@@ -19,7 +19,8 @@ bool DBConnection::Connect(SQLHENV henv, const WCHAR* connectionString)
 	WCHAR resultString[MAX_PATH] = { 0 };
 	SQLSMALLINT resultStringLen = 0;
 
-	SQLRETURN rt = SQLDriverConnectW(
+	SQLRETURN rt;
+	if((rt = SQLDriverConnectW(
 		m_connection,
 		NULL,
 		stringBuffer,
@@ -28,7 +29,12 @@ bool DBConnection::Connect(SQLHENV henv, const WCHAR* connectionString)
 		_countof(resultString),
 		OUT &resultStringLen,
 		SQL_DRIVER_NOPROMPT
-	);
+	)) != (SQL_SUCCESS || SQL_SUCCESS_WITH_INFO))
+	{
+		LOG_DB("SQLDriverConnect failed");
+		HandleError(rt);
+		return false;
+	}
 
 	if ((rt=::SQLAllocHandle(SQL_HANDLE_STMT, m_connection, &m_statement)) != SQL_SUCCESS)
 	{

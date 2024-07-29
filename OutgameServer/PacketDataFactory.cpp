@@ -3,8 +3,6 @@
 
 PacketDataFactory::PacketDataFactory()
 {
-	REGISTER_PACKET_DATA(Protocol::C2S_ValidationResponse);
-	REGISTER_PACKET_DATA(Protocol::C2S_LoginRequest);
 }
 
 void PacketDataFactory::RegisterPacketDataClass(const std::string& className, CreatePacketDataFunc func)
