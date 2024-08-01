@@ -17,6 +17,8 @@ public:
 
 	Session* GetSession() const { return m_session; }
 
+	const std::string& GetName() const { return m_name; }
+
 	EUserStateType GetState() const { return m_state; }
 	void UpdateState(EUserStateType state);
 

@@ -44,8 +44,7 @@ private:
 	// GetQueuedCompletionStatus
 	void ProcessThread();
 	
-	void HandleAcceptCompletion(DWORD nTransferredByte);
-	void HandleReadCompletion(Session* session, DWORD nTransferredByte);
+	void HandleAcceptCompletion();
 	void HandleWriteCompletion(Session* session);
 
 	// IO 작업 게시

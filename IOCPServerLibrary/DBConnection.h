@@ -16,9 +16,6 @@ public:
 	void Unbind();
 	int GetRowCount();
 
-	bool GetUsable() { return m_bUsable; }
-	void SetUsable(bool usable) { m_bUsable = usable; }
-
 	bool			BindParam(int paramIndex, bool* value, SQLLEN* index);
 	bool			BindParam(int paramIndex, float* value, SQLLEN* index);
 	bool			BindParam(int paramIndex, double* value, SQLLEN* index);
@@ -51,6 +48,7 @@ private:
 	SQLHDBC m_connection;
 	SQLHSTMT m_statement;
 
+public:
 	std::atomic<bool> m_bUsable = true;
 };
 

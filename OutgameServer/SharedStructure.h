@@ -27,7 +27,7 @@ struct SendStruct
 
 	~SendStruct()
 	{
-		header.reset();
-		data.reset();
+		//header.reset();
+		//data.reset();
 	}
 };

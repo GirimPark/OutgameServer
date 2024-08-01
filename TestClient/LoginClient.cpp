@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "LoginClient.h"
 
-#include "../PacketLibrary/Protocol.pb.h"
-
 #include <iostream>
 
 using namespace std;
@@ -117,7 +115,7 @@ void LoginClient::SendThread()
 {
     int sendByte = 0;
 
-    std::shared_ptr<ClientStruct> test;
+    std::shared_ptr<ClientSendStruct> test;
     while (true)
     {
         if (!m_sendQueue.try_pop(test))
@@ -151,11 +149,11 @@ void LoginClient::SendThread()
 
 void LoginClient::ReceiveThread()
 {
+    char recvBuf[256];
+    int recvByte = 0;
+
     while (true)
     {
-        char recvBuf[256];
-        int recvByte = 0;
-
         int nRecv = recv(m_socket, recvBuf + recvByte, sizeof(recvBuf) - recvByte, 0);
         if (nRecv == SOCKET_ERROR)
         {
@@ -174,6 +172,7 @@ void LoginClient::ReceiveThread()
         {
             PacketHeader header;
             PacketBuilder::Instance().DeserializeHeader(recvBuf, sizeof(recvBuf), header);
+
             if (header.length > recvByte)
                 continue;
 
@@ -183,13 +182,13 @@ void LoginClient::ReceiveThread()
             {
                 Protocol::S2C_LoginResponse loginResponse;
                 PacketBuilder::Instance().DeserializeData(recvBuf, sizeof(recvBuf), header, loginResponse);
-                cout << loginResponse.sucess().value() << endl;
+                cout << loginResponse.success().value() << endl;
 
                 break;
             }
             case EPacketType::S2C_VALIDATION_REQUEST:
             {
-                std::shared_ptr<ClientStruct> test = std::make_shared<ClientStruct>();
+                std::shared_ptr<ClientSendStruct> test = std::make_shared<ClientSendStruct>();
                 test->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::C2S_VALIDATION_RESPONSE, 0));
                 test->header->type = EPacketType::C2S_VALIDATION_RESPONSE;
                 test->header->length = PacketHeader::Size();
@@ -206,7 +205,8 @@ void LoginClient::ReceiveThread()
             }
             }
 
-
+            ZeroMemory(recvBuf, sizeof(recvBuf));
+            recvByte = 0;
         }
     }
 }

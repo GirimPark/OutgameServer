@@ -48,7 +48,7 @@ struct TableStruct_Protocol_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[7]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[9]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -62,6 +62,9 @@ extern C2S_EchoDefaultTypeInternal _C2S_Echo_default_instance_;
 class C2S_LoginRequest;
 struct C2S_LoginRequestDefaultTypeInternal;
 extern C2S_LoginRequestDefaultTypeInternal _C2S_LoginRequest_default_instance_;
+class C2S_LogoutRequest;
+struct C2S_LogoutRequestDefaultTypeInternal;
+extern C2S_LogoutRequestDefaultTypeInternal _C2S_LogoutRequest_default_instance_;
 class C2S_ValidationResponse;
 struct C2S_ValidationResponseDefaultTypeInternal;
 extern C2S_ValidationResponseDefaultTypeInternal _C2S_ValidationResponse_default_instance_;
@@ -71,6 +74,9 @@ extern S2C_EchoDefaultTypeInternal _S2C_Echo_default_instance_;
 class S2C_LoginResponse;
 struct S2C_LoginResponseDefaultTypeInternal;
 extern S2C_LoginResponseDefaultTypeInternal _S2C_LoginResponse_default_instance_;
+class S2C_LogoutResponse;
+struct S2C_LogoutResponseDefaultTypeInternal;
+extern S2C_LogoutResponseDefaultTypeInternal _S2C_LogoutResponse_default_instance_;
 class S2C_SessionExpiredNotification;
 struct S2C_SessionExpiredNotificationDefaultTypeInternal;
 extern S2C_SessionExpiredNotificationDefaultTypeInternal _S2C_SessionExpiredNotification_default_instance_;
@@ -81,9 +87,11 @@ extern S2C_ValidationRequestDefaultTypeInternal _S2C_ValidationRequest_default_i
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Protocol::C2S_Echo* Arena::CreateMaybeMessage<::Protocol::C2S_Echo>(Arena*);
 template<> ::Protocol::C2S_LoginRequest* Arena::CreateMaybeMessage<::Protocol::C2S_LoginRequest>(Arena*);
+template<> ::Protocol::C2S_LogoutRequest* Arena::CreateMaybeMessage<::Protocol::C2S_LogoutRequest>(Arena*);
 template<> ::Protocol::C2S_ValidationResponse* Arena::CreateMaybeMessage<::Protocol::C2S_ValidationResponse>(Arena*);
 template<> ::Protocol::S2C_Echo* Arena::CreateMaybeMessage<::Protocol::S2C_Echo>(Arena*);
 template<> ::Protocol::S2C_LoginResponse* Arena::CreateMaybeMessage<::Protocol::S2C_LoginResponse>(Arena*);
+template<> ::Protocol::S2C_LogoutResponse* Arena::CreateMaybeMessage<::Protocol::S2C_LogoutResponse>(Arena*);
 template<> ::Protocol::S2C_SessionExpiredNotification* Arena::CreateMaybeMessage<::Protocol::S2C_SessionExpiredNotification>(Arena*);
 template<> ::Protocol::S2C_ValidationRequest* Arena::CreateMaybeMessage<::Protocol::S2C_ValidationRequest>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
@@ -1036,25 +1044,25 @@ class S2C_LoginResponse final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kSucessFieldNumber = 1,
+    kSuccessFieldNumber = 1,
   };
-  // .google.protobuf.BoolValue sucess = 1;
-  bool has_sucess() const;
+  // .google.protobuf.BoolValue success = 1;
+  bool has_success() const;
   private:
-  bool _internal_has_sucess() const;
+  bool _internal_has_success() const;
   public:
-  void clear_sucess();
-  const ::PROTOBUF_NAMESPACE_ID::BoolValue& sucess() const;
-  PROTOBUF_NODISCARD ::PROTOBUF_NAMESPACE_ID::BoolValue* release_sucess();
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* mutable_sucess();
-  void set_allocated_sucess(::PROTOBUF_NAMESPACE_ID::BoolValue* sucess);
+  void clear_success();
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue& success() const;
+  PROTOBUF_NODISCARD ::PROTOBUF_NAMESPACE_ID::BoolValue* release_success();
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* mutable_success();
+  void set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success);
   private:
-  const ::PROTOBUF_NAMESPACE_ID::BoolValue& _internal_sucess() const;
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* _internal_mutable_sucess();
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue& _internal_success() const;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* _internal_mutable_success();
   public:
-  void unsafe_arena_set_allocated_sucess(
-      ::PROTOBUF_NAMESPACE_ID::BoolValue* sucess);
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* unsafe_arena_release_sucess();
+  void unsafe_arena_set_allocated_success(
+      ::PROTOBUF_NAMESPACE_ID::BoolValue* success);
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* unsafe_arena_release_success();
 
   // @@protoc_insertion_point(class_scope:Protocol.S2C_LoginResponse)
  private:
@@ -1063,7 +1071,243 @@ class S2C_LoginResponse final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* sucess_;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* success_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class C2S_LogoutRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:Protocol.C2S_LogoutRequest) */ {
+ public:
+  inline C2S_LogoutRequest() : C2S_LogoutRequest(nullptr) {}
+  explicit constexpr C2S_LogoutRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C2S_LogoutRequest(const C2S_LogoutRequest& from);
+  C2S_LogoutRequest(C2S_LogoutRequest&& from) noexcept
+    : C2S_LogoutRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline C2S_LogoutRequest& operator=(const C2S_LogoutRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C2S_LogoutRequest& operator=(C2S_LogoutRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C2S_LogoutRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C2S_LogoutRequest* internal_default_instance() {
+    return reinterpret_cast<const C2S_LogoutRequest*>(
+               &_C2S_LogoutRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    7;
+
+  friend void swap(C2S_LogoutRequest& a, C2S_LogoutRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C2S_LogoutRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C2S_LogoutRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  C2S_LogoutRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<C2S_LogoutRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyFrom;
+  inline void CopyFrom(const C2S_LogoutRequest& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl(this, from);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeFrom;
+  void MergeFrom(const C2S_LogoutRequest& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl(this, from);
+  }
+  public:
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C2S_LogoutRequest";
+  }
+  protected:
+  explicit C2S_LogoutRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:Protocol.C2S_LogoutRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S2C_LogoutResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:Protocol.S2C_LogoutResponse) */ {
+ public:
+  inline S2C_LogoutResponse() : S2C_LogoutResponse(nullptr) {}
+  explicit constexpr S2C_LogoutResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S2C_LogoutResponse(const S2C_LogoutResponse& from);
+  S2C_LogoutResponse(S2C_LogoutResponse&& from) noexcept
+    : S2C_LogoutResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline S2C_LogoutResponse& operator=(const S2C_LogoutResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S2C_LogoutResponse& operator=(S2C_LogoutResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S2C_LogoutResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S2C_LogoutResponse* internal_default_instance() {
+    return reinterpret_cast<const S2C_LogoutResponse*>(
+               &_S2C_LogoutResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    8;
+
+  friend void swap(S2C_LogoutResponse& a, S2C_LogoutResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S2C_LogoutResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S2C_LogoutResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S2C_LogoutResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S2C_LogoutResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyFrom;
+  inline void CopyFrom(const S2C_LogoutResponse& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl(this, from);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeFrom;
+  void MergeFrom(const S2C_LogoutResponse& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl(this, from);
+  }
+  public:
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S2C_LogoutResponse";
+  }
+  protected:
+  explicit S2C_LogoutResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:Protocol.S2C_LogoutResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Protocol_2eproto;
 };
@@ -1306,39 +1550,39 @@ inline void C2S_LoginRequest::set_allocated_password(std::string* password) {
 
 // S2C_LoginResponse
 
-// .google.protobuf.BoolValue sucess = 1;
-inline bool S2C_LoginResponse::_internal_has_sucess() const {
-  return this != internal_default_instance() && sucess_ != nullptr;
+// .google.protobuf.BoolValue success = 1;
+inline bool S2C_LoginResponse::_internal_has_success() const {
+  return this != internal_default_instance() && success_ != nullptr;
 }
-inline bool S2C_LoginResponse::has_sucess() const {
-  return _internal_has_sucess();
+inline bool S2C_LoginResponse::has_success() const {
+  return _internal_has_success();
 }
-inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_LoginResponse::_internal_sucess() const {
-  const ::PROTOBUF_NAMESPACE_ID::BoolValue* p = sucess_;
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_LoginResponse::_internal_success() const {
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue* p = success_;
   return p != nullptr ? *p : reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::BoolValue&>(
       ::PROTOBUF_NAMESPACE_ID::_BoolValue_default_instance_);
 }
-inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_LoginResponse::sucess() const {
-  // @@protoc_insertion_point(field_get:Protocol.S2C_LoginResponse.sucess)
-  return _internal_sucess();
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_LoginResponse::success() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_LoginResponse.success)
+  return _internal_success();
 }
-inline void S2C_LoginResponse::unsafe_arena_set_allocated_sucess(
-    ::PROTOBUF_NAMESPACE_ID::BoolValue* sucess) {
+inline void S2C_LoginResponse::unsafe_arena_set_allocated_success(
+    ::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(sucess_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
   }
-  sucess_ = sucess;
-  if (sucess) {
+  success_ = success;
+  if (success) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S2C_LoginResponse.sucess)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S2C_LoginResponse.success)
 }
-inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_LoginResponse::release_sucess() {
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_LoginResponse::release_success() {
   
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = sucess_;
-  sucess_ = nullptr;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
+  success_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -1350,51 +1594,63 @@ inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_LoginResponse::release_sucess() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_LoginResponse::unsafe_arena_release_sucess() {
-  // @@protoc_insertion_point(field_release:Protocol.S2C_LoginResponse.sucess)
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_LoginResponse::unsafe_arena_release_success() {
+  // @@protoc_insertion_point(field_release:Protocol.S2C_LoginResponse.success)
   
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = sucess_;
-  sucess_ = nullptr;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
+  success_ = nullptr;
   return temp;
 }
-inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_LoginResponse::_internal_mutable_sucess() {
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_LoginResponse::_internal_mutable_success() {
   
-  if (sucess_ == nullptr) {
+  if (success_ == nullptr) {
     auto* p = CreateMaybeMessage<::PROTOBUF_NAMESPACE_ID::BoolValue>(GetArenaForAllocation());
-    sucess_ = p;
+    success_ = p;
   }
-  return sucess_;
+  return success_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_LoginResponse::mutable_sucess() {
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* _msg = _internal_mutable_sucess();
-  // @@protoc_insertion_point(field_mutable:Protocol.S2C_LoginResponse.sucess)
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_LoginResponse::mutable_success() {
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* _msg = _internal_mutable_success();
+  // @@protoc_insertion_point(field_mutable:Protocol.S2C_LoginResponse.success)
   return _msg;
 }
-inline void S2C_LoginResponse::set_allocated_sucess(::PROTOBUF_NAMESPACE_ID::BoolValue* sucess) {
+inline void S2C_LoginResponse::set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(sucess_);
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
   }
-  if (sucess) {
+  if (success) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
         ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
             ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(sucess));
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(success));
     if (message_arena != submessage_arena) {
-      sucess = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, sucess, submessage_arena);
+      success = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, success, submessage_arena);
     }
     
   } else {
     
   }
-  sucess_ = sucess;
-  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_LoginResponse.sucess)
+  success_ = success;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_LoginResponse.success)
 }
+
+// -------------------------------------------------------------------
+
+// C2S_LogoutRequest
+
+// -------------------------------------------------------------------
+
+// S2C_LogoutResponse
 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

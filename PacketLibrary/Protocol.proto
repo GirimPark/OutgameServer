@@ -36,5 +36,15 @@ message C2S_LoginRequest
 
 message S2C_LoginResponse
 {
-	google.protobuf.BoolValue sucess = 1;
+	google.protobuf.BoolValue success = 1;
+}
+
+message C2S_LogoutRequest
+{
+
+}
+
+message S2C_LogoutResponse
+{
+
 }

@@ -29,4 +29,6 @@
 #include "../PacketLibrary/PacketHeader.h"
 #include "../PacketLibrary/PacketBuilder.h"
 
+#include "../PacketLibrary/Protocol.pb.h"
+
 #endif //PCH_H

@@ -1,45 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="EchoClient">
+      <UniqueIdentifier>{29181bd3-75e4-45bc-97f4-160498c8940f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="LoginClient">
+      <UniqueIdentifier>{cf5fdb7c-1c8e-497e-82c3-2013f1e311da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="MemoryPoolTestClient">
+      <UniqueIdentifier>{c49b47f8-a176-4713-94e8-d52eb1684c39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{b757e732-89bd-4037-9961-caec9bfd88c4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EchoClient.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="define.h">
+      <Filter>Config</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Config</Filter>
     </ClInclude>
-    <ClInclude Include="define.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="EchoClient.h">
+      <Filter>EchoClient</Filter>
     </ClInclude>
     <ClInclude Include="LoginClient.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>LoginClient</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPoolTestClient.h">
+      <Filter>MemoryPoolTestClient</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EchoClient.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Config</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="EchoClient.cpp">
+      <Filter>EchoClient</Filter>
     </ClCompile>
     <ClCompile Include="LoginClient.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>LoginClient</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="MemoryPoolTestClient.cpp">
+      <Filter>MemoryPoolTestClient</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -50,11 +50,11 @@ DBConnection* DBConnectionPool::GetConnection()
 
 	while(true)
 	{
-		for(const auto& con : m_connections)
+		for (const auto& con : m_connections)
 		{
-			if (con->GetUsable())
+			bool expected = true;
+			if (con->m_bUsable.compare_exchange_strong(expected, false))
 			{
-				con->SetUsable(false);
 				return con;
 			}
 		}
@@ -65,5 +65,5 @@ DBConnection* DBConnectionPool::GetConnection()
 
 void DBConnectionPool::ReturnConnection(DBConnection* connection)
 {
-	connection->SetUsable(true);
+	connection->m_bUsable.store(true);
 }

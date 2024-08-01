@@ -8,7 +8,7 @@ ServerCore::ServerCore(const char* port, int backlog)
 {
     SYSTEM_INFO systemInfo;
     GetSystemInfo(&systemInfo);
-    m_nThread = 5;// systemInfo.dwNumberOfProcessors * 2;
+    m_nThread = systemInfo.dwNumberOfProcessors * 2;
     m_IOCPThreads.resize(m_nThread);
 }
 
@@ -176,18 +176,14 @@ bool ServerCore::CreateListenContext()
     if(m_pListenSocketCtxt)
     {
         m_pListenSocketCtxt->listenSocket = CreateListenSocket();
-        if(!m_pListenSocketCtxt->listenSocket)
+        if(m_pListenSocketCtxt->listenSocket == INVALID_SOCKET)
         {
-            closesocket(m_pListenSocketCtxt->listenSocket);
             printf("create Listen Socket failed: %d\n", GetLastError());
+            delete m_pListenSocketCtxt;
             return false;
         }
         m_pListenSocketCtxt->acceptedSocket = INVALID_SOCKET;
-        m_pListenSocketCtxt->acceptOverlapped.Internal = 0;
-        m_pListenSocketCtxt->acceptOverlapped.InternalHigh = 0;
-        m_pListenSocketCtxt->acceptOverlapped.Offset = 0;
-        m_pListenSocketCtxt->acceptOverlapped.OffsetHigh = 0;
-        m_pListenSocketCtxt->acceptOverlapped.hEvent = nullptr;
+        ZeroMemory(&m_pListenSocketCtxt->acceptOverlapped, sizeof(OVERLAPPED));
     }
     else
     {
@@ -200,12 +196,14 @@ bool ServerCore::CreateListenContext()
     if (!m_hIOCP)
     {
         printf("CreateIoCompletionPort failed to associate socket with error: %d\n", GetLastError());
+        delete m_pListenSocketCtxt;
         return false;
     }
 
     // Accept 게시
     if (!StartAccept())
     {
+        delete m_pListenSocketCtxt;
         return false;
     }
 
@@ -294,25 +292,28 @@ void ServerCore::CloseSession(Session* session, bool needLock)
 void ServerCore::RegisterSession(Session* session)
 {
     session->state = Session::eStateType::MAINTAIN;
+    EnterCriticalSection(&m_criticalSection);
     m_sessionMap.insert({ session->sessionId, session });
+    LeaveCriticalSection(&m_criticalSection);
 }
 
 void ServerCore::UnregisterSession(SessionId sessionId)
 {
+    EnterCriticalSection(&m_criticalSection);
     auto iter = m_sessionMap.find(sessionId);
     if (iter == m_sessionMap.end())
     {
-        printf("UnregisterSession : can't find session\n");
+        LeaveCriticalSection(&m_criticalSection);
         return;
     }
     Session* session = iter->second;
     if(!session)
     {
-        printf("UnregisterSession : unvalid session\n");
+        LeaveCriticalSection(&m_criticalSection);
+        printf("UnregisterSession : invalid session\n");
         return;
     }
 
-    EnterCriticalSection(&m_criticalSection);
     m_sessionMap.unsafe_erase(iter);
     CloseSession(session, false);
     LeaveCriticalSection(&m_criticalSection);
@@ -336,10 +337,16 @@ void ServerCore::ProcessThread()
         bSuccess = GetQueuedCompletionStatus(m_hIOCP, &nTransferredByte, &completionKey, &overlapped, INFINITE);
         if(!bSuccess)
         {
-            printf("GetQueuedCompletionStatus() failed: %d\n", GetLastError());
+            if(GetLastError() != 1236)
+				printf("GetQueuedCompletionStatus() failed: %d\n", GetLastError());
         }
         if(!m_pListenSocketCtxt)
         {
+            return;
+        }
+        if(completionKey == NULL)
+        {
+            printf("completionKey is NULL\n");
             return;
         }
         if(m_bEndServer)
@@ -353,14 +360,14 @@ void ServerCore::ProcessThread()
 
         if(listenCtxt && listenCtxt->type == eCompletionKeyType::LISTEN_CONTEXT)
         {
-            HandleAcceptCompletion(nTransferredByte);
+            HandleAcceptCompletion();
         }
         else if(session && session->type == eCompletionKeyType::SESSION)
         {
             // 좀비 클라이언트 예외처리
             if(nTransferredByte == 0)
             {
-                UnregisterSession(session->sessionId);
+                //UnregisterSession(session->sessionId);
                 continue;
             }
 
@@ -371,7 +378,6 @@ void ServerCore::ProcessThread()
             {
                 OnReceiveData(session, session->recvOverlapped.buffer, nTransferredByte);
                 StartReceive(session);
-                //HandleReadCompletion(session, nTransferredByte);
                 break;
             }
             case OVERLAPPED_STRUCT::eIOType::WRITE:
@@ -395,15 +401,17 @@ void ServerCore::ProcessThread()
     }
 }
 
-void ServerCore::HandleAcceptCompletion(DWORD nTransferredByte)
+void ServerCore::HandleAcceptCompletion()
 {
+    EnterCriticalSection(&m_criticalSection);
+
     sockaddr_in* localAddr = nullptr;
     sockaddr_in* remoteAddr = nullptr;
     int localAddrLen = 0, remoteAddrLen = 0;
 
     GetAcceptExSockaddrs(
         m_pListenSocketCtxt->acceptBuffer,
-        INIT_DATA_SIZE,
+        0,
         sizeof(SOCKADDR_IN) + IP_SIZE,
         sizeof(SOCKADDR_IN) + IP_SIZE,
         (sockaddr**)&localAddr,
@@ -413,6 +421,13 @@ void ServerCore::HandleAcceptCompletion(DWORD nTransferredByte)
     );
 
     // 수락 클라이언트 소켓 옵션 설정
+    if (m_pListenSocketCtxt->acceptedSocket == INVALID_SOCKET)
+    {
+        printf("HandleAcceptCompletion: acceptedSocket is invalid\n");
+    	closesocket(m_pListenSocketCtxt->acceptedSocket);
+        return;
+    }
+
     int rt = setsockopt(m_pListenSocketCtxt->acceptedSocket,
         SOL_SOCKET,
         SO_UPDATE_ACCEPT_CONTEXT,
@@ -420,6 +435,7 @@ void ServerCore::HandleAcceptCompletion(DWORD nTransferredByte)
         sizeof(m_pListenSocketCtxt->listenSocket));
     if (rt == SOCKET_ERROR)
     {
+        LeaveCriticalSection(&m_criticalSection);
         printf("setsockopt(SO_UPDATE_ACCEPT_CONTEXT) failed to update accept socket : %d\n", GetLastError());
         m_bEndServer = true;
         return;
@@ -428,35 +444,28 @@ void ServerCore::HandleAcceptCompletion(DWORD nTransferredByte)
     // 세션 생성, iocp 등록
     Session* session = CreateSession();
     session->clientSocket = m_pListenSocketCtxt->acceptedSocket;
+    m_pListenSocketCtxt->acceptedSocket = INVALID_SOCKET;
     session->clientIP = *remoteAddr;
 
     m_hIOCP = CreateIoCompletionPort((HANDLE)session->clientSocket, m_hIOCP, (ULONG_PTR)session, 0);
     if (!m_hIOCP)
     {
+        LeaveCriticalSection(&m_criticalSection);
         printf("CreateIoCompletionPort failed to associate socket with error: %d\n", GetLastError());
         m_bEndServer = true;
         return;
     }
+    LeaveCriticalSection(&m_criticalSection);
 
     char addr[INET_ADDRSTRLEN];
     inet_ntop(AF_INET, &localAddr->sin_addr, addr, INET_ADDRSTRLEN);
-    printf("Local Address: %s\n", addr);
+    //printf("Local Address: %s\n", addr);
     inet_ntop(AF_INET, &remoteAddr->sin_addr, addr, INET_ADDRSTRLEN);
-    printf("Remote Address: %s\n", addr);
-
-    OnReceiveData(session, m_pListenSocketCtxt->acceptBuffer, nTransferredByte);
+    //printf("Remote Address: %s\n", addr);
 
     // 다른 수락 작업 게시
     StartAccept();
     StartReceive(session);
-}
-
-void ServerCore::HandleReadCompletion(Session* session, DWORD bytesTransferred)
-{
-    if (bytesTransferred > 0) 
-    {
-        StartSend(session, session->recvOverlapped.buffer, bytesTransferred);
-    }
 }
 
 void ServerCore::HandleWriteCompletion(Session* session)
@@ -496,7 +505,8 @@ bool ServerCore::Broadcast(const char* data, int length)
     if (m_sessionMap.empty())
         return true;
 
-    for(const auto& session : m_sessionMap)
+    concurrency::concurrent_unordered_map<SessionId, Session*> snapshot = m_sessionMap;
+    for(const auto& session : snapshot)
     {
         if (!session.second)
             continue;
@@ -511,6 +521,8 @@ bool ServerCore::Broadcast(const char* data, int length)
 
 bool ServerCore::StartAccept()
 {
+    EnterCriticalSection(&m_criticalSection);
+
     // 새로운 acceptedSocket 생성
     m_pListenSocketCtxt->acceptedSocket = CreateSocket();
     if (m_pListenSocketCtxt->acceptedSocket == INVALID_SOCKET)
@@ -524,7 +536,7 @@ bool ServerCore::StartAccept()
         m_pListenSocketCtxt->listenSocket,
         m_pListenSocketCtxt->acceptedSocket,
         m_pListenSocketCtxt->acceptBuffer,
-        INIT_DATA_SIZE,
+        0,
         sizeof(SOCKADDR_IN) + IP_SIZE,
         sizeof(SOCKADDR_IN) + IP_SIZE,
         &nRecvByte,
@@ -536,6 +548,8 @@ bool ServerCore::StartAccept()
         m_pListenSocketCtxt->acceptedSocket = INVALID_SOCKET; // 소켓 상태 초기화
         return false;
     }
+
+    LeaveCriticalSection(&m_criticalSection);
 
     return true;
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include <concurrent_queue.h>
 
-struct ClientStruct
+struct ClientSendStruct
 {
 	std::shared_ptr<PacketHeader> header;
 	std::shared_ptr<PacketData> data;
@@ -29,5 +29,5 @@ private:
 	std::string m_username;
 	std::string m_password;
 
-	concurrency::concurrent_queue<std::shared_ptr<ClientStruct>> m_sendQueue;
+	concurrency::concurrent_queue<std::shared_ptr<ClientSendStruct>> m_sendQueue;
 };

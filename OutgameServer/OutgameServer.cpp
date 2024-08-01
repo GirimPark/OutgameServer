@@ -42,12 +42,12 @@ int main()
 	}
 
 	// Add Data
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 1000; i++)
 	{
 		DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
 		DBBind<2, 0> dbBind(dbConn, L"INSERT INTO [dbo].[User]([username], [password]) VALUES(?, ?)");
 
-		std::wstring username = L"test" + std::to_wstring(i + 1);
+		std::wstring username = L"test" + std::to_wstring(i);
 		dbBind.BindParam(0, username.c_str(), username.size());
 		std::wstring password = L"1234";
 		dbBind.BindParam(1, password.c_str(), password.size()); 
@@ -90,10 +90,10 @@ void OutgameServer::Start()
 {
 	m_bRun = true;
 
-	m_pServerCore = new ServerCore("5001", 5);
+	m_pServerCore = new ServerCore("5001", SOMAXCONN);
 	m_pPacketHandler = new PacketHandler;
 	m_pUserManager = new UserManager;
-	m_pUserManager->SetTimeout(std::chrono::milliseconds(3000));
+	m_pUserManager->SetTimeout(std::chrono::milliseconds(300000));
 
 	m_pServerCore->RegisterCallback([this](Session* session, char* data, int nReceivedByte)
 		{
@@ -106,7 +106,7 @@ void OutgameServer::Start()
 	m_workers.emplace_back(new std::thread(&OutgameServer::SendThread, this));						// Send
 	m_workers.emplace_back(new std::thread(&OutgameServer::QuitThread, this));						// Quit
 
-	m_workers.emplace_back(new std::thread(&UserManager::BroadcastValidationPacket, m_pUserManager, std::chrono::milliseconds(1000)));	// Validation Request
+	m_workers.emplace_back(new std::thread(&UserManager::BroadcastValidationPacket, m_pUserManager, std::chrono::milliseconds(100000)));	// Validation Request
 	
 
 	for(const auto& worker : m_workers)
