@@ -40,7 +40,6 @@ private:
 	UserManager* m_pUserManager;
 	PacketHandler* m_pPacketHandler;
 
-	//concurrency::concurrent_queue<std::shared_ptr<ReceiveStruct>> m_recvQueue;
 	concurrency::concurrent_queue<std::shared_ptr<SendStruct>> m_sendQueue;
 
 	std::vector<std::thread*> m_workers;

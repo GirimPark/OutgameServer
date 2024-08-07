@@ -10,7 +10,7 @@ struct TestClient
 {
 	std::thread* thread;
 
-	SOCKET socket;
+	SOCKET socket = INVALID_SOCKET;
 	std::string username;
 	std::string password;
 
@@ -30,8 +30,8 @@ private:
 	SOCKET CreateConnectedSocket();
 
 	void TestThread(TestClient* client);
-	void Login(TestClient* client);
-	void Logout(TestClient* client);
+	bool Login(TestClient* client);
+	bool Logout(TestClient* client);
 
 private:
 	const char* m_connectIP;

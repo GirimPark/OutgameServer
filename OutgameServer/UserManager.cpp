@@ -98,6 +98,10 @@ void UserManager::HandleLogoutRequest(std::shared_ptr<ReceiveStruct> receiveStru
 		LOG_CONTENTS("Logout User Failed");
 		return;
 	}
+	if(receiveStructure->session->state != Session::eStateType::MAINTAIN)
+	{
+		int a = 0;
+	}
 
 	//LOG_CONTENTS("로그아웃 성공");
 
@@ -123,8 +127,9 @@ void UserManager::HandleValidationResponse(std::shared_ptr<ReceiveStruct> receiv
 	auto validationResponse = std::make_shared<Protocol::C2S_ValidationResponse>();
 	if(PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *validationResponse))
 	{
-		concurrency::concurrent_unordered_map<SessionId, User*> snapshot = m_activeUserMap;	// 락을 최소화하기 위해 스냅샷 생성
-		snapshot[receiveStructure->session->sessionId]->UpdateLastValidationTime(std::chrono::steady_clock::now());
+		EnterCriticalSection(&m_criticalSection);
+		m_activeUserMap[receiveStructure->session->sessionId]->UpdateLastValidationTime(std::chrono::steady_clock::now());
+		LeaveCriticalSection(&m_criticalSection);
 	}
 	else
 	{
@@ -135,8 +140,8 @@ void UserManager::HandleValidationResponse(std::shared_ptr<ReceiveStruct> receiv
 void UserManager::CreateActiveUser(Session* session, std::string_view name)
 {
 	// 새 유저 생성, 세션과 연결
-	User* user = new User(session, name);
 	EnterCriticalSection(&m_criticalSection);
+	User* user = new User(session, name);
 	m_activeUserMap.insert({ session->sessionId, user });
 	LeaveCriticalSection(&m_criticalSection);
 
@@ -238,8 +243,8 @@ bool UserManager::LogoutUser(Session* session)
 void UserManager::UpdateActiveUserMap()
 {
 	// 유저 유효성 검사 및 목록 정리
-	concurrency::concurrent_unordered_map<SessionId, User*> snapshot = m_activeUserMap;
-	for(Concurrency::concurrent_unordered_map<unsigned int, User*>::iterator it = snapshot.begin(); it!= snapshot.end();)
+	EnterCriticalSection(&m_criticalSection);
+	for(Concurrency::concurrent_unordered_map<unsigned int, User*>::iterator it = m_activeUserMap.begin(); it!= m_activeUserMap.end();)
 	{
 		auto now = std::chrono::steady_clock::now();
 		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - it->second->GetLastValidationTime());
@@ -261,14 +266,12 @@ void UserManager::UpdateActiveUserMap()
 			OutgameServer::Instance().InsertSendTask(sendStruct);
 
 			delete it->second;
-			EnterCriticalSection(&m_criticalSection);
 			m_activeUserMap.unsafe_erase(it);
-			LeaveCriticalSection(&m_criticalSection);
-			it = snapshot.unsafe_erase(it);
 		}
 		else
 		{
 			++it;
 		}
 	}
+	LeaveCriticalSection(&m_criticalSection);
 }

@@ -99,7 +99,7 @@ void OutgameServer::Start()
 		{
 			m_pPacketHandler->HandlePacket(session, data, nReceivedByte);
 		});
-
+	
 	/// Threads
 	// Core
 	m_workers.emplace_back(new std::thread(&ServerCore::Run, m_pServerCore));					// Server Core
@@ -152,12 +152,12 @@ void OutgameServer::InsertSendTask(std::shared_ptr<SendStruct> task)
 
 void OutgameServer::SendThread()
 {
-	std::shared_ptr<SendStruct> sendStruct;
 	while (m_bRun)
 	{
 		if (m_sendQueue.empty())
 			continue;
 
+		std::shared_ptr<SendStruct> sendStruct;
 		if (!m_sendQueue.try_pop(sendStruct))
 			continue;
 

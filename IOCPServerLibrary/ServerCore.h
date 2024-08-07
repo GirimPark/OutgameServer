@@ -38,7 +38,7 @@ private:
 	Session* CreateSession();						// 세션 생성
 	void RegisterSession(Session* session);			// 세션 맵에 추가
 	void CloseSession(Session* session, bool needLock = true);			// 세션 자원 해제
-	void UnregisterSession(SessionId sessionId);	// 세션 맵에서 삭제+세션 자원 해제. lock이 있으므로 남용 유의
+	void UnregisterSession(SessionId sessionId);	// 세션 맵에서 삭제+세션 자원 해제.
 
 	/// IO 작업 관련 함수
 	// GetQueuedCompletionStatus

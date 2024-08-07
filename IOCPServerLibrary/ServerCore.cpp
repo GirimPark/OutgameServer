@@ -283,17 +283,21 @@ void ServerCore::CloseSession(Session* session, bool needLock)
             Sleep(0);
     }
 
+    delete session;
+
     if(needLock)
 		LeaveCriticalSection(&m_criticalSection);
-
-    delete session;
 }
 
 void ServerCore::RegisterSession(Session* session)
 {
-    session->state = Session::eStateType::MAINTAIN;
     EnterCriticalSection(&m_criticalSection);
-    m_sessionMap.insert({ session->sessionId, session });
+    session->state = Session::eStateType::MAINTAIN;
+    auto result = m_sessionMap.insert({ session->sessionId, session });
+    if (!result.second)
+    {
+        printf("RegisterSession: 중복된 세션 등록\n");
+    }
     LeaveCriticalSection(&m_criticalSection);
 }
 
@@ -324,7 +328,7 @@ void ServerCore::ProcessThread()
     bool bSuccess = false;
     int rt = 0;
 
-    OVERLAPPED* overlapped = nullptr;
+    OVERLAPPED* overlapped = nullptr; 
     OVERLAPPED_STRUCT* overlappedStruct = nullptr;
     ULONG_PTR completionKey = NULL;
     Session* session = nullptr;
@@ -364,10 +368,8 @@ void ServerCore::ProcessThread()
         }
         else if(session && session->type == eCompletionKeyType::SESSION)
         {
-            // 좀비 클라이언트 예외처리
             if(nTransferredByte == 0)
             {
-                //UnregisterSession(session->sessionId);
                 continue;
             }
 
@@ -403,8 +405,6 @@ void ServerCore::ProcessThread()
 
 void ServerCore::HandleAcceptCompletion()
 {
-    EnterCriticalSection(&m_criticalSection);
-
     sockaddr_in* localAddr = nullptr;
     sockaddr_in* remoteAddr = nullptr;
     int localAddrLen = 0, remoteAddrLen = 0;
@@ -435,7 +435,6 @@ void ServerCore::HandleAcceptCompletion()
         sizeof(m_pListenSocketCtxt->listenSocket));
     if (rt == SOCKET_ERROR)
     {
-        LeaveCriticalSection(&m_criticalSection);
         printf("setsockopt(SO_UPDATE_ACCEPT_CONTEXT) failed to update accept socket : %d\n", GetLastError());
         m_bEndServer = true;
         return;
@@ -450,12 +449,10 @@ void ServerCore::HandleAcceptCompletion()
     m_hIOCP = CreateIoCompletionPort((HANDLE)session->clientSocket, m_hIOCP, (ULONG_PTR)session, 0);
     if (!m_hIOCP)
     {
-        LeaveCriticalSection(&m_criticalSection);
         printf("CreateIoCompletionPort failed to associate socket with error: %d\n", GetLastError());
         m_bEndServer = true;
         return;
     }
-    LeaveCriticalSection(&m_criticalSection);
 
     char addr[INET_ADDRSTRLEN];
     inet_ntop(AF_INET, &localAddr->sin_addr, addr, INET_ADDRSTRLEN);
@@ -464,8 +461,8 @@ void ServerCore::HandleAcceptCompletion()
     //printf("Remote Address: %s\n", addr);
 
     // 다른 수락 작업 게시
-    StartAccept();
     StartReceive(session);
+    StartAccept();
 }
 
 void ServerCore::HandleWriteCompletion(Session* session)
@@ -502,10 +499,14 @@ bool ServerCore::Unicast(Session* session, const char* data, int length)
 
 bool ServerCore::Broadcast(const char* data, int length)
 {
-    if (m_sessionMap.empty())
-        return true;
+    auto snapshot = m_sessionMap;
+    bool rt = true;
 
-    concurrency::concurrent_unordered_map<SessionId, Session*> snapshot = m_sessionMap;
+    if (snapshot.empty())
+    {
+        return rt;
+    }
+
     for(const auto& session : snapshot)
     {
         if (!session.second)
@@ -513,16 +514,15 @@ bool ServerCore::Broadcast(const char* data, int length)
 
         if (!StartSend(session.second, data, length))
         {
-            return false;
+            rt = false;
+            continue;
         }
     }
-    return true;
+    return rt;
 }
 
 bool ServerCore::StartAccept()
 {
-    EnterCriticalSection(&m_criticalSection);
-
     // 새로운 acceptedSocket 생성
     m_pListenSocketCtxt->acceptedSocket = CreateSocket();
     if (m_pListenSocketCtxt->acceptedSocket == INVALID_SOCKET)
@@ -549,13 +549,12 @@ bool ServerCore::StartAccept()
         return false;
     }
 
-    LeaveCriticalSection(&m_criticalSection);
-
     return true;
 }
 
 bool ServerCore::StartReceive(Session* session)
 {
+    EnterCriticalSection(&m_criticalSection);
     DWORD flags = 0;
     DWORD bytesReceived = 0;
     session->recvOverlapped.IOOperation = OVERLAPPED_STRUCT::eIOType::READ;
@@ -566,16 +565,21 @@ bool ServerCore::StartReceive(Session* session)
     {
         printf("WSARecv() failed: %d\n", WSAGetLastError());
         UnregisterSession(session->sessionId);
+        LeaveCriticalSection(&m_criticalSection);
         return false;
     }
-
+    LeaveCriticalSection(&m_criticalSection);
     return true;
 }
 
 bool ServerCore::StartSend(Session* session, const char* data, int length)
 {
+    EnterCriticalSection(&m_criticalSection);
     if (m_bEndServer)
+    {
+        LeaveCriticalSection(&m_criticalSection);
         return false;
+    }
 
     session->sendOverlapped.IOOperation = OVERLAPPED_STRUCT::eIOType::WRITE;
     ZeroMemory(session->sendOverlapped.buffer, MAX_BUF_SIZE);
@@ -587,9 +591,11 @@ bool ServerCore::StartSend(Session* session, const char* data, int length)
     {
         printf("WSASend() failed: %d\n", WSAGetLastError());
         UnregisterSession(session->sessionId);
+        LeaveCriticalSection(&m_criticalSection);
         return false;
     }
 
+    LeaveCriticalSection(&m_criticalSection);
     return true;
 }
 

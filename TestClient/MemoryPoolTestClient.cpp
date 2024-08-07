@@ -118,8 +118,14 @@ void MemoryPoolTestClient::TestThread(TestClient* client)
     {
         auto start = std::chrono::high_resolution_clock::now();
         client->socket = CreateConnectedSocket();
-        Login(client);
-        Logout(client);
+        if (client->socket == INVALID_SOCKET)
+            continue;
+        if (!Login(client))
+            continue;
+        if (!Logout(client))
+            continue;
+        closesocket(client->socket);
+        client->socket = INVALID_SOCKET;
         auto end = std::chrono::high_resolution_clock::now();
 
         auto responseTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
@@ -133,7 +139,7 @@ void MemoryPoolTestClient::TestThread(TestClient* client)
     client->avgResponseTime /= m_cycleCnt;
 }
 
-void MemoryPoolTestClient::Login(TestClient* client)
+bool MemoryPoolTestClient::Login(TestClient* client)
 {
     /// Send Login Request
     Protocol::C2S_LoginRequest loginRequest;
@@ -150,16 +156,22 @@ void MemoryPoolTestClient::Login(TestClient* client)
         if (nSend == SOCKET_ERROR)
         {
             printf("send() failed: %d\n", WSAGetLastError());
-            return;
+            closesocket(client->socket);
+            client->socket = INVALID_SOCKET;
+            return false;
         }
         if (nSend == 0)
         {
             printf("connection closed\n");
-            return;
+            closesocket(client->socket);
+            client->socket = INVALID_SOCKET;
+            return false;
         }
 
         sendByte += nSend;
     }
+
+    delete[] sendBuf;
 
     /// Receive Login Response
     char recvBuf[256];
@@ -174,12 +186,16 @@ void MemoryPoolTestClient::Login(TestClient* client)
         if (nRecv == SOCKET_ERROR)
         {
             printf("recv() failed: %d\n", WSAGetLastError());
-            return;
+            closesocket(client->socket);
+            client->socket = INVALID_SOCKET;
+            return false;
         }
         if (nRecv == 0)
         {
             printf("connection closed\n");
-            return;
+            closesocket(client->socket);
+            client->socket = INVALID_SOCKET;
+            return false;
         }
 
         recvByte += nRecv;
@@ -192,7 +208,9 @@ void MemoryPoolTestClient::Login(TestClient* client)
         if(!PacketBuilder::Instance().DeserializeHeader(recvBuf, recvByte, header))
         {
             printf("Deserialize Header Failed\n");
-            return;
+            closesocket(client->socket);
+            client->socket = INVALID_SOCKET;
+            return false;
         }
         if (recvByte >= header.length)
             break;  // 수신 완료
@@ -201,21 +219,32 @@ void MemoryPoolTestClient::Login(TestClient* client)
     // data deserialize
     if (header.type != EPacketType::S2C_LOGIN_RESPONSE)
     {
-        cout << "로그인 응답 패킷이 아님" << endl;    // 에코가 걸림,, 그냥 역직렬화가 잘못된것같은데
-        return;
+        cout << "로그인 응답 패킷이 아님" << endl;
+        closesocket(client->socket);
+        client->socket = INVALID_SOCKET;
+        return false;
     }
     Protocol::S2C_LoginResponse loginResponse;
     if (!PacketBuilder::Instance().DeserializeData(recvBuf, recvByte, header, loginResponse))
     {
         printf("Deserialize Data Failed\n");
-        return;
+        closesocket(client->socket);
+        client->socket = INVALID_SOCKET;
+        return false;
     }
 
     if (!loginResponse.success().value())
+    {
         printf("login failed\n");
+        closesocket(client->socket);
+        client->socket = INVALID_SOCKET;
+        return false;
+    }
+
+    return true;
 }
 
-void MemoryPoolTestClient::Logout(TestClient* client)
+bool MemoryPoolTestClient::Logout(TestClient* client)
 {
     /// Send Logout Request
     Protocol::C2S_LogoutRequest logoutRequest;
@@ -224,22 +253,28 @@ void MemoryPoolTestClient::Logout(TestClient* client)
     int sendByte = 0;
     int totalSendByte = PacketHeader::Size() + logoutRequest.ByteSizeLong();
 
-    while (sendByte < totalSendByte)
+    while (sendByte < totalSendByte) 
     {
         int nSend = send(client->socket, sendBuf + sendByte, totalSendByte - sendByte, 0);
         if (nSend == SOCKET_ERROR)
         {
             printf("send() failed: %d\n", WSAGetLastError());
-            return;
+            closesocket(client->socket);
+            client->socket = INVALID_SOCKET;
+            return false;
         }
         if (nSend == 0)
         {
             printf("connection closed\n");
-            return;
+            closesocket(client->socket);
+            client->socket = INVALID_SOCKET;
+            return false;
         }
 
         sendByte += nSend;
     }
+
+    delete[] sendBuf;
 
     /// Receive Logout Response
     char recvBuf[256];
@@ -254,12 +289,16 @@ void MemoryPoolTestClient::Logout(TestClient* client)
         if (nRecv == SOCKET_ERROR)
         {
             printf("recv() failed: %d\n", WSAGetLastError());
-            return;
+            closesocket(client->socket);
+            client->socket = INVALID_SOCKET;
+            return false;
         }
         if (nRecv == 0)
         {
             printf("connection closed\n");
-            return;
+            closesocket(client->socket);
+            client->socket = INVALID_SOCKET;
+            return false;
         }
 
         recvByte += nRecv;
@@ -272,7 +311,9 @@ void MemoryPoolTestClient::Logout(TestClient* client)
         if (!PacketBuilder::Instance().DeserializeHeader(recvBuf, recvByte, header))
         {
             printf("Deserialize Header Failed\n");
-            return;
+            closesocket(client->socket);
+            client->socket = INVALID_SOCKET;
+            return false;
         }
         if (recvByte >= header.length)
             break;  // 수신 완료
@@ -282,12 +323,18 @@ void MemoryPoolTestClient::Logout(TestClient* client)
     if (header.type != EPacketType::S2C_LOGOUT_RESPONSE)
     {
         cout << "로그아웃 응답 패킷이 아님" << endl;
-        return;
+        closesocket(client->socket);
+        client->socket = INVALID_SOCKET;
+        return false;
     }
     Protocol::S2C_LogoutResponse logoutResponse;
     if (!PacketBuilder::Instance().DeserializeData(recvBuf, recvByte, header, logoutResponse))
     {
         printf("Deserialize Data Failed\n");
-        return;
+        closesocket(client->socket);
+        client->socket = INVALID_SOCKET;
+        return false;
     }
+
+    return true;
 }

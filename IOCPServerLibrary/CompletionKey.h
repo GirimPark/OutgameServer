@@ -40,6 +40,10 @@ struct Session
 
 	~Session()
 	{
+		if (state != eStateType::CLOSE && state != eStateType::UNREGISTER)
+		{
+			int a = 0;
+		}
 		closesocket(clientSocket);
 		clientSocket = INVALID_SOCKET;
 	}
