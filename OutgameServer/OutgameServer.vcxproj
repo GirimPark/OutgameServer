@@ -28,8 +28,12 @@
     <ProjectReference Include="..\PacketLibrary\PacketLibrary.vcxproj">
       <Project>{29ab2687-53ac-4a7e-8096-6ac1ddff692d}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\UtilityLibrary\UtilityLibrary.vcxproj">
+      <Project>{476afe9f-ac69-44df-857d-b51cce089f61}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="OutgameServer.cpp" />
     <ClCompile Include="PacketDataFactory.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

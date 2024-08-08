@@ -27,7 +27,9 @@
 #include <vld/vld.h>
 #endif
 
-int main()
+
+
+void OutgameServer::Start()
 {
 	/// Database test
 	ASSERT_CRASH(DBConnectionPool::Instance().Connect(5, L"Driver={SQL Server};Server=localhost\\SQLEXPRESS;Database=ServerDB;Trusted_Connection=Yes;"));
@@ -50,7 +52,7 @@ int main()
 		std::wstring username = L"test" + std::to_wstring(i);
 		dbBind.BindParam(0, username.c_str(), username.size());
 		std::wstring password = L"1234";
-		dbBind.BindParam(1, password.c_str(), password.size()); 
+		dbBind.BindParam(1, password.c_str(), password.size());
 
 		ASSERT_CRASH(dbBind.Execute());
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
@@ -82,20 +84,15 @@ int main()
 	//		std::wcout << "Id: " << outId << " /Username : " << outUsername << " /Password: " << outPassword << " /Status: "<< outStatus << '\n';
 	//	}
 	//}
-
-	OutgameServer::Instance().Start();
-}
-
-void OutgameServer::Start()
-{
+	///////////////
 	m_bRun = true;
 
 	m_pServerCore = new ServerCore("5001", SOMAXCONN);
 	m_pPacketHandler = new PacketHandler;
 	m_pUserManager = new UserManager;
-	m_pUserManager->SetTimeout(std::chrono::milliseconds(300000));
+	m_pUserManager->SetTimeout(std::chrono::milliseconds(30000000));
 
-	m_pServerCore->RegisterCallback([this](Session* session, char* data, int nReceivedByte)
+	m_pServerCore->RegisterCallback([this](Session* session, const char* data, int nReceivedByte)
 		{
 			m_pPacketHandler->HandlePacket(session, data, nReceivedByte);
 		});
@@ -106,7 +103,7 @@ void OutgameServer::Start()
 	m_workers.emplace_back(new std::thread(&OutgameServer::SendThread, this));						// Send
 	m_workers.emplace_back(new std::thread(&OutgameServer::QuitThread, this));						// Quit
 
-	m_workers.emplace_back(new std::thread(&UserManager::BroadcastValidationPacket, m_pUserManager, std::chrono::milliseconds(100000)));	// Validation Request
+	m_workers.emplace_back(new std::thread(&UserManager::BroadcastValidationPacket, m_pUserManager, std::chrono::milliseconds(10000000)));	// Validation Request
 	
 
 	for(const auto& worker : m_workers)

@@ -5,7 +5,7 @@
 
 UserManager::UserManager()
 {
-	InitializeCriticalSection(&m_criticalSection);
+	InitializeCriticalSection(&m_userMapLock);
 
 	OutgameServer::Instance().RegisterPacketHanlder(EPacketType::C2S_VALIDATION_RESPONSE, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
 	{
@@ -23,7 +23,7 @@ UserManager::UserManager()
 
 UserManager::~UserManager()
 {
-	DeleteCriticalSection(&m_criticalSection);
+	DeleteCriticalSection(&m_userMapLock);
 
 	for(auto& user : m_activeUserMap)
 	{
@@ -75,12 +75,12 @@ void UserManager::HandleLoginRequest(std::shared_ptr<ReceiveStruct> receiveStruc
 	if (AuthenticateUser(sendStruct->session, loginRequest->username(), loginRequest->password()))
 	{
 		response->mutable_success()->set_value(true);
-		sendStruct->session->state =Session::eStateType::REGISTER;
+		sendStruct->session->SetState(eSessionStateType::REGISTER);
 	}
 	else
 	{
 		response->mutable_success()->set_value(false);
-		sendStruct->session->state = Session::eStateType::CLOSE;
+		sendStruct->session->SetState(eSessionStateType::CLOSE);
 	}
 	sendStruct->data = response;
 	// header
@@ -98,7 +98,7 @@ void UserManager::HandleLogoutRequest(std::shared_ptr<ReceiveStruct> receiveStru
 		LOG_CONTENTS("Logout User Failed");
 		return;
 	}
-	if(receiveStructure->session->state != Session::eStateType::MAINTAIN)
+	if(receiveStructure->session->GetState() != eSessionStateType::MAINTAIN)
 	{
 		int a = 0;
 	}
@@ -111,7 +111,7 @@ void UserManager::HandleLogoutRequest(std::shared_ptr<ReceiveStruct> receiveStru
 	sendStruct->type = ESendType::UNICAST;
 	// session
 	sendStruct->session = receiveStructure->session;
-	sendStruct->session->state = Session::eStateType::UNREGISTER;
+	sendStruct->session->SetState(eSessionStateType::UNREGISTER);
 	// data
 	sendStruct->data = std::make_shared<Protocol::S2C_LogoutResponse>();
 	// header
@@ -127,9 +127,9 @@ void UserManager::HandleValidationResponse(std::shared_ptr<ReceiveStruct> receiv
 	auto validationResponse = std::make_shared<Protocol::C2S_ValidationResponse>();
 	if(PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *validationResponse))
 	{
-		EnterCriticalSection(&m_criticalSection);
-		m_activeUserMap[receiveStructure->session->sessionId]->UpdateLastValidationTime(std::chrono::steady_clock::now());
-		LeaveCriticalSection(&m_criticalSection);
+		EnterCriticalSection(&m_userMapLock);
+		m_activeUserMap[receiveStructure->session->GetSessionId()]->UpdateLastValidationTime(std::chrono::steady_clock::now());
+		LeaveCriticalSection(&m_userMapLock);
 	}
 	else
 	{
@@ -140,10 +140,10 @@ void UserManager::HandleValidationResponse(std::shared_ptr<ReceiveStruct> receiv
 void UserManager::CreateActiveUser(Session* session, std::string_view name)
 {
 	// 새 유저 생성, 세션과 연결
-	EnterCriticalSection(&m_criticalSection);
+	EnterCriticalSection(&m_userMapLock);
 	User* user = new User(session, name);
-	m_activeUserMap.insert({ session->sessionId, user });
-	LeaveCriticalSection(&m_criticalSection);
+	m_activeUserMap.insert({ session->GetSessionId(), user });
+	LeaveCriticalSection(&m_userMapLock);
 
 	// DB Update
 	std::wstring wUsername = std::wstring(name.begin(), name.end());
@@ -219,8 +219,8 @@ bool UserManager::AuthenticateUser(Session* session, const std::string_view& use
 bool UserManager::LogoutUser(Session* session)
 {
 	// DB Update
-	EnterCriticalSection(&m_criticalSection);
-	auto iter = m_activeUserMap.find(session->sessionId);
+	EnterCriticalSection(&m_userMapLock);
+	auto iter = m_activeUserMap.find(session->GetSessionId());
 	ASSERT_CRASH(iter != m_activeUserMap.end());
 	std::wstring username = std::wstring(iter->second->GetName().begin(), iter->second->GetName().end());
 
@@ -235,7 +235,7 @@ bool UserManager::LogoutUser(Session* session)
 
 	delete iter->second;
 	iter = m_activeUserMap.unsafe_erase(iter);
-	LeaveCriticalSection(&m_criticalSection);
+	LeaveCriticalSection(&m_userMapLock);
 
 	return true;
 }
@@ -243,7 +243,7 @@ bool UserManager::LogoutUser(Session* session)
 void UserManager::UpdateActiveUserMap()
 {
 	// 유저 유효성 검사 및 목록 정리
-	EnterCriticalSection(&m_criticalSection);
+	EnterCriticalSection(&m_userMapLock);
 	for(Concurrency::concurrent_unordered_map<unsigned int, User*>::iterator it = m_activeUserMap.begin(); it!= m_activeUserMap.end();)
 	{
 		auto now = std::chrono::steady_clock::now();
@@ -257,7 +257,7 @@ void UserManager::UpdateActiveUserMap()
 			std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
 			sendStruct->type = ESendType::UNICAST;
 			sendStruct->session = it->second->GetSession();
-			sendStruct->session->state = Session::eStateType::UNREGISTER;
+			sendStruct->session->SetState(eSessionStateType::UNREGISTER);
 			sendStruct->data = std::make_shared<Protocol::S2C_SessionExpiredNotification>();
 			std::string serializedString;
 			(sendStruct->data)->SerializeToString(&serializedString);
@@ -266,12 +266,12 @@ void UserManager::UpdateActiveUserMap()
 			OutgameServer::Instance().InsertSendTask(sendStruct);
 
 			delete it->second;
-			m_activeUserMap.unsafe_erase(it);
+			it = m_activeUserMap.unsafe_erase(it);
 		}
 		else
 		{
 			++it;
 		}
 	}
-	LeaveCriticalSection(&m_criticalSection);
+	LeaveCriticalSection(&m_userMapLock);
 }

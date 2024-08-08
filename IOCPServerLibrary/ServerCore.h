@@ -3,7 +3,7 @@
 
 enum class eIOType;
 
-typedef std::function<void(Session*, char*, int)> ReceiveDataCallback;
+typedef std::function<void(Session*, const char*, int)> ReceiveDataCallback;
 
 class ServerCore
 {
@@ -35,9 +35,7 @@ private:
 	SOCKET CreateListenSocket();
 
 	/// 세션 관련 함수
-	Session* CreateSession();						// 세션 생성
 	void RegisterSession(Session* session);			// 세션 맵에 추가
-	void CloseSession(Session* session, bool needLock = true);			// 세션 자원 해제
 	void UnregisterSession(SessionId sessionId);	// 세션 맵에서 삭제+세션 자원 해제.
 
 	/// IO 작업 관련 함수
@@ -49,11 +47,9 @@ private:
 
 	// IO 작업 게시
 	bool StartAccept();
-	bool StartReceive(Session* session);
-	bool StartSend(Session* session, const char* data, int length);
 
 	/// Callbacks
-	void OnReceiveData(Session* session, char* data, int nReceivedByte);
+	void OnReceiveData(Session* session, const char* data, int nReceivedByte);
 
 	HANDLE m_hIOCP;
 	std::atomic<bool> m_bEndServer;
@@ -66,8 +62,7 @@ private:
 	std::vector<std::thread*> m_IOCPThreads;
 
 	concurrency::concurrent_unordered_map<SessionId, Session*> m_sessionMap;
-
-	CRITICAL_SECTION m_criticalSection;
+	CRITICAL_SECTION m_sessionMapLock;
 
 	std::vector<ReceiveDataCallback> m_receiveCallbacks;
 };

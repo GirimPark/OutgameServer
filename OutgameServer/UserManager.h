@@ -33,9 +33,8 @@ private:
 
 private:
     concurrency::concurrent_unordered_map<SessionId, User*> m_activeUserMap;
+    CRITICAL_SECTION m_userMapLock;
 
     std::chrono::milliseconds m_userTimeout;
-
-    CRITICAL_SECTION m_criticalSection;
 };
 

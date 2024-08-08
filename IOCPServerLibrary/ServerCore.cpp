@@ -18,7 +18,7 @@ ServerCore::~ServerCore()
 
 void ServerCore::Run()
 {
-    InitializeCriticalSection(&m_criticalSection);
+    InitializeCriticalSection(&m_sessionMapLock);
 
     WSADATA wsaData;
     int rt = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -94,7 +94,7 @@ void ServerCore::Finalize()
     {
         if(m_sessionMap[i])
         {
-			UnregisterSession(m_sessionMap[i]->sessionId);
+			UnregisterSession(m_sessionMap[i]->GetSessionId());
             --i;
         }
     }
@@ -119,7 +119,7 @@ void ServerCore::Finalize()
     m_IOCPThreads.clear();
 
     // 크리티컬 섹션 해제
-    DeleteCriticalSection(&m_criticalSection);
+    DeleteCriticalSection(&m_sessionMapLock);
 
     m_receiveCallbacks.clear();
 
@@ -221,31 +221,36 @@ SOCKET ServerCore::CreateListenSocket()
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_IP;
 
-    if (getaddrinfo(NULL, m_listeningPort, &hints, &addrlocal) != 0) {
+    if (getaddrinfo(NULL, m_listeningPort, &hints, &addrlocal) != 0) 
+    {
         printf("getaddrinfo() failed with error %d\n", WSAGetLastError());
         return NULL;
     }
 
-    if (addrlocal == NULL) {
+    if (addrlocal == NULL) 
+    {
         printf("getaddrinfo() failed to resolve/convert the interface\n");
         return NULL;
     }
 
     SOCKET listenSocket = CreateSocket();
-    if (listenSocket == INVALID_SOCKET) {
+    if (listenSocket == INVALID_SOCKET) 
+    {
         freeaddrinfo(addrlocal);
         return NULL;
     }
 
     rt = bind(listenSocket, addrlocal->ai_addr, (int)addrlocal->ai_addrlen);
-    if (rt == SOCKET_ERROR) {
+    if (rt == SOCKET_ERROR) 
+    {
         printf("bind() failed: %d\n", WSAGetLastError());
         freeaddrinfo(addrlocal);
         return NULL;
     }
 
     rt = listen(listenSocket, m_backlog);
-    if (rt == SOCKET_ERROR) {
+    if (rt == SOCKET_ERROR) 
+    {
         printf("listen() failed: %d\n", WSAGetLastError());
         freeaddrinfo(addrlocal);
         return NULL;
@@ -256,71 +261,39 @@ SOCKET ServerCore::CreateListenSocket()
     return listenSocket;
 }
 
-Session* ServerCore::CreateSession()
-{
-    static unsigned int nextSessionId = 1;
-    Session* session = new Session();
-    session->sessionId = nextSessionId++;
-    ZeroMemory(&session->sendOverlapped, sizeof(OVERLAPPED));
-    ZeroMemory(&session->recvOverlapped, sizeof(OVERLAPPED));
-
-    return session;
-}
-
-void ServerCore::CloseSession(Session* session, bool needLock)
-{
-    if(needLock)
-		EnterCriticalSection(&m_criticalSection);
-
-    linger lingerStruct;
-    lingerStruct.l_onoff = 1;
-    lingerStruct.l_linger = 0;
-    setsockopt(session->clientSocket, SOL_SOCKET, SO_LINGER, (char*)&lingerStruct, sizeof(lingerStruct));
-
-    if (m_bEndServer)
-    {
-        while (!(HasOverlappedIoCompleted(&session->recvOverlapped)))
-            Sleep(0);
-    }
-
-    delete session;
-
-    if(needLock)
-		LeaveCriticalSection(&m_criticalSection);
-}
-
 void ServerCore::RegisterSession(Session* session)
 {
-    EnterCriticalSection(&m_criticalSection);
-    session->state = Session::eStateType::MAINTAIN;
-    auto result = m_sessionMap.insert({ session->sessionId, session });
+    EnterCriticalSection(&m_sessionMapLock);
+    session->SetState(eSessionStateType::MAINTAIN);
+    auto result = m_sessionMap.insert({ session->GetSessionId(), session });
     if (!result.second)
     {
         printf("RegisterSession: 중복된 세션 등록\n");
     }
-    LeaveCriticalSection(&m_criticalSection);
+    LeaveCriticalSection(&m_sessionMapLock);
 }
 
 void ServerCore::UnregisterSession(SessionId sessionId)
 {
-    EnterCriticalSection(&m_criticalSection);
+    EnterCriticalSection(&m_sessionMapLock);
     auto iter = m_sessionMap.find(sessionId);
     if (iter == m_sessionMap.end())
     {
-        LeaveCriticalSection(&m_criticalSection);
+        LeaveCriticalSection(&m_sessionMapLock);
         return;
     }
     Session* session = iter->second;
     if(!session)
     {
-        LeaveCriticalSection(&m_criticalSection);
+        LeaveCriticalSection(&m_sessionMapLock);
         printf("UnregisterSession : invalid session\n");
         return;
     }
 
     m_sessionMap.unsafe_erase(iter);
-    CloseSession(session, false);
-    LeaveCriticalSection(&m_criticalSection);
+    session->Close();
+    delete session; // todo 풀에 반환하는 방식으로 변경
+    LeaveCriticalSection(&m_sessionMapLock);
 }
 
 void ServerCore::ProcessThread()
@@ -366,7 +339,7 @@ void ServerCore::ProcessThread()
         {
             HandleAcceptCompletion();
         }
-        else if(session && session->type == eCompletionKeyType::SESSION)
+        else if(session && session->GetType() == eCompletionKeyType::SESSION)
         {
             if(nTransferredByte == 0)
             {
@@ -378,8 +351,11 @@ void ServerCore::ProcessThread()
             {
             case OVERLAPPED_STRUCT::eIOType::READ:
             {
-                OnReceiveData(session, session->recvOverlapped.buffer, nTransferredByte);
-                StartReceive(session);
+                OnReceiveData(session, session->GetReceivedData(), nTransferredByte);
+                if(!session->PostReceive())
+                {
+                    UnregisterSession(session->GetSessionId());
+                }
                 break;
             }
             case OVERLAPPED_STRUCT::eIOType::WRITE:
@@ -394,7 +370,7 @@ void ServerCore::ProcessThread()
             }
             }
         }
-        else if(session->type == eCompletionKeyType::SESSION && !session)
+        else if(session->GetType() == eCompletionKeyType::SESSION && !session)
         {
             printf("이미 해제된 세션\n");
             continue;
@@ -441,12 +417,12 @@ void ServerCore::HandleAcceptCompletion()
     }
 
     // 세션 생성, iocp 등록
-    Session* session = CreateSession();
-    session->clientSocket = m_pListenSocketCtxt->acceptedSocket;
+    Session* session = new Session;
+    session->SetClientSocket(m_pListenSocketCtxt->acceptedSocket, false);
     m_pListenSocketCtxt->acceptedSocket = INVALID_SOCKET;
-    session->clientIP = *remoteAddr;
+    session->SetClientIP(*remoteAddr, false);
 
-    m_hIOCP = CreateIoCompletionPort((HANDLE)session->clientSocket, m_hIOCP, (ULONG_PTR)session, 0);
+    m_hIOCP = CreateIoCompletionPort((HANDLE)session->GetClientSocket(), m_hIOCP, (ULONG_PTR)session, 0);
     if (!m_hIOCP)
     {
         printf("CreateIoCompletionPort failed to associate socket with error: %d\n", GetLastError());
@@ -461,27 +437,30 @@ void ServerCore::HandleAcceptCompletion()
     //printf("Remote Address: %s\n", addr);
 
     // 다른 수락 작업 게시
-    StartReceive(session);
+    if(!session->PostReceive())
+    {
+        UnregisterSession(session->GetSessionId());
+    }
     StartAccept();
 }
 
 void ServerCore::HandleWriteCompletion(Session* session)
 { 
-    switch(session->state)
+    switch(session->GetState())
     {
-    case Session::eStateType::REGISTER:
+    case eSessionStateType::REGISTER:
 	    {
         RegisterSession(session);
         break;
 	    }
-    case Session::eStateType::CLOSE:
+    case eSessionStateType::CLOSE:
 	    {
-        CloseSession(session);
+        session->Close();
         break;
 	    }
-    case Session::eStateType::UNREGISTER:
+    case eSessionStateType::UNREGISTER:
 	    {
-        UnregisterSession(session->sessionId);
+        UnregisterSession(session->GetSessionId());
         break;
 	    }
     default:
@@ -494,7 +473,13 @@ bool ServerCore::Unicast(Session* session, const char* data, int length)
     if (!session)
         return false;
 
-    return StartSend(session, data, length);
+    if(!session->PostSend(data, length))
+    {
+        UnregisterSession(session->GetSessionId());
+        return false;
+    }
+
+    return true;
 }
 
 bool ServerCore::Broadcast(const char* data, int length)
@@ -512,8 +497,9 @@ bool ServerCore::Broadcast(const char* data, int length)
         if (!session.second)
             continue;
 
-        if (!StartSend(session.second, data, length))
+        if (!session.second->PostSend(data, length))
         {
+            UnregisterSession(session.second->GetSessionId());
             rt = false;
             continue;
         }
@@ -552,54 +538,7 @@ bool ServerCore::StartAccept()
     return true;
 }
 
-bool ServerCore::StartReceive(Session* session)
-{
-    EnterCriticalSection(&m_criticalSection);
-    DWORD flags = 0;
-    DWORD bytesReceived = 0;
-    session->recvOverlapped.IOOperation = OVERLAPPED_STRUCT::eIOType::READ;
-    session->recvOverlapped.wsaBuffer.len = sizeof(session->recvOverlapped.buffer);
-
-    int rt = WSARecv(session->clientSocket, &session->recvOverlapped.wsaBuffer, 1, &bytesReceived, &flags, &session->recvOverlapped, NULL);
-    if(rt == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
-    {
-        printf("WSARecv() failed: %d\n", WSAGetLastError());
-        UnregisterSession(session->sessionId);
-        LeaveCriticalSection(&m_criticalSection);
-        return false;
-    }
-    LeaveCriticalSection(&m_criticalSection);
-    return true;
-}
-
-bool ServerCore::StartSend(Session* session, const char* data, int length)
-{
-    EnterCriticalSection(&m_criticalSection);
-    if (m_bEndServer)
-    {
-        LeaveCriticalSection(&m_criticalSection);
-        return false;
-    }
-
-    session->sendOverlapped.IOOperation = OVERLAPPED_STRUCT::eIOType::WRITE;
-    ZeroMemory(session->sendOverlapped.buffer, MAX_BUF_SIZE);
-    memcpy(session->sendOverlapped.buffer, data, length);
-    session->sendOverlapped.wsaBuffer.len = length;
-
-    int rt = WSASend(session->clientSocket, &session->sendOverlapped.wsaBuffer, 1, NULL, 0, &session->sendOverlapped, NULL);
-    if (rt == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING) 
-    {
-        printf("WSASend() failed: %d\n", WSAGetLastError());
-        UnregisterSession(session->sessionId);
-        LeaveCriticalSection(&m_criticalSection);
-        return false;
-    }
-
-    LeaveCriticalSection(&m_criticalSection);
-    return true;
-}
-
-void ServerCore::OnReceiveData(Session* session, char* data, int nReceivedByte)
+void ServerCore::OnReceiveData(Session* session, const char* data, int nReceivedByte)
 {
     for (const auto& callback : m_receiveCallbacks)
         callback(session, data, nReceivedByte);

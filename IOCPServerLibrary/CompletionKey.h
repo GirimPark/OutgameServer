@@ -26,45 +26,147 @@ struct OVERLAPPED_STRUCT : OVERLAPPED
 	char buffer[MAX_BUF_SIZE];
 };
 
-// READ, WRITE
-struct Session
+enum class eSessionStateType
 {
+	MAINTAIN,
+	REGISTER,
+	CLOSE,
+	UNREGISTER
+};
+
+static unsigned int staticSessionId = 0;
+
+// READ, WRITE
+class Session
+{
+public:
 	Session()
 	{
+		sessionId = staticSessionId++;
+
 		type = eCompletionKeyType::SESSION;
-		state = eStateType::MAINTAIN;
+		state = eSessionStateType::MAINTAIN;
 
 		sendOverlapped.IOOperation = OVERLAPPED_STRUCT::eIOType::WRITE;
 		recvOverlapped.IOOperation = OVERLAPPED_STRUCT::eIOType::READ;
+
+		InitializeCriticalSection(&writeLock);
+		InitializeCriticalSection(&sendLock);
+		InitializeCriticalSection(&recvLock);
 	}
 
 	~Session()
 	{
-		if (state != eStateType::CLOSE && state != eStateType::UNREGISTER)
-		{
-			int a = 0;
-		}
-		closesocket(clientSocket);
-		clientSocket = INVALID_SOCKET;
+		DeleteCriticalSection(&writeLock);
+		DeleteCriticalSection(&sendLock);
+		DeleteCriticalSection(&recvLock);
 	}
 
+	void Close()
+	{
+		EnterCriticalSection(&writeLock);
+		EnterCriticalSection(&sendLock);
+		EnterCriticalSection(&recvLock);
+
+		linger lingerStruct;
+		lingerStruct.l_onoff = 1;
+		lingerStruct.l_linger = 0;
+		setsockopt(clientSocket, SOL_SOCKET, SO_LINGER, (char*)&lingerStruct, sizeof(lingerStruct));
+
+		while (!(HasOverlappedIoCompleted(&recvOverlapped)))
+			Sleep(0);
+
+		closesocket(clientSocket);
+		clientSocket = INVALID_SOCKET;
+
+		LeaveCriticalSection(&writeLock);
+		LeaveCriticalSection(&sendLock);
+		LeaveCriticalSection(&recvLock);
+	}
+
+	bool PostSend(const char* data, int length)
+	{
+		EnterCriticalSection(&sendLock);
+
+		sendOverlapped.IOOperation = OVERLAPPED_STRUCT::eIOType::WRITE;
+		ZeroMemory(sendOverlapped.buffer, MAX_BUF_SIZE);
+		memcpy(sendOverlapped.buffer, data, length);
+		sendOverlapped.wsaBuffer.len = length;
+
+		int rt = WSASend(clientSocket, &sendOverlapped.wsaBuffer, 1, NULL, 0, &sendOverlapped, NULL);
+		if (rt == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
+		{
+			printf("WSASend() failed: %d\n", WSAGetLastError());
+			LeaveCriticalSection(&sendLock);
+			return false;
+		}
+
+		LeaveCriticalSection(&sendLock);
+		return true;
+	}
+
+	bool PostReceive()
+	{
+		EnterCriticalSection(&recvLock);
+		DWORD flags = 0;
+		DWORD bytesReceived = 0;
+		recvOverlapped.IOOperation = OVERLAPPED_STRUCT::eIOType::READ;
+		recvOverlapped.wsaBuffer.len = sizeof(recvOverlapped.buffer);
+
+		int rt = WSARecv(clientSocket, &recvOverlapped.wsaBuffer, 1, &bytesReceived, &flags, &recvOverlapped, NULL);
+		if (rt == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
+		{
+			printf("WSARecv() failed: %d\n", WSAGetLastError());
+			LeaveCriticalSection(&recvLock);
+			return false;
+		}
+		LeaveCriticalSection(&recvLock);
+		return true;
+	}
+
+public:
+	void SetState(eSessionStateType _state, bool needLock = true)
+	{
+		if(needLock)	EnterCriticalSection(&writeLock);
+		state = _state;
+		if(needLock)	LeaveCriticalSection(&writeLock);
+	}
+	void SetClientSocket(SOCKET _clientSocket, bool needLock = true)
+	{
+		if (needLock)	EnterCriticalSection(&writeLock);
+		clientSocket = _clientSocket;
+		if (needLock)	LeaveCriticalSection(&writeLock);
+	}
+	void SetClientIP(sockaddr_in _clientIP, bool needLock = true)
+	{
+		if (needLock)	EnterCriticalSection(&writeLock);
+		clientIP = _clientIP;
+		if (needLock)	LeaveCriticalSection(&writeLock);
+	}
+
+	const eCompletionKeyType& GetType() const { return type; }
+	const eSessionStateType& GetState() const { return state; }
+	const SessionId& GetSessionId() const { return sessionId; }
+	const SOCKET& GetClientSocket() const { return clientSocket; }
+	const sockaddr_in& GetClientIP() const { return clientIP; }
+	const char* GetReceivedData() const { return recvOverlapped.buffer; }
+
+private:
 	eCompletionKeyType type;
 
-	enum class eStateType
-	{
-		MAINTAIN,
-		REGISTER,
-		CLOSE,
-		UNREGISTER
-	} state;	// Write 累诀 饶 技记 贸府
-
-	unsigned int sessionId;
+	eSessionStateType state;
+	 
+	SessionId sessionId;
 
 	SOCKET clientSocket;
 	sockaddr_in clientIP;
 
 	OVERLAPPED_STRUCT sendOverlapped;
 	OVERLAPPED_STRUCT recvOverlapped;
+
+	CRITICAL_SECTION writeLock;
+	CRITICAL_SECTION sendLock;
+	CRITICAL_SECTION recvLock;
 };
 
 // Accept

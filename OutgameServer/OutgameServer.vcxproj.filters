@@ -1,69 +1,66 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="DBTables">
-      <UniqueIdentifier>{1ace958a-7954-41cb-97d7-3665101cceb4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility">
       <UniqueIdentifier>{33080799-5001-4bcb-8a7a-96f0bda48a81}</UniqueIdentifier>
     </Filter>
+    <Filter Include="User">
+      <UniqueIdentifier>{8b5b713c-74a5-4b3c-8bfb-0f31ba8ee808}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{233d8f91-fe40-43b0-96b6-5456c707e664}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{e9633464-4068-4271-a65c-923cd34dc1af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OutgameServer.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="User.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="UserManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="PacketHandler.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="PacketDataFactory.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="User.cpp">
+      <Filter>User</Filter>
+    </ClCompile>
+    <ClCompile Include="UserManager.cpp">
+      <Filter>User</Filter>
+    </ClCompile>
+    <ClCompile Include="OutgameServer.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Config</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OutgameServer.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Define.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="User.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UserManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SharedStructure.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="PacketHandler.h">
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="PacketDataFactory.h">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="User.h">
+      <Filter>User</Filter>
+    </ClInclude>
+    <ClInclude Include="UserManager.h">
+      <Filter>User</Filter>
+    </ClInclude>
+    <ClInclude Include="OutgameServer.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedStructure.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

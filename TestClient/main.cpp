@@ -14,6 +14,9 @@
 
 int main()
 {
-	MemoryPoolTestClient client("localhost","5001", 100, 1000);
+	MemoryPoolTestClient client("localhost","5001", 100, 3000);
 	client.Run();
+
+	system("pause");
+	return 0;
 }

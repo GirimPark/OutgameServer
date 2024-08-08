@@ -9,7 +9,7 @@ public:
 	~PacketHandler() = default;
 
 	void RegisterHandler(EPacketType headerType, PacketHandlerCallback callback);
-	void HandlePacket(Session* session, char* data, int nReceivedByte);
+	void HandlePacket(Session* session, const char* data, int nReceivedByte);
 
 private:
 	std::unordered_map<EPacketType, PacketHandlerCallback> m_packetCallbacks;

@@ -14,7 +14,7 @@ struct ReceiveStruct
 {
 	std::shared_ptr<PacketHeader> header;
 	Session* session;
-	char* data;
+	const char* data;
 	int nReceivedByte;
 };
 

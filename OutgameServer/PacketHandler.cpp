@@ -12,7 +12,7 @@ void PacketHandler::RegisterHandler(EPacketType headerType, PacketHandlerCallbac
 	m_packetCallbacks.emplace(headerType, callback);
 }
 
-void PacketHandler::HandlePacket(Session* session, char* data, int nReceivedByte)
+void PacketHandler::HandlePacket(Session* session, const char* data, int nReceivedByte)
 {
 	std::shared_ptr<PacketHeader> packetHeader = std::make_shared<PacketHeader>();
 	ASSERT_CRASH(PacketBuilder::Instance().DeserializeHeader(data, nReceivedByte, *packetHeader));

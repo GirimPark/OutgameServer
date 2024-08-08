@@ -53,11 +53,6 @@ void MemoryPoolTestClient::Run()
     avgResponseTime /= m_clientCnt;
     cout << "전체 평균 응답 시간 : " << avgResponseTime << "ms" << endl;
 
-    while(true)
-    {
-        int a = 0;
-    }
-
     for(auto& client : m_clients)
     {
         delete client;
@@ -133,7 +128,7 @@ void MemoryPoolTestClient::TestThread(TestClient* client)
 
         client->curCycle++;
 
-        this_thread::sleep_for(1s);
+        //this_thread::sleep_for(1s);
     }
 
     client->avgResponseTime /= m_cycleCnt;
