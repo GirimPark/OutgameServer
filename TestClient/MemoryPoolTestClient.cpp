@@ -109,18 +109,40 @@ SOCKET MemoryPoolTestClient::CreateConnectedSocket()
 
 void MemoryPoolTestClient::TestThread(TestClient* client)
 {
+    client->avgResponseTime = 0;
     while(client->curCycle < m_cycleCnt)
     {
         auto start = std::chrono::high_resolution_clock::now();
         client->socket = CreateConnectedSocket();
         if (client->socket == INVALID_SOCKET)
             continue;
+
+        auto temp1 = std::chrono::high_resolution_clock::now();
+        auto tempInterval1 = std::chrono::duration_cast<std::chrono::milliseconds>(temp1 - start).count();
+
         if (!Login(client))
             continue;
+
+        auto temp2 = std::chrono::high_resolution_clock::now();
+        auto tempInterval2 = std::chrono::duration_cast<std::chrono::milliseconds>(temp2 - temp1).count(); 
+
         if (!Logout(client))
             continue;
-        closesocket(client->socket);
+
+        linger lingerStruct;
+        lingerStruct.l_onoff = 1;
+        lingerStruct.l_linger = 0;
+        setsockopt(client->socket, SOL_SOCKET, SO_LINGER, (char*)&lingerStruct, sizeof(lingerStruct));
+        int result = closesocket(client->socket);
+        if (result == SOCKET_ERROR) {
+            int error = WSAGetLastError();
+            printf("closesocket() failed with error: %d\n", error);
+        }
         client->socket = INVALID_SOCKET;
+
+        auto temp3 = std::chrono::high_resolution_clock::now();
+        auto tempInterval3 = std::chrono::duration_cast<std::chrono::milliseconds>(temp3 - temp2).count();
+
         auto end = std::chrono::high_resolution_clock::now();
 
         auto responseTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
@@ -128,7 +150,7 @@ void MemoryPoolTestClient::TestThread(TestClient* client)
 
         client->curCycle++;
 
-        //this_thread::sleep_for(1s);
+        this_thread::sleep_for(1s);
     }
 
     client->avgResponseTime /= m_cycleCnt;

@@ -203,7 +203,6 @@ bool UserManager::AuthenticateUser(Session* session, const std::string_view& use
 		{
 			// 새 유저 생성, 로그인
 			CreateActiveUser(session, username);
-			//LOG_CONTENTS("로그인 성공");
 
 			return true;
 		}

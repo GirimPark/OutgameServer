@@ -90,7 +90,7 @@ void OutgameServer::Start()
 	m_pServerCore = new ServerCore("5001", SOMAXCONN);
 	m_pPacketHandler = new PacketHandler;
 	m_pUserManager = new UserManager;
-	m_pUserManager->SetTimeout(std::chrono::milliseconds(30000000));
+	m_pUserManager->SetTimeout(std::chrono::milliseconds(3000));
 
 	m_pServerCore->RegisterCallback([this](Session* session, const char* data, int nReceivedByte)
 		{
@@ -103,7 +103,7 @@ void OutgameServer::Start()
 	m_workers.emplace_back(new std::thread(&OutgameServer::SendThread, this));						// Send
 	m_workers.emplace_back(new std::thread(&OutgameServer::QuitThread, this));						// Quit
 
-	m_workers.emplace_back(new std::thread(&UserManager::BroadcastValidationPacket, m_pUserManager, std::chrono::milliseconds(10000000)));	// Validation Request
+	m_workers.emplace_back(new std::thread(&UserManager::BroadcastValidationPacket, m_pUserManager, std::chrono::milliseconds(1000)));	// Validation Request
 	
 
 	for(const auto& worker : m_workers)

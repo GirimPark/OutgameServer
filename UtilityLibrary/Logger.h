@@ -3,14 +3,14 @@
 #include <string>
 #include <fstream>
 #include <mutex>
-#include <memory>
 
 class Logger {
 public:
-    enum class LogLevel {
+    enum class LogLevel
+	{
         INFO,
         WARNING,
-        ERROR
+        LOG_ERROR,
     };
 
     static Logger& Instance();
@@ -32,4 +32,4 @@ private:
 // Macro for easy logging
 #define LOG_INFO(msg) Logger::Instance().Log(Logger::LogLevel::INFO, msg, __FILE__, __LINE__)
 #define LOG_WARNING(msg) Logger::Instance().Log(Logger::LogLevel::WARNING, msg, __FILE__, __LINE__)
-#define LOG_ERROR(msg) Logger::Instance().Log(Logger::LogLevel::ERROR, msg, __FILE__, __LINE__)
+#define LOG_ERROR(msg) Logger::Instance().Log(Logger::LogLevel::LOG_ERROR, msg, __FILE__, __LINE__)

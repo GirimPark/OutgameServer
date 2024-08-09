@@ -21,7 +21,7 @@
 #include <vld/vld.h>
 #endif
 
-//#include "../UtilityLibrary/Logger.h"
+#include "../UtilityLibrary/Logger.h"
 
 void CreateDirectoryIfNotExists(const std::wstring& dir);
 void CreateMiniDump(EXCEPTION_POINTERS* pep);
@@ -30,7 +30,7 @@ LONG WINAPI MyExceptionFilter(EXCEPTION_POINTERS* pExceptionPointers);
 int main()
 {
     SetUnhandledExceptionFilter(MyExceptionFilter);
-    //LOG_INFO("test log");
+
 	OutgameServer::Instance().Start();
 
     system("pause");

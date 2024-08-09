@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "ServerCore.h"
 
+#include "../UtilityLibrary/Logger.h"
+
 ServerCore::ServerCore(const char* port, int backlog)
     : m_bEndServer(false)
     , m_listeningPort(port)
@@ -314,16 +316,16 @@ void ServerCore::ProcessThread()
         bSuccess = GetQueuedCompletionStatus(m_hIOCP, &nTransferredByte, &completionKey, &overlapped, INFINITE);
         if(!bSuccess)
         {
-            if(GetLastError() != 1236)
+            DWORD errorCode = GetLastError();
+
+            if(GetLastError() != 64 && GetLastError() != 997)
+            {
 				printf("GetQueuedCompletionStatus() failed: %d\n", GetLastError());
+                LOG_ERROR("GetQueuedCompletionStatus failed : " + GetLastError());
+            }
         }
         if(!m_pListenSocketCtxt)
         {
-            return;
-        }
-        if(completionKey == NULL)
-        {
-            printf("completionKey is NULL\n");
             return;
         }
         if(m_bEndServer)
