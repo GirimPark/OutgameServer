@@ -177,7 +177,7 @@ bool EchoClient::SendBuffer(int threadId, char* outbuf)
     echoMessage.set_data("Hello, this is a test message!");
 
     bool rt = true;
-    char* bufp = PacketBuilder::Instance().Serialize(EPacketType::C2S_ECHO, echoMessage);
+    char* bufp = PacketBuilder::Instance().Serialize(PacketID::C2S_ECHO, echoMessage);
     int nTotalSend = 0;
     int nSend = 0;
     m_nSendByte = PacketHeader::Size() + echoMessage.ByteSizeLong();

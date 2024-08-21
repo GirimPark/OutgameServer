@@ -7,15 +7,15 @@ UserManager::UserManager()
 {
 	InitializeCriticalSection(&m_userMapLock);
 
-	OutgameServer::Instance().RegisterPacketHanlder(EPacketType::C2S_VALIDATION_RESPONSE, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
+	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_VALIDATION_RESPONSE, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
 	{
 			HandleValidationResponse(receiveStruct);
 	});
-	OutgameServer::Instance().RegisterPacketHanlder(EPacketType::C2S_LOGIN_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
+	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_LOGIN_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
 		{
 			HandleLoginRequest(receiveStruct);
 		});
-	OutgameServer::Instance().RegisterPacketHanlder(EPacketType::C2S_LOGOUT_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
+	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_LOGOUT_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
 		{
 			HandleLogoutRequest(receiveStruct);
 		});
@@ -47,7 +47,7 @@ void UserManager::BroadcastValidationPacket(std::chrono::milliseconds period)
 		
 		std::string serializedString;
 		(sendStruct->data)->SerializeToString(&serializedString);
-		sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::S2C_VALIDATION_REQUEST, serializedString.size()));
+		sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2C_VALIDATION_REQUEST, serializedString.size()));
 
 		OutgameServer::Instance().InsertSendTask(sendStruct);
 
@@ -65,7 +65,7 @@ void UserManager::HandleLoginRequest(std::shared_ptr<ReceiveStruct> receiveStruc
 	}
 
 	std::shared_ptr<SendStruct> sendStruct =std::make_shared<SendStruct>();
-	// type
+	// packetID
 	sendStruct->type = ESendType::UNICAST;
 	// session
 	sendStruct->session = receiveStructure->session;
@@ -86,7 +86,7 @@ void UserManager::HandleLoginRequest(std::shared_ptr<ReceiveStruct> receiveStruc
 	// header
 	std::string serializedString;
 	(sendStruct->data)->SerializeToString(&serializedString);
-	sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::S2C_LOGIN_RESPONSE, serializedString.size()));
+	sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2C_LOGIN_RESPONSE, serializedString.size()));
 
 	OutgameServer::Instance().InsertSendTask(sendStruct);
 }
@@ -107,7 +107,7 @@ void UserManager::HandleLogoutRequest(std::shared_ptr<ReceiveStruct> receiveStru
 
 	// 결과 송신
 	std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
-	// type
+	// packetID
 	sendStruct->type = ESendType::UNICAST;
 	// session
 	sendStruct->session = receiveStructure->session;
@@ -117,7 +117,7 @@ void UserManager::HandleLogoutRequest(std::shared_ptr<ReceiveStruct> receiveStru
 	// header
 	std::string serializedString;
 	(sendStruct->data)->SerializeToString(&serializedString);
-	sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::S2C_LOGOUT_RESPONSE, serializedString.size()));
+	sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2C_LOGOUT_RESPONSE, serializedString.size()));
 
 	OutgameServer::Instance().InsertSendTask(sendStruct);
 }
@@ -203,7 +203,7 @@ bool UserManager::AuthenticateUser(Session* session, const std::string_view& use
 		{
 			// 새 유저 생성, 로그인
 			CreateActiveUser(session, username);
-
+			LOG_CONTENTS("로그인 성공");
 			return true;
 		}
 	}
@@ -260,7 +260,7 @@ void UserManager::UpdateActiveUserMap()
 			sendStruct->data = std::make_shared<Protocol::S2C_SessionExpiredNotification>();
 			std::string serializedString;
 			(sendStruct->data)->SerializeToString(&serializedString);
-			sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::S2C_SESSION_EXPIRED_NOTIFICATION, serializedString.size()));
+			sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2C_SESSION_EXPIRED_NOTIFICATION, serializedString.size()));
 
 			OutgameServer::Instance().InsertSendTask(sendStruct);
 

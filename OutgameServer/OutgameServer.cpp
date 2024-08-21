@@ -90,20 +90,21 @@ void OutgameServer::Start()
 	m_pServerCore = new ServerCore("5001", SOMAXCONN);
 	m_pPacketHandler = new PacketHandler;
 	m_pUserManager = new UserManager;
-	m_pUserManager->SetTimeout(std::chrono::milliseconds(3000));
+	m_pUserManager->SetTimeout(std::chrono::milliseconds(10000));
 
 	m_pServerCore->RegisterCallback([this](Session* session, const char* data, int nReceivedByte)
 		{
-			m_pPacketHandler->HandlePacket(session, data, nReceivedByte);
+			m_pPacketHandler->ReceivePacket(session, data, nReceivedByte);
 		});
 	
 	/// Threads
 	// Core
-	m_workers.emplace_back(new std::thread(&ServerCore::Run, m_pServerCore));					// Server Core
+	m_workers.emplace_back(new std::thread(&ServerCore::Run, m_pServerCore));					// Server Core(Recv)
 	m_workers.emplace_back(new std::thread(&OutgameServer::SendThread, this));						// Send
+	m_workers.emplace_back(new std::thread(&PacketHandler::Run, m_pPacketHandler));				// Handle
 	m_workers.emplace_back(new std::thread(&OutgameServer::QuitThread, this));						// Quit
 
-	m_workers.emplace_back(new std::thread(&UserManager::BroadcastValidationPacket, m_pUserManager, std::chrono::milliseconds(1000)));	// Validation Request
+	m_workers.emplace_back(new std::thread(&UserManager::BroadcastValidationPacket, m_pUserManager, std::chrono::milliseconds(3000)));	// Validation Request
 	
 
 	for(const auto& worker : m_workers)
@@ -137,7 +138,7 @@ void OutgameServer::TriggerShutdown()
 	m_pServerCore = nullptr;
 }
 
-void OutgameServer::RegisterPacketHanlder(EPacketType headerType, PacketHandlerCallback callback)
+void OutgameServer::RegisterPacketHanlder(PacketID headerType, PacketHandlerCallback callback)
 {
 	m_pPacketHandler->RegisterHandler(headerType, callback);
 }
@@ -158,7 +159,7 @@ void OutgameServer::SendThread()
 		if (!m_sendQueue.try_pop(sendStruct))
 			continue;
 
-		char* serializedPacket = PacketBuilder::Instance().Serialize(sendStruct->header->type, *sendStruct->data);
+		char* serializedPacket = PacketBuilder::Instance().Serialize(sendStruct->header->packetId, *sendStruct->data);
 		if (!serializedPacket)
 		{
 			LOG_CONTENTS("Packet Serialize Failed");

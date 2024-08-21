@@ -86,7 +86,7 @@ SOCKET LoginClient::CreateConnectedSocket()
     loginRequest.set_username(m_username);
     loginRequest.set_password(m_password);
 
-    char* sendBuf = PacketBuilder::Instance().Serialize(EPacketType::C2S_LOGIN_REQUEST, loginRequest);
+    char* sendBuf = PacketBuilder::Instance().Serialize(PacketID::C2S_LOGIN_REQUEST, loginRequest);
     int sendByte = 0;
     int totalSendByte = PacketHeader::Size() + loginRequest.ByteSizeLong();
 
@@ -121,7 +121,7 @@ void LoginClient::SendThread()
         if (!m_sendQueue.try_pop(test))
             continue;
 
-        char* serializedPacket = PacketBuilder::Instance().Serialize(test->header->type, *test->data);
+        char* serializedPacket = PacketBuilder::Instance().Serialize(test->header->packetId, *test->data);
 
         while (sendByte < test->header->length)
         {
@@ -176,9 +176,9 @@ void LoginClient::ReceiveThread()
             if (header.length > recvByte)
                 continue;
 
-            switch (header.type)
+            switch (header.packetId)
             {
-            case EPacketType::S2C_LOGIN_RESPONSE:
+            case PacketID::S2C_LOGIN_RESPONSE:
             {
                 Protocol::S2C_LoginResponse loginResponse;
                 PacketBuilder::Instance().DeserializeData(recvBuf, sizeof(recvBuf), header, loginResponse);
@@ -186,18 +186,18 @@ void LoginClient::ReceiveThread()
 
                 break;
             }
-            case EPacketType::S2C_VALIDATION_REQUEST:
+            case PacketID::S2C_VALIDATION_REQUEST:
             {
                 std::shared_ptr<ClientSendStruct> test = std::make_shared<ClientSendStruct>();
-                test->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(EPacketType::C2S_VALIDATION_RESPONSE, 0));
-                test->header->type = EPacketType::C2S_VALIDATION_RESPONSE;
+                test->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::C2S_VALIDATION_RESPONSE, 0));
+                test->header->packetId = PacketID::C2S_VALIDATION_RESPONSE;
                 test->header->length = PacketHeader::Size();
                 test->data = std::make_shared<Protocol::C2S_ValidationResponse>();
                 m_sendQueue.push(test);
 
                 break;
             }
-            case EPacketType::S2C_SESSION_EXPIRED_NOTIFICATION:
+            case PacketID::S2C_SESSION_EXPIRED_NOTIFICATION:
             {
                 cout << "세션이 만료되었습니다" << endl;
 

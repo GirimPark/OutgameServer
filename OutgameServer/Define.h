@@ -8,6 +8,6 @@
 }
 
 //#define REGISTER_PACKET_DATA(className) \
-//        PacketDataFactory::RegisterPacketDataClass(#className, []() -> std::shared_ptr<PacketData> { \
+//        PacketDataFactory::RegisterPacketDataClass(#className, []() -> std::shared_ptr<Payload> { \
 //            return std::make_shared<className>(); \
 //        })

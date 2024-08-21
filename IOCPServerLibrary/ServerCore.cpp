@@ -293,9 +293,10 @@ void ServerCore::UnregisterSession(SessionId sessionId)
     }
 
     m_sessionMap.unsafe_erase(iter);
+    LeaveCriticalSection(&m_sessionMapLock);
+
     session->Close();
     delete session; // todo 풀에 반환하는 방식으로 변경
-    LeaveCriticalSection(&m_sessionMapLock);
 }
 
 void ServerCore::ProcessThread()
@@ -318,7 +319,7 @@ void ServerCore::ProcessThread()
         {
             DWORD errorCode = GetLastError();
 
-            if(GetLastError() != 64 && GetLastError() != 997)
+            if(GetLastError() != ERROR_NETNAME_DELETED && GetLastError() != ERROR_IO_PENDING)
             {
 				printf("GetQueuedCompletionStatus() failed: %d\n", GetLastError());
                 LOG_ERROR("GetQueuedCompletionStatus failed : " + GetLastError());
@@ -345,6 +346,7 @@ void ServerCore::ProcessThread()
         {
             if(nTransferredByte == 0)
             {
+                UnregisterSession(session->GetSessionId());
                 continue;
             }
 
@@ -443,11 +445,14 @@ void ServerCore::HandleAcceptCompletion()
     {
         UnregisterSession(session->GetSessionId());
     }
+
     StartAccept();
 }
 
 void ServerCore::HandleWriteCompletion(Session* session)
-{ 
+{
+    session->SubReferenceCount();
+
     switch(session->GetState())
     {
     case eSessionStateType::REGISTER:
@@ -542,6 +547,8 @@ bool ServerCore::StartAccept()
 
 void ServerCore::OnReceiveData(Session* session, const char* data, int nReceivedByte)
 {
+    session->SubReferenceCount();
+
     for (const auto& callback : m_receiveCallbacks)
         callback(session, data, nReceivedByte);
 }

@@ -1,13 +1,13 @@
-#include "pch.h"
 #include "PacketBuilder.h"
+#include "PacketHeader.h"
 
-PacketHeader PacketBuilder::CreateHeader(EPacketType type, int dataSize)
+PacketHeader PacketBuilder::CreateHeader(PacketID type, int dataSize)
 {
     short length = PacketHeader::Size() + dataSize;
     return PacketHeader(length, type);
 }
 
-char* PacketBuilder::Serialize(EPacketType type, const PacketData& dataPacket)
+char* PacketBuilder::Serialize(PacketID type, const Payload& dataPacket)
 {
     std::string serializedMessage;
     dataPacket.SerializeToString(&serializedMessage);
@@ -25,7 +25,7 @@ char* PacketBuilder::Serialize(EPacketType type, const PacketData& dataPacket)
     return packet;
 }
 
-bool PacketBuilder::Deserialize(const char* buffer, short size, PacketHeader& header, PacketData& data)
+bool PacketBuilder::Deserialize(const char* buffer, short size, PacketHeader& header, Payload& data)
 {
     if (size < PacketHeader::Size())
     {
@@ -51,7 +51,7 @@ bool PacketBuilder::DeserializeHeader(const char* buffer, short size, PacketHead
     return true;
 }
 
-bool PacketBuilder::DeserializeData(const char* buffer, short size, const PacketHeader& header, PacketData& data)
+bool PacketBuilder::DeserializeData(const char* buffer, short size, const PacketHeader& header, Payload& data)
 {
     if (size < header.length) 
     {

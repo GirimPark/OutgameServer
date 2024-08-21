@@ -22,7 +22,7 @@ public:
 	bool IsRunning() { return m_bRun; }
 	void TriggerShutdown();
 
-	void RegisterPacketHanlder(EPacketType headerType, PacketHandlerCallback callback);
+	void RegisterPacketHanlder(PacketID headerType, PacketHandlerCallback callback);
 	void InsertSendTask(std::shared_ptr<SendStruct> task);
 
 	ServerCore* GetServerCore() const { return m_pServerCore; }

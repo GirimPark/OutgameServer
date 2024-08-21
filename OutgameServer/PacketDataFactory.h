@@ -5,14 +5,14 @@
 class PacketDataFactory
 {
 public:
-	using CreatePacketDataFunc = std::shared_ptr<PacketData>(*)();
+	using CreatePacketDataFunc = std::shared_ptr<Payload>(*)();
 
 	PacketDataFactory();
 	~PacketDataFactory() = default;
 
 	static void RegisterPacketDataClass(const std::string& className, CreatePacketDataFunc func);
 
-	static std::shared_ptr<PacketData> CreateInstance(const std::string& className);
+	static std::shared_ptr<Payload> CreateInstance(const std::string& className);
 
 private: 
 	static std::unordered_map<std::string, CreatePacketDataFunc>& GetClassMap();

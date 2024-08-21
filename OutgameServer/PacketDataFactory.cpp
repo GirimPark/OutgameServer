@@ -10,7 +10,7 @@ void PacketDataFactory::RegisterPacketDataClass(const std::string& className, Cr
 	GetClassMap()[className] = func;
 }
 
-std::shared_ptr<PacketData> PacketDataFactory::CreateInstance(const std::string& className)
+std::shared_ptr<Payload> PacketDataFactory::CreateInstance(const std::string& className)
 {
 	auto it = GetClassMap().find(className);
 	if(it != GetClassMap().end())

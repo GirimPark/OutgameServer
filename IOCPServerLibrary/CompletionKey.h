@@ -64,25 +64,33 @@ public:
 
 	void Close()
 	{
-		EnterCriticalSection(&writeLock);
-		EnterCriticalSection(&sendLock);
-		EnterCriticalSection(&recvLock);
-
 		linger lingerStruct;
 		lingerStruct.l_onoff = 1;
 		lingerStruct.l_linger = 0;
 		setsockopt(clientSocket, SOL_SOCKET, SO_LINGER, (char*)&lingerStruct, sizeof(lingerStruct));
 
-		while (!(HasOverlappedIoCompleted(&recvOverlapped)))
-			Sleep(0);
-
 		closesocket(clientSocket);
 		clientSocket = INVALID_SOCKET;
 
-		LeaveCriticalSection(&writeLock);
-		LeaveCriticalSection(&sendLock);
-		LeaveCriticalSection(&recvLock);
-	}
+		//EnterCriticalSection(&writeLock);
+		//EnterCriticalSection(&sendLock);
+		//EnterCriticalSection(&recvLock);
+
+		//linger lingerStruct;
+		//lingerStruct.l_onoff = 1;
+		//lingerStruct.l_linger = 0;
+		//setsockopt(clientSocket, SOL_SOCKET, SO_LINGER, (char*)&lingerStruct, sizeof(lingerStruct));
+
+		//while (!(HasOverlappedIoCompleted(&recvOverlapped)))
+		//	Sleep(0);
+
+		//closesocket(clientSocket);
+		//clientSocket = INVALID_SOCKET;
+
+		//LeaveCriticalSection(&writeLock);
+		//LeaveCriticalSection(&sendLock);
+		//LeaveCriticalSection(&recvLock);
+	} 
 
 	bool PostSend(const char* data, int length)
 	{
@@ -92,7 +100,7 @@ public:
 		ZeroMemory(sendOverlapped.buffer, MAX_BUF_SIZE);
 		memcpy(sendOverlapped.buffer, data, length);
 		sendOverlapped.wsaBuffer.len = length;
-
+		
 		int rt = WSASend(clientSocket, &sendOverlapped.wsaBuffer, 1, NULL, 0, &sendOverlapped, NULL);
 		if (rt == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
 		{
@@ -102,12 +110,15 @@ public:
 		}
 
 		LeaveCriticalSection(&sendLock);
+
+		AddReferenceCount();
 		return true;
 	}
 
 	bool PostReceive()
 	{
 		EnterCriticalSection(&recvLock);
+
 		DWORD flags = 0;
 		DWORD bytesReceived = 0;
 		recvOverlapped.IOOperation = OVERLAPPED_STRUCT::eIOType::READ;
@@ -120,7 +131,10 @@ public:
 			LeaveCriticalSection(&recvLock);
 			return false;
 		}
+
 		LeaveCriticalSection(&recvLock);
+
+		AddReferenceCount();
 		return true;
 	}
 
@@ -144,6 +158,16 @@ public:
 		if (needLock)	LeaveCriticalSection(&writeLock);
 	}
 
+	void AddReferenceCount()
+	{
+		refCount.store(refCount.load() + 1);
+	}
+
+	void SubReferenceCount()
+	{
+		refCount.store(refCount.load() - 1);
+	}
+
 	const eCompletionKeyType& GetType() const { return type; }
 	const eSessionStateType& GetState() const { return state; }
 	const SessionId& GetSessionId() const { return sessionId; }
@@ -153,10 +177,10 @@ public:
 
 private:
 	eCompletionKeyType type;
-
 	eSessionStateType state;
-	 
 	SessionId sessionId;
+
+	std::atomic<int> refCount = 0;
 
 	SOCKET clientSocket;
 	sockaddr_in clientIP;

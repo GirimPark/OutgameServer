@@ -163,7 +163,7 @@ bool MemoryPoolTestClient::Login(TestClient* client)
     loginRequest.set_username(client->username);
     loginRequest.set_password(client->password);
 
-    char* sendBuf = PacketBuilder::Instance().Serialize(EPacketType::C2S_LOGIN_REQUEST, loginRequest);
+    char* sendBuf = PacketBuilder::Instance().Serialize(PacketID::C2S_LOGIN_REQUEST, loginRequest);
     int sendByte = 0;
     int totalSendByte = PacketHeader::Size() + loginRequest.ByteSizeLong();
 
@@ -234,7 +234,7 @@ bool MemoryPoolTestClient::Login(TestClient* client)
     }
 
     // data deserialize
-    if (header.type != EPacketType::S2C_LOGIN_RESPONSE)
+    if (header.packetId != PacketID::S2C_LOGIN_RESPONSE)
     {
         cout << "로그인 응답 패킷이 아님" << endl;
         closesocket(client->socket);
@@ -266,7 +266,7 @@ bool MemoryPoolTestClient::Logout(TestClient* client)
     /// Send Logout Request
     Protocol::C2S_LogoutRequest logoutRequest;
 
-    char* sendBuf = PacketBuilder::Instance().Serialize(EPacketType::C2S_LOGOUT_REQUEST, logoutRequest);
+    char* sendBuf = PacketBuilder::Instance().Serialize(PacketID::C2S_LOGOUT_REQUEST, logoutRequest);
     int sendByte = 0;
     int totalSendByte = PacketHeader::Size() + logoutRequest.ByteSizeLong();
 
@@ -337,7 +337,7 @@ bool MemoryPoolTestClient::Logout(TestClient* client)
     }
 
     // data deserialize
-    if (header.type != EPacketType::S2C_LOGOUT_RESPONSE)
+    if (header.packetId != PacketID::S2C_LOGOUT_RESPONSE)
     {
         cout << "로그아웃 응답 패킷이 아님" << endl;
         closesocket(client->socket);

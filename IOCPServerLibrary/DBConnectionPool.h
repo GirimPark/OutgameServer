@@ -2,8 +2,6 @@
 
 #include "DBConnection.h"
 
-#include <mutex>
-
 class DBConnectionPool
 {
 public:

@@ -8,9 +8,14 @@ public:
 	PacketHandler() = default;
 	~PacketHandler() = default;
 
-	void RegisterHandler(EPacketType headerType, PacketHandlerCallback callback);
-	void HandlePacket(Session* session, const char* data, int nReceivedByte);
+	void RegisterHandler(PacketID headerType, PacketHandlerCallback callback);
+	void ReceivePacket(Session* session, const char* data, int nReceivedByte);
+
+	void Run();
+
 
 private:
-	std::unordered_map<EPacketType, PacketHandlerCallback> m_packetCallbacks;
+	std::unordered_map<PacketID, PacketHandlerCallback> m_packetCallbacks;
+
+	concurrency::concurrent_queue<std::shared_ptr<ReceiveStruct>> m_recvQueue;
 };
