@@ -48,3 +48,14 @@ message S2C_LogoutResponse
 {
 
 }
+
+message C2S_JoinRequest
+{
+	string username = 1;
+	string password = 2;
+}
+
+message S2C_JoinResponse
+{
+	google.protobuf.BoolValue success = 1;
+}

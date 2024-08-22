@@ -121,8 +121,33 @@ struct S2C_LogoutResponseDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S2C_LogoutResponseDefaultTypeInternal _S2C_LogoutResponse_default_instance_;
+constexpr C2S_JoinRequest::C2S_JoinRequest(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : username_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , password_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+struct C2S_JoinRequestDefaultTypeInternal {
+  constexpr C2S_JoinRequestDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~C2S_JoinRequestDefaultTypeInternal() {}
+  union {
+    C2S_JoinRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C2S_JoinRequestDefaultTypeInternal _C2S_JoinRequest_default_instance_;
+constexpr S2C_JoinResponse::S2C_JoinResponse(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : success_(nullptr){}
+struct S2C_JoinResponseDefaultTypeInternal {
+  constexpr S2C_JoinResponseDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~S2C_JoinResponseDefaultTypeInternal() {}
+  union {
+    S2C_JoinResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S2C_JoinResponseDefaultTypeInternal _S2C_JoinResponse_default_instance_;
 }  // namespace Protocol
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Protocol_2eproto[9];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Protocol_2eproto[11];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_Protocol_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_Protocol_2eproto = nullptr;
 
@@ -186,6 +211,21 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_JoinRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_JoinRequest, username_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_JoinRequest, password_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_JoinResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_JoinResponse, success_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::Protocol::S2C_ValidationRequest)},
@@ -197,6 +237,8 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 40, -1, -1, sizeof(::Protocol::S2C_LoginResponse)},
   { 47, -1, -1, sizeof(::Protocol::C2S_LogoutRequest)},
   { 53, -1, -1, sizeof(::Protocol::S2C_LogoutResponse)},
+  { 59, -1, -1, sizeof(::Protocol::C2S_JoinRequest)},
+  { 67, -1, -1, sizeof(::Protocol::S2C_JoinResponse)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -209,6 +251,8 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_LoginResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C2S_LogoutRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_LogoutResponse_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C2S_JoinRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_JoinResponse_default_instance_),
 };
 
 const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -221,6 +265,9 @@ const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "sword\030\002 \001(\t\"@\n\021S2C_LoginResponse\022+\n\007succ"
   "ess\030\001 \001(\0132\032.google.protobuf.BoolValue\"\023\n"
   "\021C2S_LogoutRequest\"\024\n\022S2C_LogoutResponse"
+  "\"5\n\017C2S_JoinRequest\022\020\n\010username\030\001 \001(\t\022\020\n"
+  "\010password\030\002 \001(\t\"\?\n\020S2C_JoinResponse\022+\n\007s"
+  "uccess\030\001 \001(\0132\032.google.protobuf.BoolValue"
   "b\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Protocol_2eproto_deps[1] = {
@@ -228,8 +275,8 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Protocol_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Protocol_2eproto = {
-  false, false, 368, descriptor_table_protodef_Protocol_2eproto, "Protocol.proto", 
-  &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 1, 9,
+  false, false, 488, descriptor_table_protodef_Protocol_2eproto, "Protocol.proto", 
+  &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 1, 11,
   schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
   file_level_metadata_Protocol_2eproto, file_level_enum_descriptors_Protocol_2eproto, file_level_service_descriptors_Protocol_2eproto,
 };
@@ -1295,6 +1342,459 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*S2C_LogoutResponse::GetClassDa
       file_level_metadata_Protocol_2eproto[8]);
 }
 
+// ===================================================================
+
+class C2S_JoinRequest::_Internal {
+ public:
+};
+
+C2S_JoinRequest::C2S_JoinRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:Protocol.C2S_JoinRequest)
+}
+C2S_JoinRequest::C2S_JoinRequest(const C2S_JoinRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  username_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_username().empty()) {
+    username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_username(), 
+      GetArenaForAllocation());
+  }
+  password_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    password_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_password().empty()) {
+    password_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_password(), 
+      GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:Protocol.C2S_JoinRequest)
+}
+
+inline void C2S_JoinRequest::SharedCtor() {
+username_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+password_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  password_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+C2S_JoinRequest::~C2S_JoinRequest() {
+  // @@protoc_insertion_point(destructor:Protocol.C2S_JoinRequest)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void C2S_JoinRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  username_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  password_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void C2S_JoinRequest::ArenaDtor(void* object) {
+  C2S_JoinRequest* _this = reinterpret_cast< C2S_JoinRequest* >(object);
+  (void)_this;
+}
+void C2S_JoinRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void C2S_JoinRequest::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void C2S_JoinRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.C2S_JoinRequest)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  username_.ClearToEmpty();
+  password_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* C2S_JoinRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string username = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_username();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C2S_JoinRequest.username"));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string password = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_password();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C2S_JoinRequest.password"));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* C2S_JoinRequest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.C2S_JoinRequest)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string username = 1;
+  if (!this->_internal_username().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_username().data(), static_cast<int>(this->_internal_username().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C2S_JoinRequest.username");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_username(), target);
+  }
+
+  // string password = 2;
+  if (!this->_internal_password().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_password().data(), static_cast<int>(this->_internal_password().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C2S_JoinRequest.password");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_password(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.C2S_JoinRequest)
+  return target;
+}
+
+size_t C2S_JoinRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.C2S_JoinRequest)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string username = 1;
+  if (!this->_internal_username().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_username());
+  }
+
+  // string password = 2;
+  if (!this->_internal_password().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_password());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData C2S_JoinRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    C2S_JoinRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C2S_JoinRequest::GetClassData() const { return &_class_data_; }
+
+void C2S_JoinRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<C2S_JoinRequest *>(to)->MergeFrom(
+      static_cast<const C2S_JoinRequest &>(from));
+}
+
+
+void C2S_JoinRequest::MergeFrom(const C2S_JoinRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.C2S_JoinRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_username().empty()) {
+    _internal_set_username(from._internal_username());
+  }
+  if (!from._internal_password().empty()) {
+    _internal_set_password(from._internal_password());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void C2S_JoinRequest::CopyFrom(const C2S_JoinRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.C2S_JoinRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool C2S_JoinRequest::IsInitialized() const {
+  return true;
+}
+
+void C2S_JoinRequest::InternalSwap(C2S_JoinRequest* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &username_, lhs_arena,
+      &other->username_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &password_, lhs_arena,
+      &other->password_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata C2S_JoinRequest::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
+      file_level_metadata_Protocol_2eproto[9]);
+}
+
+// ===================================================================
+
+class S2C_JoinResponse::_Internal {
+ public:
+  static const ::PROTOBUF_NAMESPACE_ID::BoolValue& success(const S2C_JoinResponse* msg);
+};
+
+const ::PROTOBUF_NAMESPACE_ID::BoolValue&
+S2C_JoinResponse::_Internal::success(const S2C_JoinResponse* msg) {
+  return *msg->success_;
+}
+void S2C_JoinResponse::clear_success() {
+  if (GetArenaForAllocation() == nullptr && success_ != nullptr) {
+    delete success_;
+  }
+  success_ = nullptr;
+}
+S2C_JoinResponse::S2C_JoinResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:Protocol.S2C_JoinResponse)
+}
+S2C_JoinResponse::S2C_JoinResponse(const S2C_JoinResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_success()) {
+    success_ = new ::PROTOBUF_NAMESPACE_ID::BoolValue(*from.success_);
+  } else {
+    success_ = nullptr;
+  }
+  // @@protoc_insertion_point(copy_constructor:Protocol.S2C_JoinResponse)
+}
+
+inline void S2C_JoinResponse::SharedCtor() {
+success_ = nullptr;
+}
+
+S2C_JoinResponse::~S2C_JoinResponse() {
+  // @@protoc_insertion_point(destructor:Protocol.S2C_JoinResponse)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void S2C_JoinResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete success_;
+}
+
+void S2C_JoinResponse::ArenaDtor(void* object) {
+  S2C_JoinResponse* _this = reinterpret_cast< S2C_JoinResponse* >(object);
+  (void)_this;
+}
+void S2C_JoinResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void S2C_JoinResponse::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void S2C_JoinResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.S2C_JoinResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaForAllocation() == nullptr && success_ != nullptr) {
+    delete success_;
+  }
+  success_ = nullptr;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* S2C_JoinResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // .google.protobuf.BoolValue success = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_success(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* S2C_JoinResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S2C_JoinResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .google.protobuf.BoolValue success = 1;
+  if (this->_internal_has_success()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        1, _Internal::success(this), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S2C_JoinResponse)
+  return target;
+}
+
+size_t S2C_JoinResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.S2C_JoinResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .google.protobuf.BoolValue success = 1;
+  if (this->_internal_has_success()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *success_);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData S2C_JoinResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    S2C_JoinResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*S2C_JoinResponse::GetClassData() const { return &_class_data_; }
+
+void S2C_JoinResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<S2C_JoinResponse *>(to)->MergeFrom(
+      static_cast<const S2C_JoinResponse &>(from));
+}
+
+
+void S2C_JoinResponse::MergeFrom(const S2C_JoinResponse& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S2C_JoinResponse)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_has_success()) {
+    _internal_mutable_success()->::PROTOBUF_NAMESPACE_ID::BoolValue::MergeFrom(from._internal_success());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void S2C_JoinResponse::CopyFrom(const S2C_JoinResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S2C_JoinResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool S2C_JoinResponse::IsInitialized() const {
+  return true;
+}
+
+void S2C_JoinResponse::InternalSwap(S2C_JoinResponse* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(success_, other->success_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata S2C_JoinResponse::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
+      file_level_metadata_Protocol_2eproto[10]);
+}
+
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
@@ -1324,6 +1824,12 @@ template<> PROTOBUF_NOINLINE ::Protocol::C2S_LogoutRequest* Arena::CreateMaybeMe
 }
 template<> PROTOBUF_NOINLINE ::Protocol::S2C_LogoutResponse* Arena::CreateMaybeMessage< ::Protocol::S2C_LogoutResponse >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::S2C_LogoutResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::C2S_JoinRequest* Arena::CreateMaybeMessage< ::Protocol::C2S_JoinRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::C2S_JoinRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::S2C_JoinResponse* Arena::CreateMaybeMessage< ::Protocol::S2C_JoinResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::S2C_JoinResponse >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

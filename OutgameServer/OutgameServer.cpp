@@ -43,20 +43,31 @@ void OutgameServer::Start()
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
 	}
 
+	//DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
+	//DBBind<2, 0> dbBind(dbConn, L"INSERT INTO [dbo].[User]([username], [password]) VALUES(?, ?)");
+
+	//std::wstring username = L"test";
+	//dbBind.BindParam(0, username.c_str(), username.size());
+	//std::wstring password = L"1234";
+	//dbBind.BindParam(1, password.c_str(), password.size());
+
+	//ASSERT_CRASH(dbBind.Execute());
+	//DBConnectionPool::Instance().ReturnConnection(dbConn);
+
 	// Add Data
-	for (int i = 0; i < 1000; i++)
-	{
-		DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
-		DBBind<2, 0> dbBind(dbConn, L"INSERT INTO [dbo].[User]([username], [password]) VALUES(?, ?)");
+	//for (int i = 0; i < 1000; i++)
+	//{
+	//	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
+	//	DBBind<2, 0> dbBind(dbConn, L"INSERT INTO [dbo].[User]([username], [password]) VALUES(?, ?)");
 
-		std::wstring username = L"test" + std::to_wstring(i);
-		dbBind.BindParam(0, username.c_str(), username.size());
-		std::wstring password = L"1234";
-		dbBind.BindParam(1, password.c_str(), password.size());
+	//	std::wstring username = L"test" + std::to_wstring(i);
+	//	dbBind.BindParam(0, username.c_str(), username.size());
+	//	std::wstring password = L"1234";
+	//	dbBind.BindParam(1, password.c_str(), password.size());
 
-		ASSERT_CRASH(dbBind.Execute());
-		DBConnectionPool::Instance().ReturnConnection(dbConn);
-	}
+	//	ASSERT_CRASH(dbBind.Execute());
+	//	DBConnectionPool::Instance().ReturnConnection(dbConn);
+	//}
 
 	//// Read
 	//{

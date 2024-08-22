@@ -11,6 +11,7 @@ UserManager::UserManager()
 	{
 			HandleValidationResponse(receiveStruct);
 	});
+
 	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_LOGIN_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
 		{
 			HandleLoginRequest(receiveStruct);
@@ -18,6 +19,10 @@ UserManager::UserManager()
 	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_LOGOUT_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
 		{
 			HandleLogoutRequest(receiveStruct);
+		});
+	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_JOIN_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
+		{
+			HandleJoinRequest(receiveStruct);
 		});
 }
 
@@ -118,6 +123,51 @@ void UserManager::HandleLogoutRequest(std::shared_ptr<ReceiveStruct> receiveStru
 	std::string serializedString;
 	(sendStruct->data)->SerializeToString(&serializedString);
 	sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2C_LOGOUT_RESPONSE, serializedString.size()));
+
+	OutgameServer::Instance().InsertSendTask(sendStruct);
+}
+
+void UserManager::HandleJoinRequest(std::shared_ptr<ReceiveStruct> receiveStructure)
+{
+	auto joinRequest = std::make_shared<Protocol::C2S_JoinRequest>();
+	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *joinRequest))
+	{
+		LOG_CONTENTS("C2S_JOIN_REQUEST: PakcetBuilder::Deserialize() failed");
+		return;
+	}
+
+	std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
+	// packetID
+	sendStruct->type = ESendType::UNICAST;
+	// session
+	sendStruct->session = receiveStructure->session;
+	// data
+	std::shared_ptr<Protocol::S2C_JoinResponse> response = std::make_shared<Protocol::S2C_JoinResponse>();
+	// 아이디 중복 확인
+	if(IsAvailableID(joinRequest->username(), joinRequest->password()))
+	{
+		response->mutable_success()->set_value(true);
+
+		// DB에 계정 정보 추가
+		DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
+		DBBind<2, 0> dbBind(dbConn, L"INSERT INTO [dbo].[User]([username], [password]) VALUES(?, ?)");
+
+		std::wstring username = std::wstring(joinRequest->username().begin(), joinRequest->username().end());
+		dbBind.BindParam(0, username.c_str(), username.size());
+		std::wstring password = std::wstring(joinRequest->password().begin(), joinRequest->password().end());
+		dbBind.BindParam(1, password.c_str(), password.size());
+
+		ASSERT_CRASH(dbBind.Execute());
+	}
+	else
+		response->mutable_success()->set_value(true);
+
+	sendStruct->session->SetState(eSessionStateType::CLOSE);
+	sendStruct->data = response;
+	// header
+	std::string serializedString;
+	(sendStruct->data)->SerializeToString(&serializedString);
+	sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2C_JOIN_RESPONSE, serializedString.size()));
 
 	OutgameServer::Instance().InsertSendTask(sendStruct);
 }
@@ -236,6 +286,40 @@ bool UserManager::LogoutUser(Session* session)
 	iter = m_activeUserMap.unsafe_erase(iter);
 	LeaveCriticalSection(&m_userMapLock);
 
+	return true;
+}
+
+bool UserManager::IsAvailableID(const std::string_view& username, const std::string_view& password)
+{
+	// UserDB 조회, validation 확인
+	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
+
+	DBBind<1, 1> joinRequestBind(dbConn, L"SELECT 1 FROM [dbo].[User] WHERE username = (?)");
+	if (dbConn->m_bUsable.load() == true)
+	{
+		int a = 0;
+	}
+	std::wstring wUsername = std::wstring(username.begin(), username.end());
+	joinRequestBind.BindParam(0, wUsername.c_str(), wUsername.size());
+
+	int exist = 0;
+	joinRequestBind.BindCol(0, OUT exist);
+
+	if (!joinRequestBind.Execute())
+	{
+		LOG_CONTENTS("joinRequest Execute Failed");
+		DBConnectionPool::Instance().ReturnConnection(dbConn);
+		return false;
+	}
+
+	if (joinRequestBind.Fetch())
+	{
+		LOG_CONTENTS("중복된 ID");
+		DBConnectionPool::Instance().ReturnConnection(dbConn);
+		return false;
+	}
+
+	DBConnectionPool::Instance().ReturnConnection(dbConn);
 	return true;
 }
 

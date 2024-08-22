@@ -1,5 +1,5 @@
-/*IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[User]') AND type in (N'U'))*/
-DROP TABLE IF EXISTS [dbo].[User];
+/*DROP TABLE IF EXISTS [dbo].[User];*/
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[User]') AND type in (N'U'))
 BEGIN
     CREATE TABLE [dbo].[User] (
         id INT PRIMARY KEY IDENTITY(1,1),
