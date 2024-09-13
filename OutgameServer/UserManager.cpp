@@ -3,9 +3,18 @@
 
 #include "User.h"
 
+concurrency::concurrent_unordered_map<SessionId, std::shared_ptr<User>> UserManager::s_activeUserMap;
+
 UserManager::UserManager()
 {
 	InitializeCriticalSection(&m_userMapLock);
+
+	int offlineState = EUserStateType::OFFLINE;
+	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
+	DBBind<1, 0> updateStateBind(dbConn, L"UPDATE [dbo].[User] SET state = (?)");
+	updateStateBind.BindParam(0, offlineState);
+	ASSERT_CRASH(updateStateBind.Execute());
+	DBConnectionPool::Instance().ReturnConnection(dbConn);
 
 	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_VALIDATION_RESPONSE, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
 	{
@@ -30,31 +39,40 @@ UserManager::~UserManager()
 {
 	DeleteCriticalSection(&m_userMapLock);
 
-	for(auto& user : m_activeUserMap)
-	{
-		delete user.second;
-	}
-	m_activeUserMap.clear();
+	int offlineState = EUserStateType::OFFLINE;
+	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
+	DBBind<1, 0> updateStateBind(dbConn, L"UPDATE [dbo].[User] SET state = (?)");
+	updateStateBind.BindParam(0, offlineState);
+	ASSERT_CRASH(updateStateBind.Execute());
+	DBConnectionPool::Instance().ReturnConnection(dbConn);
+
+	s_activeUserMap.clear();
 }
 
-void UserManager::BroadcastValidationPacket(std::chrono::milliseconds period)
+void UserManager::UpdateActiveUserMap(std::chrono::milliseconds period)
 {
 	while(OutgameServer::Instance().IsRunning())
 	{
-		UpdateActiveUserMap();
+		EnterCriticalSection(&m_userMapLock);
+		auto snapshot = s_activeUserMap;
+		LeaveCriticalSection(&m_userMapLock);
 
-		// 유효성 검사 패킷 송신 게시
-		std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
-		sendStruct->type = ESendType::BROADCAST;
+		std::list<UserId> invalidUserList;
+		for(const auto& iter : snapshot)
+		{
+			if (!iter.second->GetSession()->IsValid())
+				invalidUserList.push_back(iter.second->GetId());
+		}
 
-		std::shared_ptr<Protocol::S2C_ValidationRequest> validationRequest = std::make_shared<Protocol::S2C_ValidationRequest>();
-		sendStruct->data = validationRequest;
-		
-		std::string serializedString;
-		(sendStruct->data)->SerializeToString(&serializedString);
-		sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2C_VALIDATION_REQUEST, serializedString.size()));
-
-		OutgameServer::Instance().InsertSendTask(sendStruct);
+		for(const auto& id : invalidUserList)
+		{
+			EnterCriticalSection(&m_userMapLock);
+			auto userIter = s_activeUserMap.find(id);
+			userIter->second->UpdateState(EUserStateType::OFFLINE);
+			delete userIter->second->GetSession();
+			s_activeUserMap.unsafe_erase(userIter);
+			LeaveCriticalSection(&m_userMapLock);
+		}
 
 		std::this_thread::sleep_for(period);
 	}
@@ -178,7 +196,7 @@ void UserManager::HandleValidationResponse(std::shared_ptr<ReceiveStruct> receiv
 	if(PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *validationResponse))
 	{
 		EnterCriticalSection(&m_userMapLock);
-		m_activeUserMap[receiveStructure->session->GetSessionId()]->UpdateLastValidationTime(std::chrono::steady_clock::now());
+		s_activeUserMap[receiveStructure->session->GetSessionId()]->UpdateLastValidationTime(std::chrono::steady_clock::now());
 		LeaveCriticalSection(&m_userMapLock);
 	}
 	else
@@ -191,8 +209,8 @@ void UserManager::CreateActiveUser(Session* session, std::string_view name)
 {
 	// 새 유저 생성, 세션과 연결
 	EnterCriticalSection(&m_userMapLock);
-	User* user = new User(session, name);
-	m_activeUserMap.insert({ session->GetSessionId(), user });
+	std::shared_ptr<User> user = std::make_shared<User>(session, name);
+	s_activeUserMap.insert({ session->GetSessionId(), user });
 	LeaveCriticalSection(&m_userMapLock);
 
 	// DB Update
@@ -269,8 +287,8 @@ bool UserManager::LogoutUser(Session* session)
 {
 	// DB Update
 	EnterCriticalSection(&m_userMapLock);
-	auto iter = m_activeUserMap.find(session->GetSessionId());
-	ASSERT_CRASH(iter != m_activeUserMap.end());
+	auto iter = s_activeUserMap.find(session->GetSessionId());
+	ASSERT_CRASH(iter != s_activeUserMap.end());
 	std::wstring username = std::wstring(iter->second->GetName().begin(), iter->second->GetName().end());
 
 	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
@@ -282,8 +300,7 @@ bool UserManager::LogoutUser(Session* session)
 	// active User Map에서 해당 유저 정리
 	iter->second->UpdateState(EUserStateType::OFFLINE);
 
-	delete iter->second;
-	iter = m_activeUserMap.unsafe_erase(iter);
+	iter = s_activeUserMap.unsafe_erase(iter);
 	LeaveCriticalSection(&m_userMapLock);
 
 	return true;
@@ -323,38 +340,37 @@ bool UserManager::IsAvailableID(const std::string_view& username, const std::str
 	return true;
 }
 
-void UserManager::UpdateActiveUserMap()
-{
-	// 유저 유효성 검사 및 목록 정리
-	EnterCriticalSection(&m_userMapLock);
-	for(Concurrency::concurrent_unordered_map<unsigned int, User*>::iterator it = m_activeUserMap.begin(); it!= m_activeUserMap.end();)
-	{
-		auto now = std::chrono::steady_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - it->second->GetLastValidationTime());
-		// 세션 만료 시간이 지났다면
-		if(duration > m_userTimeout || it->second->GetState() == EUserStateType::OFFLINE)
-		{
-			it->second->UpdateState(EUserStateType::OFFLINE);
-
-			// 세션 만료 통지 패킷 송신
-			std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
-			sendStruct->type = ESendType::UNICAST;
-			sendStruct->session = it->second->GetSession();
-			sendStruct->session->SetState(eSessionStateType::UNREGISTER);
-			sendStruct->data = std::make_shared<Protocol::S2C_SessionExpiredNotification>();
-			std::string serializedString;
-			(sendStruct->data)->SerializeToString(&serializedString);
-			sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2C_SESSION_EXPIRED_NOTIFICATION, serializedString.size()));
-
-			OutgameServer::Instance().InsertSendTask(sendStruct);
-
-			delete it->second;
-			it = m_activeUserMap.unsafe_erase(it);
-		}
-		else
-		{
-			++it;
-		}
-	}
-	LeaveCriticalSection(&m_userMapLock);
-}
+//void UserManager::UpdateActiveUserMap()
+//{
+//	// 유저 유효성 검사 및 목록 정리
+//	EnterCriticalSection(&m_userMapLock);
+//	for(Concurrency::concurrent_unordered_map<unsigned int, std::shared_ptr<User>>::iterator it = s_activeUserMap.begin(); it!= s_activeUserMap.end();)
+//	{
+//		auto now = std::chrono::steady_clock::now();
+//		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - it->second->GetLastValidationTime());
+//		// 세션 만료 시간이 지났다면
+//		if(duration > m_userTimeout || it->second->GetState() == EUserStateType::OFFLINE)
+//		{
+//			it->second->UpdateState(EUserStateType::OFFLINE);
+//
+//			// 세션 만료 통지 패킷 송신
+//			std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
+//			sendStruct->type = ESendType::UNICAST;
+//			sendStruct->session = it->second->GetSession();
+//			sendStruct->session->SetState(eSessionStateType::UNREGISTER);
+//			sendStruct->data = std::make_shared<Protocol::S2C_SessionExpiredNotification>();
+//			std::string serializedString;
+//			(sendStruct->data)->SerializeToString(&serializedString);
+//			sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2C_SESSION_EXPIRED_NOTIFICATION, serializedString.size()));
+//
+//			OutgameServer::Instance().InsertSendTask(sendStruct);
+//
+//			it = s_activeUserMap.unsafe_erase(it);
+//		}
+//		else
+//		{
+//			++it;
+//		}
+//	}
+//	LeaveCriticalSection(&m_userMapLock);
+//}

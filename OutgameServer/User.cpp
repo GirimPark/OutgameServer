@@ -1,8 +1,10 @@
 #include "pch.h"
 #include "User.h"
+#include "GameRoom.h"
 
 User::User(Session* session, std::string_view name)
 	: m_session(session)
+	, m_id(session->GetSessionId())
 	, m_name(name)
 	, m_state(EUserStateType::ONLINE)
 	, m_lastValidationTime(std::chrono::steady_clock::now())

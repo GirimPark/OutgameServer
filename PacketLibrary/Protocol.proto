@@ -3,37 +3,28 @@ package Protocol;
 
 import "google/protobuf/wrappers.proto";
 
+
+// 세션 관리
 message S2C_ValidationRequest
 {
 
 }
-
 message C2S_ValidationResponse
 {
 
 }
-
 message S2C_SessionExpiredNotification
 {
 
 }
 
-message S2C_Echo
-{
-	string data = 1;
-}
 
-message C2S_Echo
-{
-	string data = 1;
-}
-
+// 로그인, 로그아웃, 회원가입
 message C2S_LoginRequest
 {
 	string username = 1;
 	string password = 2;
 }
-
 message S2C_LoginResponse
 {
 	google.protobuf.BoolValue success = 1;
@@ -43,7 +34,6 @@ message C2S_LogoutRequest
 {
 
 }
-
 message S2C_LogoutResponse
 {
 
@@ -54,8 +44,61 @@ message C2S_JoinRequest
 	string username = 1;
 	string password = 2;
 }
-
 message S2C_JoinResponse
+{
+	google.protobuf.BoolValue success = 1;
+}
+
+
+// 방 생성, 참가, 퇴장, 초대
+message C2S_CreateRoomRequest
+{
+
+}
+message S2C_CreateRoomResponse
+{
+	google.protobuf.BoolValue success = 1;
+	string roomCode = 2;
+}
+
+message C2S_JoinRoomRequest
+{
+	string roomCode = 1;
+}
+message S2C_JoinRoomResponse
+{
+	google.protobuf.BoolValue success = 1;
+	string ipAddress = 2;
+}
+
+message C2S_QuitRoomRequest
+{
+
+}
+message S2C_QuitRoomResponse
+{
+	google.protobuf.BoolValue success = 1;
+}
+
+message C2S_InviteUserRequest
+{
+	string username = 1;
+}
+message S2C_InviteUserResponse
+{
+	google.protobuf.BoolValue success = 1;
+}
+message S2C_InviteUserNotification
+{
+	string ipAddress = 1;
+}
+
+// 게임 시작
+message C2S_StartGameRequest
+{
+
+}
+message S2C_StartGameResponse
 {
 	google.protobuf.BoolValue success = 1;
 }

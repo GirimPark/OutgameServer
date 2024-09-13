@@ -12,21 +12,17 @@
 
 #include "pch.h"
 #include "OutgameServer.h"
-
-#include <memory>
-
 #include "UserManager.h"
+#include "GameRoomManager.h"
 #include "PacketHandler.h"
 
 #include <sstream>
-
-#include "PacketDataFactory.h"
+#include <memory>
 
 
 #ifdef _DEBUG
 #include <vld/vld.h>
 #endif
-
 
 
 void OutgameServer::Start()
@@ -101,7 +97,7 @@ void OutgameServer::Start()
 	m_pServerCore = new ServerCore("5001", SOMAXCONN);
 	m_pPacketHandler = new PacketHandler;
 	m_pUserManager = new UserManager;
-	m_pUserManager->SetTimeout(std::chrono::milliseconds(10000));
+	m_pGameRoomManager = new GameRoomManager;
 
 	m_pServerCore->RegisterCallback([this](Session* session, const char* data, int nReceivedByte)
 		{
@@ -115,7 +111,7 @@ void OutgameServer::Start()
 	m_workers.emplace_back(new std::thread(&PacketHandler::Run, m_pPacketHandler));				// Handle
 	m_workers.emplace_back(new std::thread(&OutgameServer::QuitThread, this));						// Quit
 
-	m_workers.emplace_back(new std::thread(&UserManager::BroadcastValidationPacket, m_pUserManager, std::chrono::milliseconds(3000)));	// Validation Request
+	m_workers.emplace_back(new std::thread(&UserManager::UpdateActiveUserMap, m_pUserManager, std::chrono::milliseconds(10000)));	// User 목록 정리
 	
 
 	for(const auto& worker : m_workers)

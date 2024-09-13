@@ -4,6 +4,7 @@
 
 class ServerCore;
 class UserManager;
+class GameRoomManager;
 class PacketHandler;
 
 
@@ -38,6 +39,7 @@ private:
 
 	ServerCore* m_pServerCore;
 	UserManager* m_pUserManager;
+	GameRoomManager* m_pGameRoomManager;
 	PacketHandler* m_pPacketHandler;
 
 	concurrency::concurrent_queue<std::shared_ptr<SendStruct>> m_sendQueue;

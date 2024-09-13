@@ -155,6 +155,8 @@ SOCKET ServerCore::CreateSocket()
 
     int zero = 0;
     int rt = setsockopt(newSocket, SOL_SOCKET, SO_SNDBUF, (char*)&zero, sizeof(zero));
+    //    int enable = 1;
+    //int rt = setsockopt(newSocket, SOL_SOCKET, SO_KEEPALIVE, (char*)&enable, sizeof(enable));
     if (rt == SOCKET_ERROR)
     {
         printf("setsockopt(SNDBUF) failed: %d\n", WSAGetLastError());
@@ -296,7 +298,7 @@ void ServerCore::UnregisterSession(SessionId sessionId)
     LeaveCriticalSection(&m_sessionMapLock);
 
     session->Close();
-    delete session; // todo 풀에 반환하는 방식으로 변경
+    //delete session; // todo 풀에 반환하는 방식으로 변경
 }
 
 void ServerCore::ProcessThread()
@@ -317,12 +319,21 @@ void ServerCore::ProcessThread()
         bSuccess = GetQueuedCompletionStatus(m_hIOCP, &nTransferredByte, &completionKey, &overlapped, INFINITE);
         if(!bSuccess)
         {
+            // 비정상적 종료
+            if(nTransferredByte <= 0)
+            {
+                LOG_SERVER_CORE("비정상적 종료");
+                session = reinterpret_cast<Session*>(completionKey);
+                UnregisterSession(session->GetSessionId());
+            }
+
             DWORD errorCode = GetLastError();
 
             if(GetLastError() != ERROR_NETNAME_DELETED && GetLastError() != ERROR_IO_PENDING)
             {
 				printf("GetQueuedCompletionStatus() failed: %d\n", GetLastError());
                 LOG_ERROR("GetQueuedCompletionStatus failed : " + GetLastError());
+                continue;
             }
         }
         if(!m_pListenSocketCtxt)
@@ -334,18 +345,21 @@ void ServerCore::ProcessThread()
             return;
         }
 
+
         listenCtxt = reinterpret_cast<ListenContext*>(completionKey);
         session = reinterpret_cast<Session*>(completionKey);
         overlappedStruct = reinterpret_cast<OVERLAPPED_STRUCT*>(overlapped);
 
         if(listenCtxt && listenCtxt->type == eCompletionKeyType::LISTEN_CONTEXT)
         {
-            HandleAcceptCompletion();
+            HandleAcceptCompletion(nTransferredByte);
         }
         else if(session && session->GetType() == eCompletionKeyType::SESSION)
         {
-            if(nTransferredByte == 0)
+            // 정상종료(클라이언트 측에서 closesocket 호출)
+            if(nTransferredByte <= 0)
             {
+                LOG_SERVER_CORE("정상적 종료");
                 UnregisterSession(session->GetSessionId());
                 continue;
             }
@@ -383,7 +397,7 @@ void ServerCore::ProcessThread()
     }
 }
 
-void ServerCore::HandleAcceptCompletion()
+void ServerCore::HandleAcceptCompletion(int nReceivedByte)
 {
     sockaddr_in* localAddr = nullptr;
     sockaddr_in* remoteAddr = nullptr;
@@ -440,6 +454,9 @@ void ServerCore::HandleAcceptCompletion()
     inet_ntop(AF_INET, &remoteAddr->sin_addr, addr, INET_ADDRSTRLEN);
     //printf("Remote Address: %s\n", addr);
 
+    // 초기데이터 처리
+    OnReceiveData(session, m_pListenSocketCtxt->acceptBuffer, nReceivedByte);
+
     // 다른 수락 작업 게시
     if(!session->PostReceive())
     {
@@ -491,7 +508,10 @@ bool ServerCore::Unicast(Session* session, const char* data, int length)
 
 bool ServerCore::Broadcast(const char* data, int length)
 {
+    EnterCriticalSection(&m_sessionMapLock);
     auto snapshot = m_sessionMap;
+    LeaveCriticalSection(&m_sessionMapLock);
+   
     bool rt = true;
 
     if (snapshot.empty())
@@ -523,13 +543,13 @@ bool ServerCore::StartAccept()
         printf("failed to create new accept socket\n");
         return false;
     }
-
+    //sizeof(m_pListenSocketCtxt->acceptBuffer),
     DWORD nRecvByte = 0;
     int rt = AcceptEx(
         m_pListenSocketCtxt->listenSocket,
         m_pListenSocketCtxt->acceptedSocket,
         m_pListenSocketCtxt->acceptBuffer,
-        0,
+        sizeof(m_pListenSocketCtxt->acceptBuffer),
         sizeof(SOCKADDR_IN) + IP_SIZE,
         sizeof(SOCKADDR_IN) + IP_SIZE,
         &nRecvByte,

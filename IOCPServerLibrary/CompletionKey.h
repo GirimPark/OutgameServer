@@ -31,7 +31,8 @@ enum class eSessionStateType
 	MAINTAIN,
 	REGISTER,
 	CLOSE,
-	UNREGISTER
+	UNREGISTER,
+	INVALID,
 };
 
 static unsigned int staticSessionId = 0;
@@ -62,6 +63,11 @@ public:
 		DeleteCriticalSection(&recvLock);
 	}
 
+	bool IsValid() const
+	{
+		return (state != eSessionStateType::INVALID);
+	}
+
 	void Close()
 	{
 		linger lingerStruct;
@@ -71,6 +77,8 @@ public:
 
 		closesocket(clientSocket);
 		clientSocket = INVALID_SOCKET;
+
+		state = eSessionStateType::INVALID;
 
 		//EnterCriticalSection(&writeLock);
 		//EnterCriticalSection(&sendLock);

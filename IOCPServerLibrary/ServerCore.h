@@ -42,7 +42,7 @@ private:
 	// GetQueuedCompletionStatus
 	void ProcessThread();
 	
-	void HandleAcceptCompletion();
+	void HandleAcceptCompletion(int nReceivedByte);
 	void HandleWriteCompletion(Session* session);
 
 	// IO 작업 게시

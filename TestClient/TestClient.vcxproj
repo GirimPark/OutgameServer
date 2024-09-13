@@ -155,6 +155,10 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MemoryPoolTestClient.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="test.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PacketLibrary\PacketLibrary.vcxproj">

@@ -13,6 +13,9 @@
     <Filter Include="Config">
       <UniqueIdentifier>{e9633464-4068-4271-a65c-923cd34dc1af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameRoom">
+      <UniqueIdentifier>{d33ad84f-d922-4bf2-adee-f134a8c62c46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PacketHandler.cpp">
@@ -35,6 +38,12 @@
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Config</Filter>
+    </ClCompile>
+    <ClCompile Include="GameRoom.cpp">
+      <Filter>GameRoom</Filter>
+    </ClCompile>
+    <ClCompile Include="GameRoomManager.cpp">
+      <Filter>GameRoom</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +70,12 @@
     </ClInclude>
     <ClInclude Include="SharedStructure.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="GameRoom.h">
+      <Filter>GameRoom</Filter>
+    </ClInclude>
+    <ClInclude Include="GameRoomManager.h">
+      <Filter>GameRoom</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

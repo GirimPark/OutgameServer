@@ -22,7 +22,7 @@ void PacketHandler::ReceivePacket(Session* session, const char* data, int nRecei
 
 	std::shared_ptr<ReceiveStruct> receivedStruct = std::make_shared<ReceiveStruct>(packetHeader, session, data, nReceivedByte);
 
-	m_recvQueue.push(receivedStruct);
+	m_recvQueue.push(receivedStruct); 
 }
 
 void PacketHandler::Run()

@@ -18,52 +18,11 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\IOCPNetworkLibrary\IOCPNetworkLibrary.vcxproj">
-      <Project>{b8cd1d4c-3a5e-4268-8277-532ad619ef70}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\IOCPServerLibrary\IOCPServerLibrary.vcxproj">
-      <Project>{5266bd53-59b8-4db4-b682-2fcb8f0acc1e}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\PacketLibrary\PacketLibrary.vcxproj">
-      <Project>{29ab2687-53ac-4a7e-8096-6ac1ddff692d}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\UtilityLibrary\UtilityLibrary.vcxproj">
-      <Project>{476afe9f-ac69-44df-857d-b51cce089f61}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="GameRoom.cpp" />
-    <ClCompile Include="GameRoomManager.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="OutgameServer.cpp" />
-    <ClCompile Include="PacketDataFactory.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="PacketHandler.cpp" />
-    <ClCompile Include="pch.cpp" />
-    <ClCompile Include="User.cpp" />
-    <ClCompile Include="UserManager.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Define.h" />
-    <ClInclude Include="GameRoom.h" />
-    <ClInclude Include="GameRoomManager.h" />
-    <ClInclude Include="OutgameServer.h" />
-    <ClInclude Include="PacketDataFactory.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="PacketHandler.h" />
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="SharedStructure.h" />
-    <ClInclude Include="User.h" />
-    <ClInclude Include="UserManager.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{71967042-d865-4115-9e34-db3c44633332}</ProjectGuid>
-    <RootNamespace>OutgameServer</RootNamespace>
+    <ProjectGuid>{d7093571-2aef-441b-ba74-711c35fd223a}</ProjectGuid>
+    <RootNamespace>Project1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -111,14 +70,6 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ImportLibrary\Include</IncludePath>
-    <LibraryPath>$(SolutionDir)ImportLibrary\Libs\_Debug;$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)ImportLibrary\Include\</IncludePath>
-    <LibraryPath>$(SolutionDir)ImportLibrary\Libs\_Release\;$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -153,25 +104,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Create</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)ImportLibrary\Libs\_Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <HeapReserveSize>
-      </HeapReserveSize>
-      <HeapCommitSize>
-      </HeapCommitSize>
     </Link>
-    <ProjectReference>
-      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
-    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -181,25 +118,17 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Create</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionPath)/ImportLibrary/Library/Release;</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)ImportLibrary\Libs\_Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <HeapReserveSize>
-      </HeapReserveSize>
-      <HeapCommitSize>
-      </HeapCommitSize>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="test.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -45,5 +45,6 @@
     <ClCompile Include="MemoryPoolTestClient.cpp">
       <Filter>MemoryPoolTestClient</Filter>
     </ClCompile>
+    <ClCompile Include="test.cpp" />
   </ItemGroup>
 </Project>
