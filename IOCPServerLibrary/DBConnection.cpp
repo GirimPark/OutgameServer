@@ -64,7 +64,7 @@ void DBConnection::Clear()
 bool DBConnection::Execute(const WCHAR* query)
 {
 	SQLRETURN rt = ::SQLExecDirectW(m_statement, (SQLWCHAR*)query, SQL_NTSL);
-	if (rt == SQL_SUCCESS || rt == SQL_SUCCESS_WITH_INFO)
+	if (rt == SQL_SUCCESS || rt == SQL_SUCCESS_WITH_INFO || rt == SQL_NO_DATA)
 		return true;
 
 	HandleError(rt);

@@ -60,3 +60,4 @@ bool PacketBuilder::DeserializeData(const char* buffer, short size, const Packet
     std::string rt(buffer + PacketHeader::Size(), size - PacketHeader::Size());
     return data.ParseFromString(rt);
 }
+  

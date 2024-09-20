@@ -15,6 +15,10 @@ GameRoomManager::GameRoomManager()
 		{
 			HandleJoinRoomRequest(receiveStruct);
 		});
+	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_QUIT_ROOM_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
+		{
+			HandleQuitRoomRequest(receiveStruct);
+		});
 }
 
 GameRoomManager::~GameRoomManager()
@@ -160,6 +164,7 @@ bool GameRoomManager::JoinGameRoom(SessionId sessionId, std::string roomCode, st
 	if (!gameRoomIter->second->Enter(player))
 		return false;
 
+	ipAddress = gameRoomIter->second->GetRoomIpAddress();
 	return true;
 }
 
@@ -169,7 +174,14 @@ bool GameRoomManager::QuitGameRoom(SessionId sessionId)
 	if (!player)
 		return false;
 
-	player->GetActiveGameRoomRef().lock()->Quit(player);
+	std::shared_ptr<GameRoom> activeRoom = player->GetActiveGameRoomRef().lock();
+	activeRoom->Quit(player);
 
-	// Quit and PostProcess
+	if (activeRoom->GetRoomState() == ERoomStateType::DESTROYING)
+	{
+		m_roomCodes.erase(m_roomCodes.find(activeRoom->GetRoomCode()));
+		m_activeGameRooms.erase(m_activeGameRooms.find(activeRoom->GetRoomId()));
+	}
+
+	return true;
 }

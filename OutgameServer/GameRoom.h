@@ -22,6 +22,8 @@ public:
 
 	const RoomId& GetRoomId() const { return m_roomId; }
 	const std::string& GetRoomCode() const { return m_roomCode; }
+	const std::string& GetRoomIpAddress() const { return m_hostIpAddress; }
+	const ERoomStateType& GetRoomState() const { return m_roomState; }
 
 	bool Enter(std::weak_ptr<User> playerRef);
 	void Quit(std::weak_ptr<User> playerRef);

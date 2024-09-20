@@ -20,8 +20,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DatabaseTable", "DatabaseTa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UtilityLibrary", "UtilityLibrary\UtilityLibrary.vcxproj", "{476AFE9F-AC69-44DF-857D-B51CCE089F61}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Project1", "Project1\Project1.vcxproj", "{D7093571-2AEF-441B-BA74-711C35FD223A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -78,14 +76,6 @@ Global
 		{476AFE9F-AC69-44DF-857D-B51CCE089F61}.Release|x64.Build.0 = Release|x64
 		{476AFE9F-AC69-44DF-857D-B51CCE089F61}.Release|x86.ActiveCfg = Release|Win32
 		{476AFE9F-AC69-44DF-857D-B51CCE089F61}.Release|x86.Build.0 = Release|Win32
-		{D7093571-2AEF-441B-BA74-711C35FD223A}.Debug|x64.ActiveCfg = Debug|x64
-		{D7093571-2AEF-441B-BA74-711C35FD223A}.Debug|x64.Build.0 = Debug|x64
-		{D7093571-2AEF-441B-BA74-711C35FD223A}.Debug|x86.ActiveCfg = Debug|Win32
-		{D7093571-2AEF-441B-BA74-711C35FD223A}.Debug|x86.Build.0 = Debug|Win32
-		{D7093571-2AEF-441B-BA74-711C35FD223A}.Release|x64.ActiveCfg = Release|x64
-		{D7093571-2AEF-441B-BA74-711C35FD223A}.Release|x64.Build.0 = Release|x64
-		{D7093571-2AEF-441B-BA74-711C35FD223A}.Release|x86.ActiveCfg = Release|Win32
-		{D7093571-2AEF-441B-BA74-711C35FD223A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

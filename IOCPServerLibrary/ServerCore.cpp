@@ -405,7 +405,7 @@ void ServerCore::HandleAcceptCompletion(int nReceivedByte)
 
     GetAcceptExSockaddrs(
         m_pListenSocketCtxt->acceptBuffer,
-        0,
+        INIT_DATA_SIZE,
         sizeof(SOCKADDR_IN) + IP_SIZE,
         sizeof(SOCKADDR_IN) + IP_SIZE,
         (sockaddr**)&localAddr,
@@ -450,9 +450,9 @@ void ServerCore::HandleAcceptCompletion(int nReceivedByte)
 
     char addr[INET_ADDRSTRLEN];
     inet_ntop(AF_INET, &localAddr->sin_addr, addr, INET_ADDRSTRLEN);
-    //printf("Local Address: %s\n", addr);
+    printf("Local Address: %s\n", addr);
     inet_ntop(AF_INET, &remoteAddr->sin_addr, addr, INET_ADDRSTRLEN);
-    //printf("Remote Address: %s\n", addr);
+    printf("Remote Address: %s\n", addr);
 
     // 초기데이터 처리
     OnReceiveData(session, m_pListenSocketCtxt->acceptBuffer, nReceivedByte);
@@ -549,7 +549,7 @@ bool ServerCore::StartAccept()
         m_pListenSocketCtxt->listenSocket,
         m_pListenSocketCtxt->acceptedSocket,
         m_pListenSocketCtxt->acceptBuffer,
-        sizeof(m_pListenSocketCtxt->acceptBuffer),
+        INIT_DATA_SIZE,
         sizeof(SOCKADDR_IN) + IP_SIZE,
         sizeof(SOCKADDR_IN) + IP_SIZE,
         &nRecvByte,

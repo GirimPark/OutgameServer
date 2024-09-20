@@ -21,6 +21,11 @@ GameRoom::GameRoom(std::shared_ptr<User> hostPlayer) : m_hostPlayer(hostPlayer)
 
 GameRoom::~GameRoom()
 {
+	for(auto& playerIter : m_players)
+	{
+		playerIter.second.lock()->ResetActiveGameRoom();
+	}
+
 	m_players.clear();
 }
 
@@ -45,7 +50,6 @@ void GameRoom::Quit(std::weak_ptr<User> playerRef)
 	if(player == m_hostPlayer.lock())
 	{
 		m_roomState = ERoomStateType::DESTROYING;
-		//m_players.erase()
 	}
 	else
 	{
