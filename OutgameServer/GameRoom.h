@@ -1,6 +1,5 @@
 #pragma once
 
-typedef unsigned int RoomId;
 #define MAX_PLAYER_NUM 4
 
 class User;
@@ -20,19 +19,20 @@ public:
 	GameRoom(std::shared_ptr<User> hostPlayer);
 	~GameRoom();
 
-	const RoomId& GetRoomId() const { return m_roomId; }
 	const std::string& GetRoomCode() const { return m_roomCode; }
 	const std::string& GetRoomIpAddress() const { return m_hostIpAddress; }
 	const ERoomStateType& GetRoomState() const { return m_roomState; }
+	std::weak_ptr<User> GetHostPlayer() const { return m_hostPlayer; }
 
 	bool Enter(std::weak_ptr<User> playerRef);
 	void Quit(std::weak_ptr<User> playerRef);
+
+	void RegenerateRoomCode();
 
 private:
 	void GenerateRoomCode();
 
 private:
-	RoomId m_roomId;
 	std::string m_roomCode;
 	ERoomStateType m_roomState = ERoomStateType::NONE;
 

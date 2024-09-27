@@ -2,11 +2,10 @@
 #include "GameRoom.h"
 
 #include "User.h"
+#include <random>
 
 GameRoom::GameRoom(std::shared_ptr<User> hostPlayer) : m_hostPlayer(hostPlayer)
 {
-	static unsigned int roomIdCnt = 0;
-	m_roomId = roomIdCnt++;
 	GenerateRoomCode();
 
 	m_roomState = ERoomStateType::WAIT;
@@ -58,7 +57,21 @@ void GameRoom::Quit(std::weak_ptr<User> playerRef)
 
 }
 
+void GameRoom::RegenerateRoomCode()
+{
+	GenerateRoomCode();
+}
+
 void GameRoom::GenerateRoomCode()
 {
-	m_roomCode = std::to_string(m_roomId);
+	//const std::string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	const std::string chars = "0123456789";
+	std::random_device rd;
+	std::mt19937 generator(rd());
+	std::uniform_int_distribution<> distr(0, chars.size() - 1);
+
+	for (int i = 0; i < 4; ++i)
+	{
+		m_roomCode += chars[distr(generator)];
+	}
 }

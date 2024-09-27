@@ -5,8 +5,13 @@
 #include "User.h"
 #include "UserManager.h"
 
+concurrency::concurrent_unordered_map<std::string, std::shared_ptr<GameRoom>> GameRoomManager::s_activeGameRooms;
+CRITICAL_SECTION GameRoomManager::s_gameRoomsLock;
+
 GameRoomManager::GameRoomManager()
 {
+	InitializeCriticalSection(&s_gameRoomsLock);
+
 	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_CREATE_ROOM_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
 		{
 			HandleCreateRoomRequest(receiveStruct);
@@ -23,7 +28,9 @@ GameRoomManager::GameRoomManager()
 
 GameRoomManager::~GameRoomManager()
 {
-	m_activeGameRooms.clear();
+	DeleteCriticalSection(&s_gameRoomsLock);
+
+	s_activeGameRooms.clear();
 }
 
 void GameRoomManager::HandleCreateRoomRequest(std::shared_ptr<ReceiveStruct> receiveStructure)
@@ -78,15 +85,22 @@ void GameRoomManager::HandleJoinRoomRequest(std::shared_ptr<ReceiveStruct> recei
 	// data
 	std::shared_ptr<Protocol::S2C_JoinRoomResponse> response = std::make_shared<Protocol::S2C_JoinRoomResponse>();
 	std::string ipAddress;
-	if (JoinGameRoom(receiveStructure->session->GetSessionId(), joinRoomRequest->roomcode(), OUT ipAddress))
+
+	switch (EJoinRoomResponse rt = JoinGameRoom(receiveStructure->session->GetSessionId(), joinRoomRequest->roomcode(), OUT ipAddress))
 	{
-		response->mutable_success()->set_value(true);
+	case SUCCESS:
+		{
+		response->set_resultcode(rt);
 		response->set_ipaddress(ipAddress);
+		break;
+		}
+	default:
+		{
+		response->set_resultcode(rt);
+		break;
+		}
 	}
-	else
-	{
-		response->mutable_success()->set_value(false);
-	}
+
 	sendStruct->data = response;
 	//header
 	std::string serializedString;
@@ -136,8 +150,17 @@ std::shared_ptr<GameRoom> GameRoomManager::CreateGameRoom(SessionId sessionId)
 		return nullptr;
 
 	std::shared_ptr<GameRoom> gameRoom = std::make_shared<GameRoom>(hostPlayer);
-	m_roomCodes.insert({ gameRoom->GetRoomCode(), gameRoom->GetRoomId() });
-	m_activeGameRooms.insert({ gameRoom->GetRoomId(), gameRoom });
+
+	EnterCriticalSection(&s_gameRoomsLock);
+	auto snapshot = s_activeGameRooms;
+	LeaveCriticalSection(&s_gameRoomsLock);
+
+	while(snapshot.find(gameRoom->GetRoomCode()) != snapshot.end())
+	{
+		gameRoom->RegenerateRoomCode();
+	}
+
+	s_activeGameRooms.insert({ gameRoom->GetRoomCode(), gameRoom });
 
 	if (!gameRoom->Enter(hostPlayer))
 		return nullptr;
@@ -145,27 +168,40 @@ std::shared_ptr<GameRoom> GameRoomManager::CreateGameRoom(SessionId sessionId)
 	return gameRoom;
 }
 
-bool GameRoomManager::JoinGameRoom(SessionId sessionId, std::string roomCode, std::string& ipAddress)
+EJoinRoomResponse GameRoomManager::JoinGameRoom(SessionId sessionId, std::string roomCode, std::string& ipAddress)
 {
-	// Find Room
-	auto roomCodeIter = m_roomCodes.find(roomCode);
-	if(roomCodeIter == m_roomCodes.end())
-		return false;
-
-	auto gameRoomIter = m_activeGameRooms.find(roomCodeIter->second);
-	ASSERT_CRASH(gameRoomIter != m_activeGameRooms.end());
-
 	// Find Player
 	std::shared_ptr<User> player = UserManager::FindActiveUser(sessionId).lock();
 	if (!player)
-		return false;
+		return EJoinRoomResponse::UNKNOWN;
+
+	// Find Room
+	EnterCriticalSection(&s_gameRoomsLock);
+	auto gameRoomIter = s_activeGameRooms.find(roomCode);
+	if (gameRoomIter == s_activeGameRooms.end())	// ¾ø´Â ¹æ
+	{
+		LeaveCriticalSection(&s_gameRoomsLock);
+		return EJoinRoomResponse::INVALID_ROOM;
+	}
+	std::shared_ptr<GameRoom> gameRoom = gameRoomIter->second;
+
+	// Check Room State
+	if (gameRoom->GetRoomState() == ERoomStateType::DESTROYING)
+	{
+		LeaveCriticalSection(&s_gameRoomsLock);
+		return EJoinRoomResponse::INVALID_ROOM;
+	}
 
 	// Enter
-	if (!gameRoomIter->second->Enter(player))
-		return false;
+	if (!gameRoom->Enter(player))
+	{
+		LeaveCriticalSection(&s_gameRoomsLock);
+		return EJoinRoomResponse::OVER_PLAYER;
+	}
+	LeaveCriticalSection(&s_gameRoomsLock);
 
-	ipAddress = gameRoomIter->second->GetRoomIpAddress();
-	return true;
+	ipAddress = gameRoom->GetRoomIpAddress();
+	return SUCCESS;
 }
 
 bool GameRoomManager::QuitGameRoom(SessionId sessionId)
@@ -179,8 +215,9 @@ bool GameRoomManager::QuitGameRoom(SessionId sessionId)
 
 	if (activeRoom->GetRoomState() == ERoomStateType::DESTROYING)
 	{
-		m_roomCodes.erase(m_roomCodes.find(activeRoom->GetRoomCode()));
-		m_activeGameRooms.erase(m_activeGameRooms.find(activeRoom->GetRoomId()));
+		EnterCriticalSection(&s_gameRoomsLock);
+		s_activeGameRooms.unsafe_erase(activeRoom->GetRoomCode());
+		LeaveCriticalSection(&s_gameRoomsLock);
 	}
 
 	return true;

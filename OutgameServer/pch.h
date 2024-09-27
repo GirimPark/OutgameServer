@@ -4,6 +4,8 @@
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 
+#define DB_INCLUDE_VERSION
+
 /// Network
 #include <WinSock2.h>	// winsock과의 재정의 문제로 가장 먼저 컴파일 되어야함
 #include <mswsock.h>
@@ -41,6 +43,7 @@
 
 #include "../PacketLibrary/PacketHeader.h"
 #include "../PacketLibrary/PacketBuilder.h"
+#include "../PacketLibrary/PacketID.h"
 #include "../PacketLibrary/Protocol.pb.h"
 
 #include "../IOCPServerLibrary/Define.h"

@@ -48,7 +48,7 @@ struct TableStruct_Protocol_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[20]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[36]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -56,12 +56,27 @@ struct TableStruct_Protocol_2eproto {
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Protocol_2eproto;
 namespace Protocol {
+class C2S_AcceptFriendRequest;
+struct C2S_AcceptFriendRequestDefaultTypeInternal;
+extern C2S_AcceptFriendRequestDefaultTypeInternal _C2S_AcceptFriendRequest_default_instance_;
+class C2S_AcceptInvitationRequest;
+struct C2S_AcceptInvitationRequestDefaultTypeInternal;
+extern C2S_AcceptInvitationRequestDefaultTypeInternal _C2S_AcceptInvitationRequest_default_instance_;
+class C2S_AddFriendRequest;
+struct C2S_AddFriendRequestDefaultTypeInternal;
+extern C2S_AddFriendRequestDefaultTypeInternal _C2S_AddFriendRequest_default_instance_;
 class C2S_CreateRoomRequest;
 struct C2S_CreateRoomRequestDefaultTypeInternal;
 extern C2S_CreateRoomRequestDefaultTypeInternal _C2S_CreateRoomRequest_default_instance_;
-class C2S_InviteUserRequest;
-struct C2S_InviteUserRequestDefaultTypeInternal;
-extern C2S_InviteUserRequestDefaultTypeInternal _C2S_InviteUserRequest_default_instance_;
+class C2S_DelFriendRequest;
+struct C2S_DelFriendRequestDefaultTypeInternal;
+extern C2S_DelFriendRequestDefaultTypeInternal _C2S_DelFriendRequest_default_instance_;
+class C2S_FindFriendRequest;
+struct C2S_FindFriendRequestDefaultTypeInternal;
+extern C2S_FindFriendRequestDefaultTypeInternal _C2S_FindFriendRequest_default_instance_;
+class C2S_InviteFriendRequest;
+struct C2S_InviteFriendRequestDefaultTypeInternal;
+extern C2S_InviteFriendRequestDefaultTypeInternal _C2S_InviteFriendRequest_default_instance_;
 class C2S_JoinRequest;
 struct C2S_JoinRequestDefaultTypeInternal;
 extern C2S_JoinRequestDefaultTypeInternal _C2S_JoinRequest_default_instance_;
@@ -77,21 +92,42 @@ extern C2S_LogoutRequestDefaultTypeInternal _C2S_LogoutRequest_default_instance_
 class C2S_QuitRoomRequest;
 struct C2S_QuitRoomRequestDefaultTypeInternal;
 extern C2S_QuitRoomRequestDefaultTypeInternal _C2S_QuitRoomRequest_default_instance_;
+class C2S_RefuseFriendRequest;
+struct C2S_RefuseFriendRequestDefaultTypeInternal;
+extern C2S_RefuseFriendRequestDefaultTypeInternal _C2S_RefuseFriendRequest_default_instance_;
 class C2S_StartGameRequest;
 struct C2S_StartGameRequestDefaultTypeInternal;
 extern C2S_StartGameRequestDefaultTypeInternal _C2S_StartGameRequest_default_instance_;
 class C2S_ValidationResponse;
 struct C2S_ValidationResponseDefaultTypeInternal;
 extern C2S_ValidationResponseDefaultTypeInternal _C2S_ValidationResponse_default_instance_;
+class FriendInfo;
+struct FriendInfoDefaultTypeInternal;
+extern FriendInfoDefaultTypeInternal _FriendInfo_default_instance_;
+class S2C_AcceptFriendResponse;
+struct S2C_AcceptFriendResponseDefaultTypeInternal;
+extern S2C_AcceptFriendResponseDefaultTypeInternal _S2C_AcceptFriendResponse_default_instance_;
+class S2C_AcceptInvitationResponse;
+struct S2C_AcceptInvitationResponseDefaultTypeInternal;
+extern S2C_AcceptInvitationResponseDefaultTypeInternal _S2C_AcceptInvitationResponse_default_instance_;
+class S2C_AddFriendResponse;
+struct S2C_AddFriendResponseDefaultTypeInternal;
+extern S2C_AddFriendResponseDefaultTypeInternal _S2C_AddFriendResponse_default_instance_;
 class S2C_CreateRoomResponse;
 struct S2C_CreateRoomResponseDefaultTypeInternal;
 extern S2C_CreateRoomResponseDefaultTypeInternal _S2C_CreateRoomResponse_default_instance_;
-class S2C_InviteUserNotification;
-struct S2C_InviteUserNotificationDefaultTypeInternal;
-extern S2C_InviteUserNotificationDefaultTypeInternal _S2C_InviteUserNotification_default_instance_;
-class S2C_InviteUserResponse;
-struct S2C_InviteUserResponseDefaultTypeInternal;
-extern S2C_InviteUserResponseDefaultTypeInternal _S2C_InviteUserResponse_default_instance_;
+class S2C_DelFriendResponse;
+struct S2C_DelFriendResponseDefaultTypeInternal;
+extern S2C_DelFriendResponseDefaultTypeInternal _S2C_DelFriendResponse_default_instance_;
+class S2C_FindFriendResponse;
+struct S2C_FindFriendResponseDefaultTypeInternal;
+extern S2C_FindFriendResponseDefaultTypeInternal _S2C_FindFriendResponse_default_instance_;
+class S2C_InviteFriendNotification;
+struct S2C_InviteFriendNotificationDefaultTypeInternal;
+extern S2C_InviteFriendNotificationDefaultTypeInternal _S2C_InviteFriendNotification_default_instance_;
+class S2C_InviteFriendResponse;
+struct S2C_InviteFriendResponseDefaultTypeInternal;
+extern S2C_InviteFriendResponseDefaultTypeInternal _S2C_InviteFriendResponse_default_instance_;
 class S2C_JoinResponse;
 struct S2C_JoinResponseDefaultTypeInternal;
 extern S2C_JoinResponseDefaultTypeInternal _S2C_JoinResponse_default_instance_;
@@ -107,6 +143,9 @@ extern S2C_LogoutResponseDefaultTypeInternal _S2C_LogoutResponse_default_instanc
 class S2C_QuitRoomResponse;
 struct S2C_QuitRoomResponseDefaultTypeInternal;
 extern S2C_QuitRoomResponseDefaultTypeInternal _S2C_QuitRoomResponse_default_instance_;
+class S2C_RefuseFriendResponse;
+struct S2C_RefuseFriendResponseDefaultTypeInternal;
+extern S2C_RefuseFriendResponseDefaultTypeInternal _S2C_RefuseFriendResponse_default_instance_;
 class S2C_SessionExpiredNotification;
 struct S2C_SessionExpiredNotificationDefaultTypeInternal;
 extern S2C_SessionExpiredNotificationDefaultTypeInternal _S2C_SessionExpiredNotification_default_instance_;
@@ -116,32 +155,219 @@ extern S2C_StartGameResponseDefaultTypeInternal _S2C_StartGameResponse_default_i
 class S2C_ValidationRequest;
 struct S2C_ValidationRequestDefaultTypeInternal;
 extern S2C_ValidationRequestDefaultTypeInternal _S2C_ValidationRequest_default_instance_;
+class S2O_AcceptFriendNotification;
+struct S2O_AcceptFriendNotificationDefaultTypeInternal;
+extern S2O_AcceptFriendNotificationDefaultTypeInternal _S2O_AcceptFriendNotification_default_instance_;
+class S2O_AddFriendNotification;
+struct S2O_AddFriendNotificationDefaultTypeInternal;
+extern S2O_AddFriendNotificationDefaultTypeInternal _S2O_AddFriendNotification_default_instance_;
+class S2O_UpdateStateNotification;
+struct S2O_UpdateStateNotificationDefaultTypeInternal;
+extern S2O_UpdateStateNotificationDefaultTypeInternal _S2O_UpdateStateNotification_default_instance_;
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
+template<> ::Protocol::C2S_AcceptFriendRequest* Arena::CreateMaybeMessage<::Protocol::C2S_AcceptFriendRequest>(Arena*);
+template<> ::Protocol::C2S_AcceptInvitationRequest* Arena::CreateMaybeMessage<::Protocol::C2S_AcceptInvitationRequest>(Arena*);
+template<> ::Protocol::C2S_AddFriendRequest* Arena::CreateMaybeMessage<::Protocol::C2S_AddFriendRequest>(Arena*);
 template<> ::Protocol::C2S_CreateRoomRequest* Arena::CreateMaybeMessage<::Protocol::C2S_CreateRoomRequest>(Arena*);
-template<> ::Protocol::C2S_InviteUserRequest* Arena::CreateMaybeMessage<::Protocol::C2S_InviteUserRequest>(Arena*);
+template<> ::Protocol::C2S_DelFriendRequest* Arena::CreateMaybeMessage<::Protocol::C2S_DelFriendRequest>(Arena*);
+template<> ::Protocol::C2S_FindFriendRequest* Arena::CreateMaybeMessage<::Protocol::C2S_FindFriendRequest>(Arena*);
+template<> ::Protocol::C2S_InviteFriendRequest* Arena::CreateMaybeMessage<::Protocol::C2S_InviteFriendRequest>(Arena*);
 template<> ::Protocol::C2S_JoinRequest* Arena::CreateMaybeMessage<::Protocol::C2S_JoinRequest>(Arena*);
 template<> ::Protocol::C2S_JoinRoomRequest* Arena::CreateMaybeMessage<::Protocol::C2S_JoinRoomRequest>(Arena*);
 template<> ::Protocol::C2S_LoginRequest* Arena::CreateMaybeMessage<::Protocol::C2S_LoginRequest>(Arena*);
 template<> ::Protocol::C2S_LogoutRequest* Arena::CreateMaybeMessage<::Protocol::C2S_LogoutRequest>(Arena*);
 template<> ::Protocol::C2S_QuitRoomRequest* Arena::CreateMaybeMessage<::Protocol::C2S_QuitRoomRequest>(Arena*);
+template<> ::Protocol::C2S_RefuseFriendRequest* Arena::CreateMaybeMessage<::Protocol::C2S_RefuseFriendRequest>(Arena*);
 template<> ::Protocol::C2S_StartGameRequest* Arena::CreateMaybeMessage<::Protocol::C2S_StartGameRequest>(Arena*);
 template<> ::Protocol::C2S_ValidationResponse* Arena::CreateMaybeMessage<::Protocol::C2S_ValidationResponse>(Arena*);
+template<> ::Protocol::FriendInfo* Arena::CreateMaybeMessage<::Protocol::FriendInfo>(Arena*);
+template<> ::Protocol::S2C_AcceptFriendResponse* Arena::CreateMaybeMessage<::Protocol::S2C_AcceptFriendResponse>(Arena*);
+template<> ::Protocol::S2C_AcceptInvitationResponse* Arena::CreateMaybeMessage<::Protocol::S2C_AcceptInvitationResponse>(Arena*);
+template<> ::Protocol::S2C_AddFriendResponse* Arena::CreateMaybeMessage<::Protocol::S2C_AddFriendResponse>(Arena*);
 template<> ::Protocol::S2C_CreateRoomResponse* Arena::CreateMaybeMessage<::Protocol::S2C_CreateRoomResponse>(Arena*);
-template<> ::Protocol::S2C_InviteUserNotification* Arena::CreateMaybeMessage<::Protocol::S2C_InviteUserNotification>(Arena*);
-template<> ::Protocol::S2C_InviteUserResponse* Arena::CreateMaybeMessage<::Protocol::S2C_InviteUserResponse>(Arena*);
+template<> ::Protocol::S2C_DelFriendResponse* Arena::CreateMaybeMessage<::Protocol::S2C_DelFriendResponse>(Arena*);
+template<> ::Protocol::S2C_FindFriendResponse* Arena::CreateMaybeMessage<::Protocol::S2C_FindFriendResponse>(Arena*);
+template<> ::Protocol::S2C_InviteFriendNotification* Arena::CreateMaybeMessage<::Protocol::S2C_InviteFriendNotification>(Arena*);
+template<> ::Protocol::S2C_InviteFriendResponse* Arena::CreateMaybeMessage<::Protocol::S2C_InviteFriendResponse>(Arena*);
 template<> ::Protocol::S2C_JoinResponse* Arena::CreateMaybeMessage<::Protocol::S2C_JoinResponse>(Arena*);
 template<> ::Protocol::S2C_JoinRoomResponse* Arena::CreateMaybeMessage<::Protocol::S2C_JoinRoomResponse>(Arena*);
 template<> ::Protocol::S2C_LoginResponse* Arena::CreateMaybeMessage<::Protocol::S2C_LoginResponse>(Arena*);
 template<> ::Protocol::S2C_LogoutResponse* Arena::CreateMaybeMessage<::Protocol::S2C_LogoutResponse>(Arena*);
 template<> ::Protocol::S2C_QuitRoomResponse* Arena::CreateMaybeMessage<::Protocol::S2C_QuitRoomResponse>(Arena*);
+template<> ::Protocol::S2C_RefuseFriendResponse* Arena::CreateMaybeMessage<::Protocol::S2C_RefuseFriendResponse>(Arena*);
 template<> ::Protocol::S2C_SessionExpiredNotification* Arena::CreateMaybeMessage<::Protocol::S2C_SessionExpiredNotification>(Arena*);
 template<> ::Protocol::S2C_StartGameResponse* Arena::CreateMaybeMessage<::Protocol::S2C_StartGameResponse>(Arena*);
 template<> ::Protocol::S2C_ValidationRequest* Arena::CreateMaybeMessage<::Protocol::S2C_ValidationRequest>(Arena*);
+template<> ::Protocol::S2O_AcceptFriendNotification* Arena::CreateMaybeMessage<::Protocol::S2O_AcceptFriendNotification>(Arena*);
+template<> ::Protocol::S2O_AddFriendNotification* Arena::CreateMaybeMessage<::Protocol::S2O_AddFriendNotification>(Arena*);
+template<> ::Protocol::S2O_UpdateStateNotification* Arena::CreateMaybeMessage<::Protocol::S2O_UpdateStateNotification>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace Protocol {
 
 // ===================================================================
+
+class FriendInfo final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.FriendInfo) */ {
+ public:
+  inline FriendInfo() : FriendInfo(nullptr) {}
+  ~FriendInfo() override;
+  explicit constexpr FriendInfo(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  FriendInfo(const FriendInfo& from);
+  FriendInfo(FriendInfo&& from) noexcept
+    : FriendInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline FriendInfo& operator=(const FriendInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline FriendInfo& operator=(FriendInfo&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const FriendInfo& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const FriendInfo* internal_default_instance() {
+    return reinterpret_cast<const FriendInfo*>(
+               &_FriendInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    0;
+
+  friend void swap(FriendInfo& a, FriendInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(FriendInfo* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(FriendInfo* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  FriendInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<FriendInfo>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const FriendInfo& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const FriendInfo& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(FriendInfo* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.FriendInfo";
+  }
+  protected:
+  explicit FriendInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kUsernameFieldNumber = 1,
+    kStateFieldNumber = 2,
+  };
+  // string username = 1;
+  void clear_username();
+  const std::string& username() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_username(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_username();
+  PROTOBUF_NODISCARD std::string* release_username();
+  void set_allocated_username(std::string* username);
+  private:
+  const std::string& _internal_username() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_username(const std::string& value);
+  std::string* _internal_mutable_username();
+  public:
+
+  // int32 state = 2;
+  void clear_state();
+  int32_t state() const;
+  void set_state(int32_t value);
+  private:
+  int32_t _internal_state() const;
+  void _internal_set_state(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.FriendInfo)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr username_;
+  int32_t state_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
 
 class S2C_ValidationRequest final :
     public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:Protocol.S2C_ValidationRequest) */ {
@@ -190,7 +416,7 @@ class S2C_ValidationRequest final :
                &_S2C_ValidationRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    0;
+    1;
 
   friend void swap(S2C_ValidationRequest& a, S2C_ValidationRequest& b) {
     a.Swap(&b);
@@ -308,7 +534,7 @@ class C2S_ValidationResponse final :
                &_C2S_ValidationResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    2;
 
   friend void swap(C2S_ValidationResponse& a, C2S_ValidationResponse& b) {
     a.Swap(&b);
@@ -426,7 +652,7 @@ class S2C_SessionExpiredNotification final :
                &_S2C_SessionExpiredNotification_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    3;
 
   friend void swap(S2C_SessionExpiredNotification& a, S2C_SessionExpiredNotification& b) {
     a.Swap(&b);
@@ -545,7 +771,7 @@ class C2S_LoginRequest final :
                &_C2S_LoginRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    4;
 
   friend void swap(C2S_LoginRequest& a, C2S_LoginRequest& b) {
     a.Swap(&b);
@@ -712,7 +938,7 @@ class S2C_LoginResponse final :
                &_S2C_LoginResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    5;
 
   friend void swap(S2C_LoginResponse& a, S2C_LoginResponse& b) {
     a.Swap(&b);
@@ -786,8 +1012,46 @@ class S2C_LoginResponse final :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kFriendListFieldNumber = 2,
+    kPendingListFieldNumber = 3,
     kSuccessFieldNumber = 1,
   };
+  // repeated .Protocol.FriendInfo friendList = 2;
+  int friendlist_size() const;
+  private:
+  int _internal_friendlist_size() const;
+  public:
+  void clear_friendlist();
+  ::Protocol::FriendInfo* mutable_friendlist(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::FriendInfo >*
+      mutable_friendlist();
+  private:
+  const ::Protocol::FriendInfo& _internal_friendlist(int index) const;
+  ::Protocol::FriendInfo* _internal_add_friendlist();
+  public:
+  const ::Protocol::FriendInfo& friendlist(int index) const;
+  ::Protocol::FriendInfo* add_friendlist();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::FriendInfo >&
+      friendlist() const;
+
+  // repeated .Protocol.FriendInfo pendingList = 3;
+  int pendinglist_size() const;
+  private:
+  int _internal_pendinglist_size() const;
+  public:
+  void clear_pendinglist();
+  ::Protocol::FriendInfo* mutable_pendinglist(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::FriendInfo >*
+      mutable_pendinglist();
+  private:
+  const ::Protocol::FriendInfo& _internal_pendinglist(int index) const;
+  ::Protocol::FriendInfo* _internal_add_pendinglist();
+  public:
+  const ::Protocol::FriendInfo& pendinglist(int index) const;
+  ::Protocol::FriendInfo* add_pendinglist();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::FriendInfo >&
+      pendinglist() const;
+
   // .google.protobuf.BoolValue success = 1;
   bool has_success() const;
   private:
@@ -813,6 +1077,8 @@ class S2C_LoginResponse final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::FriendInfo > friendlist_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::FriendInfo > pendinglist_;
   ::PROTOBUF_NAMESPACE_ID::BoolValue* success_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Protocol_2eproto;
@@ -866,7 +1132,7 @@ class C2S_LogoutRequest final :
                &_C2S_LogoutRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    6;
 
   friend void swap(C2S_LogoutRequest& a, C2S_LogoutRequest& b) {
     a.Swap(&b);
@@ -984,7 +1250,7 @@ class S2C_LogoutResponse final :
                &_S2C_LogoutResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    7;
 
   friend void swap(S2C_LogoutResponse& a, S2C_LogoutResponse& b) {
     a.Swap(&b);
@@ -1103,7 +1369,7 @@ class C2S_JoinRequest final :
                &_C2S_JoinRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    8;
 
   friend void swap(C2S_JoinRequest& a, C2S_JoinRequest& b) {
     a.Swap(&b);
@@ -1270,7 +1536,7 @@ class S2C_JoinResponse final :
                &_S2C_JoinResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    9;
 
   friend void swap(S2C_JoinResponse& a, S2C_JoinResponse& b) {
     a.Swap(&b);
@@ -1377,6 +1643,1998 @@ class S2C_JoinResponse final :
 };
 // -------------------------------------------------------------------
 
+class C2S_FindFriendRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C2S_FindFriendRequest) */ {
+ public:
+  inline C2S_FindFriendRequest() : C2S_FindFriendRequest(nullptr) {}
+  ~C2S_FindFriendRequest() override;
+  explicit constexpr C2S_FindFriendRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C2S_FindFriendRequest(const C2S_FindFriendRequest& from);
+  C2S_FindFriendRequest(C2S_FindFriendRequest&& from) noexcept
+    : C2S_FindFriendRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline C2S_FindFriendRequest& operator=(const C2S_FindFriendRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C2S_FindFriendRequest& operator=(C2S_FindFriendRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C2S_FindFriendRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C2S_FindFriendRequest* internal_default_instance() {
+    return reinterpret_cast<const C2S_FindFriendRequest*>(
+               &_C2S_FindFriendRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    10;
+
+  friend void swap(C2S_FindFriendRequest& a, C2S_FindFriendRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C2S_FindFriendRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C2S_FindFriendRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  C2S_FindFriendRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<C2S_FindFriendRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const C2S_FindFriendRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const C2S_FindFriendRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C2S_FindFriendRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C2S_FindFriendRequest";
+  }
+  protected:
+  explicit C2S_FindFriendRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kUsernameFieldNumber = 1,
+  };
+  // string username = 1;
+  void clear_username();
+  const std::string& username() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_username(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_username();
+  PROTOBUF_NODISCARD std::string* release_username();
+  void set_allocated_username(std::string* username);
+  private:
+  const std::string& _internal_username() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_username(const std::string& value);
+  std::string* _internal_mutable_username();
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.C2S_FindFriendRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr username_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S2C_FindFriendResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S2C_FindFriendResponse) */ {
+ public:
+  inline S2C_FindFriendResponse() : S2C_FindFriendResponse(nullptr) {}
+  ~S2C_FindFriendResponse() override;
+  explicit constexpr S2C_FindFriendResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S2C_FindFriendResponse(const S2C_FindFriendResponse& from);
+  S2C_FindFriendResponse(S2C_FindFriendResponse&& from) noexcept
+    : S2C_FindFriendResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline S2C_FindFriendResponse& operator=(const S2C_FindFriendResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S2C_FindFriendResponse& operator=(S2C_FindFriendResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S2C_FindFriendResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S2C_FindFriendResponse* internal_default_instance() {
+    return reinterpret_cast<const S2C_FindFriendResponse*>(
+               &_S2C_FindFriendResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    11;
+
+  friend void swap(S2C_FindFriendResponse& a, S2C_FindFriendResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S2C_FindFriendResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S2C_FindFriendResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S2C_FindFriendResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S2C_FindFriendResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S2C_FindFriendResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const S2C_FindFriendResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S2C_FindFriendResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S2C_FindFriendResponse";
+  }
+  protected:
+  explicit S2C_FindFriendResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kExistFieldNumber = 1,
+    kFriendInfoFieldNumber = 2,
+    kRequestStateFieldNumber = 3,
+  };
+  // .google.protobuf.BoolValue exist = 1;
+  bool has_exist() const;
+  private:
+  bool _internal_has_exist() const;
+  public:
+  void clear_exist();
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue& exist() const;
+  PROTOBUF_NODISCARD ::PROTOBUF_NAMESPACE_ID::BoolValue* release_exist();
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* mutable_exist();
+  void set_allocated_exist(::PROTOBUF_NAMESPACE_ID::BoolValue* exist);
+  private:
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue& _internal_exist() const;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* _internal_mutable_exist();
+  public:
+  void unsafe_arena_set_allocated_exist(
+      ::PROTOBUF_NAMESPACE_ID::BoolValue* exist);
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* unsafe_arena_release_exist();
+
+  // .Protocol.FriendInfo friendInfo = 2;
+  bool has_friendinfo() const;
+  private:
+  bool _internal_has_friendinfo() const;
+  public:
+  void clear_friendinfo();
+  const ::Protocol::FriendInfo& friendinfo() const;
+  PROTOBUF_NODISCARD ::Protocol::FriendInfo* release_friendinfo();
+  ::Protocol::FriendInfo* mutable_friendinfo();
+  void set_allocated_friendinfo(::Protocol::FriendInfo* friendinfo);
+  private:
+  const ::Protocol::FriendInfo& _internal_friendinfo() const;
+  ::Protocol::FriendInfo* _internal_mutable_friendinfo();
+  public:
+  void unsafe_arena_set_allocated_friendinfo(
+      ::Protocol::FriendInfo* friendinfo);
+  ::Protocol::FriendInfo* unsafe_arena_release_friendinfo();
+
+  // int32 requestState = 3;
+  void clear_requeststate();
+  int32_t requeststate() const;
+  void set_requeststate(int32_t value);
+  private:
+  int32_t _internal_requeststate() const;
+  void _internal_set_requeststate(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S2C_FindFriendResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* exist_;
+  ::Protocol::FriendInfo* friendinfo_;
+  int32_t requeststate_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class C2S_AddFriendRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C2S_AddFriendRequest) */ {
+ public:
+  inline C2S_AddFriendRequest() : C2S_AddFriendRequest(nullptr) {}
+  ~C2S_AddFriendRequest() override;
+  explicit constexpr C2S_AddFriendRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C2S_AddFriendRequest(const C2S_AddFriendRequest& from);
+  C2S_AddFriendRequest(C2S_AddFriendRequest&& from) noexcept
+    : C2S_AddFriendRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline C2S_AddFriendRequest& operator=(const C2S_AddFriendRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C2S_AddFriendRequest& operator=(C2S_AddFriendRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C2S_AddFriendRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C2S_AddFriendRequest* internal_default_instance() {
+    return reinterpret_cast<const C2S_AddFriendRequest*>(
+               &_C2S_AddFriendRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    12;
+
+  friend void swap(C2S_AddFriendRequest& a, C2S_AddFriendRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C2S_AddFriendRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C2S_AddFriendRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  C2S_AddFriendRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<C2S_AddFriendRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const C2S_AddFriendRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const C2S_AddFriendRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C2S_AddFriendRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C2S_AddFriendRequest";
+  }
+  protected:
+  explicit C2S_AddFriendRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kUsernameFieldNumber = 1,
+  };
+  // string username = 1;
+  void clear_username();
+  const std::string& username() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_username(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_username();
+  PROTOBUF_NODISCARD std::string* release_username();
+  void set_allocated_username(std::string* username);
+  private:
+  const std::string& _internal_username() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_username(const std::string& value);
+  std::string* _internal_mutable_username();
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.C2S_AddFriendRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr username_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S2C_AddFriendResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S2C_AddFriendResponse) */ {
+ public:
+  inline S2C_AddFriendResponse() : S2C_AddFriendResponse(nullptr) {}
+  ~S2C_AddFriendResponse() override;
+  explicit constexpr S2C_AddFriendResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S2C_AddFriendResponse(const S2C_AddFriendResponse& from);
+  S2C_AddFriendResponse(S2C_AddFriendResponse&& from) noexcept
+    : S2C_AddFriendResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline S2C_AddFriendResponse& operator=(const S2C_AddFriendResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S2C_AddFriendResponse& operator=(S2C_AddFriendResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S2C_AddFriendResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S2C_AddFriendResponse* internal_default_instance() {
+    return reinterpret_cast<const S2C_AddFriendResponse*>(
+               &_S2C_AddFriendResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    13;
+
+  friend void swap(S2C_AddFriendResponse& a, S2C_AddFriendResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S2C_AddFriendResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S2C_AddFriendResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S2C_AddFriendResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S2C_AddFriendResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S2C_AddFriendResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const S2C_AddFriendResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S2C_AddFriendResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S2C_AddFriendResponse";
+  }
+  protected:
+  explicit S2C_AddFriendResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kSuccessFieldNumber = 1,
+  };
+  // .google.protobuf.BoolValue success = 1;
+  bool has_success() const;
+  private:
+  bool _internal_has_success() const;
+  public:
+  void clear_success();
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue& success() const;
+  PROTOBUF_NODISCARD ::PROTOBUF_NAMESPACE_ID::BoolValue* release_success();
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* mutable_success();
+  void set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success);
+  private:
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue& _internal_success() const;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* _internal_mutable_success();
+  public:
+  void unsafe_arena_set_allocated_success(
+      ::PROTOBUF_NAMESPACE_ID::BoolValue* success);
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* unsafe_arena_release_success();
+
+  // @@protoc_insertion_point(class_scope:Protocol.S2C_AddFriendResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* success_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S2O_AddFriendNotification final :
+    public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:Protocol.S2O_AddFriendNotification) */ {
+ public:
+  inline S2O_AddFriendNotification() : S2O_AddFriendNotification(nullptr) {}
+  explicit constexpr S2O_AddFriendNotification(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S2O_AddFriendNotification(const S2O_AddFriendNotification& from);
+  S2O_AddFriendNotification(S2O_AddFriendNotification&& from) noexcept
+    : S2O_AddFriendNotification() {
+    *this = ::std::move(from);
+  }
+
+  inline S2O_AddFriendNotification& operator=(const S2O_AddFriendNotification& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S2O_AddFriendNotification& operator=(S2O_AddFriendNotification&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S2O_AddFriendNotification& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S2O_AddFriendNotification* internal_default_instance() {
+    return reinterpret_cast<const S2O_AddFriendNotification*>(
+               &_S2O_AddFriendNotification_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    14;
+
+  friend void swap(S2O_AddFriendNotification& a, S2O_AddFriendNotification& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S2O_AddFriendNotification* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S2O_AddFriendNotification* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S2O_AddFriendNotification* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S2O_AddFriendNotification>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyFrom;
+  inline void CopyFrom(const S2O_AddFriendNotification& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl(this, from);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeFrom;
+  void MergeFrom(const S2O_AddFriendNotification& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl(this, from);
+  }
+  public:
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S2O_AddFriendNotification";
+  }
+  protected:
+  explicit S2O_AddFriendNotification(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:Protocol.S2O_AddFriendNotification)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class C2S_AcceptFriendRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C2S_AcceptFriendRequest) */ {
+ public:
+  inline C2S_AcceptFriendRequest() : C2S_AcceptFriendRequest(nullptr) {}
+  ~C2S_AcceptFriendRequest() override;
+  explicit constexpr C2S_AcceptFriendRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C2S_AcceptFriendRequest(const C2S_AcceptFriendRequest& from);
+  C2S_AcceptFriendRequest(C2S_AcceptFriendRequest&& from) noexcept
+    : C2S_AcceptFriendRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline C2S_AcceptFriendRequest& operator=(const C2S_AcceptFriendRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C2S_AcceptFriendRequest& operator=(C2S_AcceptFriendRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C2S_AcceptFriendRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C2S_AcceptFriendRequest* internal_default_instance() {
+    return reinterpret_cast<const C2S_AcceptFriendRequest*>(
+               &_C2S_AcceptFriendRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    15;
+
+  friend void swap(C2S_AcceptFriendRequest& a, C2S_AcceptFriendRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C2S_AcceptFriendRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C2S_AcceptFriendRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  C2S_AcceptFriendRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<C2S_AcceptFriendRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const C2S_AcceptFriendRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const C2S_AcceptFriendRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C2S_AcceptFriendRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C2S_AcceptFriendRequest";
+  }
+  protected:
+  explicit C2S_AcceptFriendRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kAcceptedUsernameFieldNumber = 1,
+  };
+  // string acceptedUsername = 1;
+  void clear_acceptedusername();
+  const std::string& acceptedusername() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_acceptedusername(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_acceptedusername();
+  PROTOBUF_NODISCARD std::string* release_acceptedusername();
+  void set_allocated_acceptedusername(std::string* acceptedusername);
+  private:
+  const std::string& _internal_acceptedusername() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_acceptedusername(const std::string& value);
+  std::string* _internal_mutable_acceptedusername();
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.C2S_AcceptFriendRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr acceptedusername_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S2C_AcceptFriendResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S2C_AcceptFriendResponse) */ {
+ public:
+  inline S2C_AcceptFriendResponse() : S2C_AcceptFriendResponse(nullptr) {}
+  ~S2C_AcceptFriendResponse() override;
+  explicit constexpr S2C_AcceptFriendResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S2C_AcceptFriendResponse(const S2C_AcceptFriendResponse& from);
+  S2C_AcceptFriendResponse(S2C_AcceptFriendResponse&& from) noexcept
+    : S2C_AcceptFriendResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline S2C_AcceptFriendResponse& operator=(const S2C_AcceptFriendResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S2C_AcceptFriendResponse& operator=(S2C_AcceptFriendResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S2C_AcceptFriendResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S2C_AcceptFriendResponse* internal_default_instance() {
+    return reinterpret_cast<const S2C_AcceptFriendResponse*>(
+               &_S2C_AcceptFriendResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    16;
+
+  friend void swap(S2C_AcceptFriendResponse& a, S2C_AcceptFriendResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S2C_AcceptFriendResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S2C_AcceptFriendResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S2C_AcceptFriendResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S2C_AcceptFriendResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S2C_AcceptFriendResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const S2C_AcceptFriendResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S2C_AcceptFriendResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S2C_AcceptFriendResponse";
+  }
+  protected:
+  explicit S2C_AcceptFriendResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kSuccessFieldNumber = 1,
+  };
+  // .google.protobuf.BoolValue success = 1;
+  bool has_success() const;
+  private:
+  bool _internal_has_success() const;
+  public:
+  void clear_success();
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue& success() const;
+  PROTOBUF_NODISCARD ::PROTOBUF_NAMESPACE_ID::BoolValue* release_success();
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* mutable_success();
+  void set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success);
+  private:
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue& _internal_success() const;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* _internal_mutable_success();
+  public:
+  void unsafe_arena_set_allocated_success(
+      ::PROTOBUF_NAMESPACE_ID::BoolValue* success);
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* unsafe_arena_release_success();
+
+  // @@protoc_insertion_point(class_scope:Protocol.S2C_AcceptFriendResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* success_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S2O_AcceptFriendNotification final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S2O_AcceptFriendNotification) */ {
+ public:
+  inline S2O_AcceptFriendNotification() : S2O_AcceptFriendNotification(nullptr) {}
+  ~S2O_AcceptFriendNotification() override;
+  explicit constexpr S2O_AcceptFriendNotification(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S2O_AcceptFriendNotification(const S2O_AcceptFriendNotification& from);
+  S2O_AcceptFriendNotification(S2O_AcceptFriendNotification&& from) noexcept
+    : S2O_AcceptFriendNotification() {
+    *this = ::std::move(from);
+  }
+
+  inline S2O_AcceptFriendNotification& operator=(const S2O_AcceptFriendNotification& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S2O_AcceptFriendNotification& operator=(S2O_AcceptFriendNotification&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S2O_AcceptFriendNotification& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S2O_AcceptFriendNotification* internal_default_instance() {
+    return reinterpret_cast<const S2O_AcceptFriendNotification*>(
+               &_S2O_AcceptFriendNotification_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    17;
+
+  friend void swap(S2O_AcceptFriendNotification& a, S2O_AcceptFriendNotification& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S2O_AcceptFriendNotification* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S2O_AcceptFriendNotification* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S2O_AcceptFriendNotification* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S2O_AcceptFriendNotification>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S2O_AcceptFriendNotification& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const S2O_AcceptFriendNotification& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S2O_AcceptFriendNotification* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S2O_AcceptFriendNotification";
+  }
+  protected:
+  explicit S2O_AcceptFriendNotification(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kNewFriendNameFieldNumber = 1,
+  };
+  // string newFriendName = 1;
+  void clear_newfriendname();
+  const std::string& newfriendname() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_newfriendname(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_newfriendname();
+  PROTOBUF_NODISCARD std::string* release_newfriendname();
+  void set_allocated_newfriendname(std::string* newfriendname);
+  private:
+  const std::string& _internal_newfriendname() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_newfriendname(const std::string& value);
+  std::string* _internal_mutable_newfriendname();
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S2O_AcceptFriendNotification)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr newfriendname_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class C2S_RefuseFriendRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C2S_RefuseFriendRequest) */ {
+ public:
+  inline C2S_RefuseFriendRequest() : C2S_RefuseFriendRequest(nullptr) {}
+  ~C2S_RefuseFriendRequest() override;
+  explicit constexpr C2S_RefuseFriendRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C2S_RefuseFriendRequest(const C2S_RefuseFriendRequest& from);
+  C2S_RefuseFriendRequest(C2S_RefuseFriendRequest&& from) noexcept
+    : C2S_RefuseFriendRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline C2S_RefuseFriendRequest& operator=(const C2S_RefuseFriendRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C2S_RefuseFriendRequest& operator=(C2S_RefuseFriendRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C2S_RefuseFriendRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C2S_RefuseFriendRequest* internal_default_instance() {
+    return reinterpret_cast<const C2S_RefuseFriendRequest*>(
+               &_C2S_RefuseFriendRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    18;
+
+  friend void swap(C2S_RefuseFriendRequest& a, C2S_RefuseFriendRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C2S_RefuseFriendRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C2S_RefuseFriendRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  C2S_RefuseFriendRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<C2S_RefuseFriendRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const C2S_RefuseFriendRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const C2S_RefuseFriendRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C2S_RefuseFriendRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C2S_RefuseFriendRequest";
+  }
+  protected:
+  explicit C2S_RefuseFriendRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kRefuesedUsernameFieldNumber = 1,
+  };
+  // string refuesedUsername = 1;
+  void clear_refuesedusername();
+  const std::string& refuesedusername() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_refuesedusername(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_refuesedusername();
+  PROTOBUF_NODISCARD std::string* release_refuesedusername();
+  void set_allocated_refuesedusername(std::string* refuesedusername);
+  private:
+  const std::string& _internal_refuesedusername() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_refuesedusername(const std::string& value);
+  std::string* _internal_mutable_refuesedusername();
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.C2S_RefuseFriendRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr refuesedusername_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S2C_RefuseFriendResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S2C_RefuseFriendResponse) */ {
+ public:
+  inline S2C_RefuseFriendResponse() : S2C_RefuseFriendResponse(nullptr) {}
+  ~S2C_RefuseFriendResponse() override;
+  explicit constexpr S2C_RefuseFriendResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S2C_RefuseFriendResponse(const S2C_RefuseFriendResponse& from);
+  S2C_RefuseFriendResponse(S2C_RefuseFriendResponse&& from) noexcept
+    : S2C_RefuseFriendResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline S2C_RefuseFriendResponse& operator=(const S2C_RefuseFriendResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S2C_RefuseFriendResponse& operator=(S2C_RefuseFriendResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S2C_RefuseFriendResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S2C_RefuseFriendResponse* internal_default_instance() {
+    return reinterpret_cast<const S2C_RefuseFriendResponse*>(
+               &_S2C_RefuseFriendResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    19;
+
+  friend void swap(S2C_RefuseFriendResponse& a, S2C_RefuseFriendResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S2C_RefuseFriendResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S2C_RefuseFriendResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S2C_RefuseFriendResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S2C_RefuseFriendResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S2C_RefuseFriendResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const S2C_RefuseFriendResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S2C_RefuseFriendResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S2C_RefuseFriendResponse";
+  }
+  protected:
+  explicit S2C_RefuseFriendResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kSuccessFieldNumber = 1,
+  };
+  // .google.protobuf.BoolValue success = 1;
+  bool has_success() const;
+  private:
+  bool _internal_has_success() const;
+  public:
+  void clear_success();
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue& success() const;
+  PROTOBUF_NODISCARD ::PROTOBUF_NAMESPACE_ID::BoolValue* release_success();
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* mutable_success();
+  void set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success);
+  private:
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue& _internal_success() const;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* _internal_mutable_success();
+  public:
+  void unsafe_arena_set_allocated_success(
+      ::PROTOBUF_NAMESPACE_ID::BoolValue* success);
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* unsafe_arena_release_success();
+
+  // @@protoc_insertion_point(class_scope:Protocol.S2C_RefuseFriendResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* success_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class C2S_DelFriendRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C2S_DelFriendRequest) */ {
+ public:
+  inline C2S_DelFriendRequest() : C2S_DelFriendRequest(nullptr) {}
+  ~C2S_DelFriendRequest() override;
+  explicit constexpr C2S_DelFriendRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C2S_DelFriendRequest(const C2S_DelFriendRequest& from);
+  C2S_DelFriendRequest(C2S_DelFriendRequest&& from) noexcept
+    : C2S_DelFriendRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline C2S_DelFriendRequest& operator=(const C2S_DelFriendRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C2S_DelFriendRequest& operator=(C2S_DelFriendRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C2S_DelFriendRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C2S_DelFriendRequest* internal_default_instance() {
+    return reinterpret_cast<const C2S_DelFriendRequest*>(
+               &_C2S_DelFriendRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    20;
+
+  friend void swap(C2S_DelFriendRequest& a, C2S_DelFriendRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C2S_DelFriendRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C2S_DelFriendRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  C2S_DelFriendRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<C2S_DelFriendRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const C2S_DelFriendRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const C2S_DelFriendRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C2S_DelFriendRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C2S_DelFriendRequest";
+  }
+  protected:
+  explicit C2S_DelFriendRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kFriendNameFieldNumber = 1,
+  };
+  // string friendName = 1;
+  void clear_friendname();
+  const std::string& friendname() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_friendname(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_friendname();
+  PROTOBUF_NODISCARD std::string* release_friendname();
+  void set_allocated_friendname(std::string* friendname);
+  private:
+  const std::string& _internal_friendname() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_friendname(const std::string& value);
+  std::string* _internal_mutable_friendname();
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.C2S_DelFriendRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr friendname_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S2C_DelFriendResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S2C_DelFriendResponse) */ {
+ public:
+  inline S2C_DelFriendResponse() : S2C_DelFriendResponse(nullptr) {}
+  ~S2C_DelFriendResponse() override;
+  explicit constexpr S2C_DelFriendResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S2C_DelFriendResponse(const S2C_DelFriendResponse& from);
+  S2C_DelFriendResponse(S2C_DelFriendResponse&& from) noexcept
+    : S2C_DelFriendResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline S2C_DelFriendResponse& operator=(const S2C_DelFriendResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S2C_DelFriendResponse& operator=(S2C_DelFriendResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S2C_DelFriendResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S2C_DelFriendResponse* internal_default_instance() {
+    return reinterpret_cast<const S2C_DelFriendResponse*>(
+               &_S2C_DelFriendResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    21;
+
+  friend void swap(S2C_DelFriendResponse& a, S2C_DelFriendResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S2C_DelFriendResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S2C_DelFriendResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S2C_DelFriendResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S2C_DelFriendResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S2C_DelFriendResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const S2C_DelFriendResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S2C_DelFriendResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S2C_DelFriendResponse";
+  }
+  protected:
+  explicit S2C_DelFriendResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kSuccessFieldNumber = 1,
+  };
+  // .google.protobuf.BoolValue success = 1;
+  bool has_success() const;
+  private:
+  bool _internal_has_success() const;
+  public:
+  void clear_success();
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue& success() const;
+  PROTOBUF_NODISCARD ::PROTOBUF_NAMESPACE_ID::BoolValue* release_success();
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* mutable_success();
+  void set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success);
+  private:
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue& _internal_success() const;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* _internal_mutable_success();
+  public:
+  void unsafe_arena_set_allocated_success(
+      ::PROTOBUF_NAMESPACE_ID::BoolValue* success);
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* unsafe_arena_release_success();
+
+  // @@protoc_insertion_point(class_scope:Protocol.S2C_DelFriendResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* success_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S2O_UpdateStateNotification final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S2O_UpdateStateNotification) */ {
+ public:
+  inline S2O_UpdateStateNotification() : S2O_UpdateStateNotification(nullptr) {}
+  ~S2O_UpdateStateNotification() override;
+  explicit constexpr S2O_UpdateStateNotification(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S2O_UpdateStateNotification(const S2O_UpdateStateNotification& from);
+  S2O_UpdateStateNotification(S2O_UpdateStateNotification&& from) noexcept
+    : S2O_UpdateStateNotification() {
+    *this = ::std::move(from);
+  }
+
+  inline S2O_UpdateStateNotification& operator=(const S2O_UpdateStateNotification& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S2O_UpdateStateNotification& operator=(S2O_UpdateStateNotification&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S2O_UpdateStateNotification& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S2O_UpdateStateNotification* internal_default_instance() {
+    return reinterpret_cast<const S2O_UpdateStateNotification*>(
+               &_S2O_UpdateStateNotification_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    22;
+
+  friend void swap(S2O_UpdateStateNotification& a, S2O_UpdateStateNotification& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S2O_UpdateStateNotification* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S2O_UpdateStateNotification* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S2O_UpdateStateNotification* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S2O_UpdateStateNotification>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S2O_UpdateStateNotification& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const S2O_UpdateStateNotification& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S2O_UpdateStateNotification* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S2O_UpdateStateNotification";
+  }
+  protected:
+  explicit S2O_UpdateStateNotification(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kUsernameFieldNumber = 1,
+    kStateFieldNumber = 2,
+  };
+  // string username = 1;
+  void clear_username();
+  const std::string& username() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_username(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_username();
+  PROTOBUF_NODISCARD std::string* release_username();
+  void set_allocated_username(std::string* username);
+  private:
+  const std::string& _internal_username() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_username(const std::string& value);
+  std::string* _internal_mutable_username();
+  public:
+
+  // int32 state = 2;
+  void clear_state();
+  int32_t state() const;
+  void set_state(int32_t value);
+  private:
+  int32_t _internal_state() const;
+  void _internal_set_state(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S2O_UpdateStateNotification)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr username_;
+  int32_t state_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
 class C2S_CreateRoomRequest final :
     public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:Protocol.C2S_CreateRoomRequest) */ {
  public:
@@ -1424,7 +3682,7 @@ class C2S_CreateRoomRequest final :
                &_C2S_CreateRoomRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    23;
 
   friend void swap(C2S_CreateRoomRequest& a, C2S_CreateRoomRequest& b) {
     a.Swap(&b);
@@ -1543,7 +3801,7 @@ class S2C_CreateRoomResponse final :
                &_S2C_CreateRoomResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    24;
 
   friend void swap(S2C_CreateRoomResponse& a, S2C_CreateRoomResponse& b) {
     a.Swap(&b);
@@ -1714,7 +3972,7 @@ class C2S_JoinRoomRequest final :
                &_C2S_JoinRoomRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    25;
 
   friend void swap(C2S_JoinRoomRequest& a, C2S_JoinRoomRequest& b) {
     a.Swap(&b);
@@ -1865,7 +4123,7 @@ class S2C_JoinRoomResponse final :
                &_S2C_JoinRoomResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    26;
 
   friend void swap(S2C_JoinRoomResponse& a, S2C_JoinRoomResponse& b) {
     a.Swap(&b);
@@ -1940,7 +4198,7 @@ class S2C_JoinRoomResponse final :
 
   enum : int {
     kIpAddressFieldNumber = 2,
-    kSuccessFieldNumber = 1,
+    kResultCodeFieldNumber = 1,
   };
   // string ipAddress = 2;
   void clear_ipaddress();
@@ -1956,23 +4214,14 @@ class S2C_JoinRoomResponse final :
   std::string* _internal_mutable_ipaddress();
   public:
 
-  // .google.protobuf.BoolValue success = 1;
-  bool has_success() const;
+  // int32 resultCode = 1;
+  void clear_resultcode();
+  int32_t resultcode() const;
+  void set_resultcode(int32_t value);
   private:
-  bool _internal_has_success() const;
+  int32_t _internal_resultcode() const;
+  void _internal_set_resultcode(int32_t value);
   public:
-  void clear_success();
-  const ::PROTOBUF_NAMESPACE_ID::BoolValue& success() const;
-  PROTOBUF_NODISCARD ::PROTOBUF_NAMESPACE_ID::BoolValue* release_success();
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* mutable_success();
-  void set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success);
-  private:
-  const ::PROTOBUF_NAMESPACE_ID::BoolValue& _internal_success() const;
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* _internal_mutable_success();
-  public:
-  void unsafe_arena_set_allocated_success(
-      ::PROTOBUF_NAMESPACE_ID::BoolValue* success);
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* unsafe_arena_release_success();
 
   // @@protoc_insertion_point(class_scope:Protocol.S2C_JoinRoomResponse)
  private:
@@ -1982,7 +4231,7 @@ class S2C_JoinRoomResponse final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr ipaddress_;
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* success_;
+  int32_t resultcode_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Protocol_2eproto;
 };
@@ -2035,7 +4284,7 @@ class C2S_QuitRoomRequest final :
                &_C2S_QuitRoomRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    27;
 
   friend void swap(C2S_QuitRoomRequest& a, C2S_QuitRoomRequest& b) {
     a.Swap(&b);
@@ -2154,7 +4403,7 @@ class S2C_QuitRoomResponse final :
                &_S2C_QuitRoomResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    28;
 
   friend void swap(S2C_QuitRoomResponse& a, S2C_QuitRoomResponse& b) {
     a.Swap(&b);
@@ -2261,24 +4510,24 @@ class S2C_QuitRoomResponse final :
 };
 // -------------------------------------------------------------------
 
-class C2S_InviteUserRequest final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C2S_InviteUserRequest) */ {
+class C2S_InviteFriendRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C2S_InviteFriendRequest) */ {
  public:
-  inline C2S_InviteUserRequest() : C2S_InviteUserRequest(nullptr) {}
-  ~C2S_InviteUserRequest() override;
-  explicit constexpr C2S_InviteUserRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline C2S_InviteFriendRequest() : C2S_InviteFriendRequest(nullptr) {}
+  ~C2S_InviteFriendRequest() override;
+  explicit constexpr C2S_InviteFriendRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  C2S_InviteUserRequest(const C2S_InviteUserRequest& from);
-  C2S_InviteUserRequest(C2S_InviteUserRequest&& from) noexcept
-    : C2S_InviteUserRequest() {
+  C2S_InviteFriendRequest(const C2S_InviteFriendRequest& from);
+  C2S_InviteFriendRequest(C2S_InviteFriendRequest&& from) noexcept
+    : C2S_InviteFriendRequest() {
     *this = ::std::move(from);
   }
 
-  inline C2S_InviteUserRequest& operator=(const C2S_InviteUserRequest& from) {
+  inline C2S_InviteFriendRequest& operator=(const C2S_InviteFriendRequest& from) {
     CopyFrom(from);
     return *this;
   }
-  inline C2S_InviteUserRequest& operator=(C2S_InviteUserRequest&& from) noexcept {
+  inline C2S_InviteFriendRequest& operator=(C2S_InviteFriendRequest&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -2301,20 +4550,20 @@ class C2S_InviteUserRequest final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const C2S_InviteUserRequest& default_instance() {
+  static const C2S_InviteFriendRequest& default_instance() {
     return *internal_default_instance();
   }
-  static inline const C2S_InviteUserRequest* internal_default_instance() {
-    return reinterpret_cast<const C2S_InviteUserRequest*>(
-               &_C2S_InviteUserRequest_default_instance_);
+  static inline const C2S_InviteFriendRequest* internal_default_instance() {
+    return reinterpret_cast<const C2S_InviteFriendRequest*>(
+               &_C2S_InviteFriendRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    29;
 
-  friend void swap(C2S_InviteUserRequest& a, C2S_InviteUserRequest& b) {
+  friend void swap(C2S_InviteFriendRequest& a, C2S_InviteFriendRequest& b) {
     a.Swap(&b);
   }
-  inline void Swap(C2S_InviteUserRequest* other) {
+  inline void Swap(C2S_InviteFriendRequest* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -2327,7 +4576,7 @@ class C2S_InviteUserRequest final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(C2S_InviteUserRequest* other) {
+  void UnsafeArenaSwap(C2S_InviteFriendRequest* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -2335,13 +4584,13 @@ class C2S_InviteUserRequest final :
 
   // implements Message ----------------------------------------------
 
-  C2S_InviteUserRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<C2S_InviteUserRequest>(arena);
+  C2S_InviteFriendRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<C2S_InviteFriendRequest>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const C2S_InviteUserRequest& from);
+  void CopyFrom(const C2S_InviteFriendRequest& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const C2S_InviteUserRequest& from);
+  void MergeFrom(const C2S_InviteFriendRequest& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -2358,15 +4607,15 @@ class C2S_InviteUserRequest final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(C2S_InviteUserRequest* other);
+  void InternalSwap(C2S_InviteFriendRequest* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Protocol.C2S_InviteUserRequest";
+    return "Protocol.C2S_InviteFriendRequest";
   }
   protected:
-  explicit C2S_InviteUserRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit C2S_InviteFriendRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -2399,7 +4648,7 @@ class C2S_InviteUserRequest final :
   std::string* _internal_mutable_username();
   public:
 
-  // @@protoc_insertion_point(class_scope:Protocol.C2S_InviteUserRequest)
+  // @@protoc_insertion_point(class_scope:Protocol.C2S_InviteFriendRequest)
  private:
   class _Internal;
 
@@ -2412,24 +4661,24 @@ class C2S_InviteUserRequest final :
 };
 // -------------------------------------------------------------------
 
-class S2C_InviteUserResponse final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S2C_InviteUserResponse) */ {
+class S2C_InviteFriendResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S2C_InviteFriendResponse) */ {
  public:
-  inline S2C_InviteUserResponse() : S2C_InviteUserResponse(nullptr) {}
-  ~S2C_InviteUserResponse() override;
-  explicit constexpr S2C_InviteUserResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline S2C_InviteFriendResponse() : S2C_InviteFriendResponse(nullptr) {}
+  ~S2C_InviteFriendResponse() override;
+  explicit constexpr S2C_InviteFriendResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  S2C_InviteUserResponse(const S2C_InviteUserResponse& from);
-  S2C_InviteUserResponse(S2C_InviteUserResponse&& from) noexcept
-    : S2C_InviteUserResponse() {
+  S2C_InviteFriendResponse(const S2C_InviteFriendResponse& from);
+  S2C_InviteFriendResponse(S2C_InviteFriendResponse&& from) noexcept
+    : S2C_InviteFriendResponse() {
     *this = ::std::move(from);
   }
 
-  inline S2C_InviteUserResponse& operator=(const S2C_InviteUserResponse& from) {
+  inline S2C_InviteFriendResponse& operator=(const S2C_InviteFriendResponse& from) {
     CopyFrom(from);
     return *this;
   }
-  inline S2C_InviteUserResponse& operator=(S2C_InviteUserResponse&& from) noexcept {
+  inline S2C_InviteFriendResponse& operator=(S2C_InviteFriendResponse&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -2452,20 +4701,20 @@ class S2C_InviteUserResponse final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const S2C_InviteUserResponse& default_instance() {
+  static const S2C_InviteFriendResponse& default_instance() {
     return *internal_default_instance();
   }
-  static inline const S2C_InviteUserResponse* internal_default_instance() {
-    return reinterpret_cast<const S2C_InviteUserResponse*>(
-               &_S2C_InviteUserResponse_default_instance_);
+  static inline const S2C_InviteFriendResponse* internal_default_instance() {
+    return reinterpret_cast<const S2C_InviteFriendResponse*>(
+               &_S2C_InviteFriendResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    30;
 
-  friend void swap(S2C_InviteUserResponse& a, S2C_InviteUserResponse& b) {
+  friend void swap(S2C_InviteFriendResponse& a, S2C_InviteFriendResponse& b) {
     a.Swap(&b);
   }
-  inline void Swap(S2C_InviteUserResponse* other) {
+  inline void Swap(S2C_InviteFriendResponse* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -2478,7 +4727,7 @@ class S2C_InviteUserResponse final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(S2C_InviteUserResponse* other) {
+  void UnsafeArenaSwap(S2C_InviteFriendResponse* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -2486,13 +4735,13 @@ class S2C_InviteUserResponse final :
 
   // implements Message ----------------------------------------------
 
-  S2C_InviteUserResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<S2C_InviteUserResponse>(arena);
+  S2C_InviteFriendResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S2C_InviteFriendResponse>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const S2C_InviteUserResponse& from);
+  void CopyFrom(const S2C_InviteFriendResponse& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const S2C_InviteUserResponse& from);
+  void MergeFrom(const S2C_InviteFriendResponse& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -2509,15 +4758,15 @@ class S2C_InviteUserResponse final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(S2C_InviteUserResponse* other);
+  void InternalSwap(S2C_InviteFriendResponse* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Protocol.S2C_InviteUserResponse";
+    return "Protocol.S2C_InviteFriendResponse";
   }
   protected:
-  explicit S2C_InviteUserResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit S2C_InviteFriendResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -2554,7 +4803,7 @@ class S2C_InviteUserResponse final :
       ::PROTOBUF_NAMESPACE_ID::BoolValue* success);
   ::PROTOBUF_NAMESPACE_ID::BoolValue* unsafe_arena_release_success();
 
-  // @@protoc_insertion_point(class_scope:Protocol.S2C_InviteUserResponse)
+  // @@protoc_insertion_point(class_scope:Protocol.S2C_InviteFriendResponse)
  private:
   class _Internal;
 
@@ -2567,24 +4816,24 @@ class S2C_InviteUserResponse final :
 };
 // -------------------------------------------------------------------
 
-class S2C_InviteUserNotification final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S2C_InviteUserNotification) */ {
+class S2C_InviteFriendNotification final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S2C_InviteFriendNotification) */ {
  public:
-  inline S2C_InviteUserNotification() : S2C_InviteUserNotification(nullptr) {}
-  ~S2C_InviteUserNotification() override;
-  explicit constexpr S2C_InviteUserNotification(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline S2C_InviteFriendNotification() : S2C_InviteFriendNotification(nullptr) {}
+  ~S2C_InviteFriendNotification() override;
+  explicit constexpr S2C_InviteFriendNotification(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  S2C_InviteUserNotification(const S2C_InviteUserNotification& from);
-  S2C_InviteUserNotification(S2C_InviteUserNotification&& from) noexcept
-    : S2C_InviteUserNotification() {
+  S2C_InviteFriendNotification(const S2C_InviteFriendNotification& from);
+  S2C_InviteFriendNotification(S2C_InviteFriendNotification&& from) noexcept
+    : S2C_InviteFriendNotification() {
     *this = ::std::move(from);
   }
 
-  inline S2C_InviteUserNotification& operator=(const S2C_InviteUserNotification& from) {
+  inline S2C_InviteFriendNotification& operator=(const S2C_InviteFriendNotification& from) {
     CopyFrom(from);
     return *this;
   }
-  inline S2C_InviteUserNotification& operator=(S2C_InviteUserNotification&& from) noexcept {
+  inline S2C_InviteFriendNotification& operator=(S2C_InviteFriendNotification&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -2607,20 +4856,20 @@ class S2C_InviteUserNotification final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const S2C_InviteUserNotification& default_instance() {
+  static const S2C_InviteFriendNotification& default_instance() {
     return *internal_default_instance();
   }
-  static inline const S2C_InviteUserNotification* internal_default_instance() {
-    return reinterpret_cast<const S2C_InviteUserNotification*>(
-               &_S2C_InviteUserNotification_default_instance_);
+  static inline const S2C_InviteFriendNotification* internal_default_instance() {
+    return reinterpret_cast<const S2C_InviteFriendNotification*>(
+               &_S2C_InviteFriendNotification_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    31;
 
-  friend void swap(S2C_InviteUserNotification& a, S2C_InviteUserNotification& b) {
+  friend void swap(S2C_InviteFriendNotification& a, S2C_InviteFriendNotification& b) {
     a.Swap(&b);
   }
-  inline void Swap(S2C_InviteUserNotification* other) {
+  inline void Swap(S2C_InviteFriendNotification* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -2633,7 +4882,7 @@ class S2C_InviteUserNotification final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(S2C_InviteUserNotification* other) {
+  void UnsafeArenaSwap(S2C_InviteFriendNotification* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -2641,13 +4890,13 @@ class S2C_InviteUserNotification final :
 
   // implements Message ----------------------------------------------
 
-  S2C_InviteUserNotification* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<S2C_InviteUserNotification>(arena);
+  S2C_InviteFriendNotification* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S2C_InviteFriendNotification>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const S2C_InviteUserNotification& from);
+  void CopyFrom(const S2C_InviteFriendNotification& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const S2C_InviteUserNotification& from);
+  void MergeFrom(const S2C_InviteFriendNotification& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -2664,15 +4913,15 @@ class S2C_InviteUserNotification final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(S2C_InviteUserNotification* other);
+  void InternalSwap(S2C_InviteFriendNotification* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Protocol.S2C_InviteUserNotification";
+    return "Protocol.S2C_InviteFriendNotification";
   }
   protected:
-  explicit S2C_InviteUserNotification(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit S2C_InviteFriendNotification(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -2689,9 +4938,312 @@ class S2C_InviteUserNotification final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kIpAddressFieldNumber = 1,
+    kRoomCodeFieldNumber = 1,
   };
-  // string ipAddress = 1;
+  // string roomCode = 1;
+  void clear_roomcode();
+  const std::string& roomcode() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_roomcode(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_roomcode();
+  PROTOBUF_NODISCARD std::string* release_roomcode();
+  void set_allocated_roomcode(std::string* roomcode);
+  private:
+  const std::string& _internal_roomcode() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_roomcode(const std::string& value);
+  std::string* _internal_mutable_roomcode();
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S2C_InviteFriendNotification)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr roomcode_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class C2S_AcceptInvitationRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C2S_AcceptInvitationRequest) */ {
+ public:
+  inline C2S_AcceptInvitationRequest() : C2S_AcceptInvitationRequest(nullptr) {}
+  ~C2S_AcceptInvitationRequest() override;
+  explicit constexpr C2S_AcceptInvitationRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C2S_AcceptInvitationRequest(const C2S_AcceptInvitationRequest& from);
+  C2S_AcceptInvitationRequest(C2S_AcceptInvitationRequest&& from) noexcept
+    : C2S_AcceptInvitationRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline C2S_AcceptInvitationRequest& operator=(const C2S_AcceptInvitationRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C2S_AcceptInvitationRequest& operator=(C2S_AcceptInvitationRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C2S_AcceptInvitationRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C2S_AcceptInvitationRequest* internal_default_instance() {
+    return reinterpret_cast<const C2S_AcceptInvitationRequest*>(
+               &_C2S_AcceptInvitationRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    32;
+
+  friend void swap(C2S_AcceptInvitationRequest& a, C2S_AcceptInvitationRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C2S_AcceptInvitationRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C2S_AcceptInvitationRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  C2S_AcceptInvitationRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<C2S_AcceptInvitationRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const C2S_AcceptInvitationRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const C2S_AcceptInvitationRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C2S_AcceptInvitationRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C2S_AcceptInvitationRequest";
+  }
+  protected:
+  explicit C2S_AcceptInvitationRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kRoomCodeFieldNumber = 1,
+  };
+  // string roomCode = 1;
+  void clear_roomcode();
+  const std::string& roomcode() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_roomcode(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_roomcode();
+  PROTOBUF_NODISCARD std::string* release_roomcode();
+  void set_allocated_roomcode(std::string* roomcode);
+  private:
+  const std::string& _internal_roomcode() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_roomcode(const std::string& value);
+  std::string* _internal_mutable_roomcode();
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.C2S_AcceptInvitationRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr roomcode_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S2C_AcceptInvitationResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S2C_AcceptInvitationResponse) */ {
+ public:
+  inline S2C_AcceptInvitationResponse() : S2C_AcceptInvitationResponse(nullptr) {}
+  ~S2C_AcceptInvitationResponse() override;
+  explicit constexpr S2C_AcceptInvitationResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S2C_AcceptInvitationResponse(const S2C_AcceptInvitationResponse& from);
+  S2C_AcceptInvitationResponse(S2C_AcceptInvitationResponse&& from) noexcept
+    : S2C_AcceptInvitationResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline S2C_AcceptInvitationResponse& operator=(const S2C_AcceptInvitationResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S2C_AcceptInvitationResponse& operator=(S2C_AcceptInvitationResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S2C_AcceptInvitationResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S2C_AcceptInvitationResponse* internal_default_instance() {
+    return reinterpret_cast<const S2C_AcceptInvitationResponse*>(
+               &_S2C_AcceptInvitationResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    33;
+
+  friend void swap(S2C_AcceptInvitationResponse& a, S2C_AcceptInvitationResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S2C_AcceptInvitationResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S2C_AcceptInvitationResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S2C_AcceptInvitationResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S2C_AcceptInvitationResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S2C_AcceptInvitationResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const S2C_AcceptInvitationResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S2C_AcceptInvitationResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S2C_AcceptInvitationResponse";
+  }
+  protected:
+  explicit S2C_AcceptInvitationResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kIpAddressFieldNumber = 2,
+    kResultCodeFieldNumber = 1,
+  };
+  // string ipAddress = 2;
   void clear_ipaddress();
   const std::string& ipaddress() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2705,7 +5257,16 @@ class S2C_InviteUserNotification final :
   std::string* _internal_mutable_ipaddress();
   public:
 
-  // @@protoc_insertion_point(class_scope:Protocol.S2C_InviteUserNotification)
+  // int32 resultCode = 1;
+  void clear_resultcode();
+  int32_t resultcode() const;
+  void set_resultcode(int32_t value);
+  private:
+  int32_t _internal_resultcode() const;
+  void _internal_set_resultcode(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S2C_AcceptInvitationResponse)
  private:
   class _Internal;
 
@@ -2713,6 +5274,7 @@ class S2C_InviteUserNotification final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr ipaddress_;
+  int32_t resultcode_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Protocol_2eproto;
 };
@@ -2765,7 +5327,7 @@ class C2S_StartGameRequest final :
                &_C2S_StartGameRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    34;
 
   friend void swap(C2S_StartGameRequest& a, C2S_StartGameRequest& b) {
     a.Swap(&b);
@@ -2884,7 +5446,7 @@ class S2C_StartGameResponse final :
                &_S2C_StartGameResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    35;
 
   friend void swap(S2C_StartGameResponse& a, S2C_StartGameResponse& b) {
     a.Swap(&b);
@@ -2998,6 +5560,81 @@ class S2C_StartGameResponse final :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
+// FriendInfo
+
+// string username = 1;
+inline void FriendInfo::clear_username() {
+  username_.ClearToEmpty();
+}
+inline const std::string& FriendInfo::username() const {
+  // @@protoc_insertion_point(field_get:Protocol.FriendInfo.username)
+  return _internal_username();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void FriendInfo::set_username(ArgT0&& arg0, ArgT... args) {
+ 
+ username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.FriendInfo.username)
+}
+inline std::string* FriendInfo::mutable_username() {
+  std::string* _s = _internal_mutable_username();
+  // @@protoc_insertion_point(field_mutable:Protocol.FriendInfo.username)
+  return _s;
+}
+inline const std::string& FriendInfo::_internal_username() const {
+  return username_.Get();
+}
+inline void FriendInfo::_internal_set_username(const std::string& value) {
+  
+  username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* FriendInfo::_internal_mutable_username() {
+  
+  return username_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* FriendInfo::release_username() {
+  // @@protoc_insertion_point(field_release:Protocol.FriendInfo.username)
+  return username_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void FriendInfo::set_allocated_username(std::string* username) {
+  if (username != nullptr) {
+    
+  } else {
+    
+  }
+  username_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), username,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (username_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.FriendInfo.username)
+}
+
+// int32 state = 2;
+inline void FriendInfo::clear_state() {
+  state_ = 0;
+}
+inline int32_t FriendInfo::_internal_state() const {
+  return state_;
+}
+inline int32_t FriendInfo::state() const {
+  // @@protoc_insertion_point(field_get:Protocol.FriendInfo.state)
+  return _internal_state();
+}
+inline void FriendInfo::_internal_set_state(int32_t value) {
+  
+  state_ = value;
+}
+inline void FriendInfo::set_state(int32_t value) {
+  _internal_set_state(value);
+  // @@protoc_insertion_point(field_set:Protocol.FriendInfo.state)
+}
+
+// -------------------------------------------------------------------
+
 // S2C_ValidationRequest
 
 // -------------------------------------------------------------------
@@ -3202,6 +5839,86 @@ inline void S2C_LoginResponse::set_allocated_success(::PROTOBUF_NAMESPACE_ID::Bo
   }
   success_ = success;
   // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_LoginResponse.success)
+}
+
+// repeated .Protocol.FriendInfo friendList = 2;
+inline int S2C_LoginResponse::_internal_friendlist_size() const {
+  return friendlist_.size();
+}
+inline int S2C_LoginResponse::friendlist_size() const {
+  return _internal_friendlist_size();
+}
+inline void S2C_LoginResponse::clear_friendlist() {
+  friendlist_.Clear();
+}
+inline ::Protocol::FriendInfo* S2C_LoginResponse::mutable_friendlist(int index) {
+  // @@protoc_insertion_point(field_mutable:Protocol.S2C_LoginResponse.friendList)
+  return friendlist_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::FriendInfo >*
+S2C_LoginResponse::mutable_friendlist() {
+  // @@protoc_insertion_point(field_mutable_list:Protocol.S2C_LoginResponse.friendList)
+  return &friendlist_;
+}
+inline const ::Protocol::FriendInfo& S2C_LoginResponse::_internal_friendlist(int index) const {
+  return friendlist_.Get(index);
+}
+inline const ::Protocol::FriendInfo& S2C_LoginResponse::friendlist(int index) const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_LoginResponse.friendList)
+  return _internal_friendlist(index);
+}
+inline ::Protocol::FriendInfo* S2C_LoginResponse::_internal_add_friendlist() {
+  return friendlist_.Add();
+}
+inline ::Protocol::FriendInfo* S2C_LoginResponse::add_friendlist() {
+  ::Protocol::FriendInfo* _add = _internal_add_friendlist();
+  // @@protoc_insertion_point(field_add:Protocol.S2C_LoginResponse.friendList)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::FriendInfo >&
+S2C_LoginResponse::friendlist() const {
+  // @@protoc_insertion_point(field_list:Protocol.S2C_LoginResponse.friendList)
+  return friendlist_;
+}
+
+// repeated .Protocol.FriendInfo pendingList = 3;
+inline int S2C_LoginResponse::_internal_pendinglist_size() const {
+  return pendinglist_.size();
+}
+inline int S2C_LoginResponse::pendinglist_size() const {
+  return _internal_pendinglist_size();
+}
+inline void S2C_LoginResponse::clear_pendinglist() {
+  pendinglist_.Clear();
+}
+inline ::Protocol::FriendInfo* S2C_LoginResponse::mutable_pendinglist(int index) {
+  // @@protoc_insertion_point(field_mutable:Protocol.S2C_LoginResponse.pendingList)
+  return pendinglist_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::FriendInfo >*
+S2C_LoginResponse::mutable_pendinglist() {
+  // @@protoc_insertion_point(field_mutable_list:Protocol.S2C_LoginResponse.pendingList)
+  return &pendinglist_;
+}
+inline const ::Protocol::FriendInfo& S2C_LoginResponse::_internal_pendinglist(int index) const {
+  return pendinglist_.Get(index);
+}
+inline const ::Protocol::FriendInfo& S2C_LoginResponse::pendinglist(int index) const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_LoginResponse.pendingList)
+  return _internal_pendinglist(index);
+}
+inline ::Protocol::FriendInfo* S2C_LoginResponse::_internal_add_pendinglist() {
+  return pendinglist_.Add();
+}
+inline ::Protocol::FriendInfo* S2C_LoginResponse::add_pendinglist() {
+  ::Protocol::FriendInfo* _add = _internal_add_pendinglist();
+  // @@protoc_insertion_point(field_add:Protocol.S2C_LoginResponse.pendingList)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::FriendInfo >&
+S2C_LoginResponse::pendinglist() const {
+  // @@protoc_insertion_point(field_list:Protocol.S2C_LoginResponse.pendingList)
+  return pendinglist_;
 }
 
 // -------------------------------------------------------------------
@@ -3410,6 +6127,975 @@ inline void S2C_JoinResponse::set_allocated_success(::PROTOBUF_NAMESPACE_ID::Boo
 
 // -------------------------------------------------------------------
 
+// C2S_FindFriendRequest
+
+// string username = 1;
+inline void C2S_FindFriendRequest::clear_username() {
+  username_.ClearToEmpty();
+}
+inline const std::string& C2S_FindFriendRequest::username() const {
+  // @@protoc_insertion_point(field_get:Protocol.C2S_FindFriendRequest.username)
+  return _internal_username();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C2S_FindFriendRequest::set_username(ArgT0&& arg0, ArgT... args) {
+ 
+ username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C2S_FindFriendRequest.username)
+}
+inline std::string* C2S_FindFriendRequest::mutable_username() {
+  std::string* _s = _internal_mutable_username();
+  // @@protoc_insertion_point(field_mutable:Protocol.C2S_FindFriendRequest.username)
+  return _s;
+}
+inline const std::string& C2S_FindFriendRequest::_internal_username() const {
+  return username_.Get();
+}
+inline void C2S_FindFriendRequest::_internal_set_username(const std::string& value) {
+  
+  username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C2S_FindFriendRequest::_internal_mutable_username() {
+  
+  return username_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C2S_FindFriendRequest::release_username() {
+  // @@protoc_insertion_point(field_release:Protocol.C2S_FindFriendRequest.username)
+  return username_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C2S_FindFriendRequest::set_allocated_username(std::string* username) {
+  if (username != nullptr) {
+    
+  } else {
+    
+  }
+  username_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), username,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (username_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C2S_FindFriendRequest.username)
+}
+
+// -------------------------------------------------------------------
+
+// S2C_FindFriendResponse
+
+// .google.protobuf.BoolValue exist = 1;
+inline bool S2C_FindFriendResponse::_internal_has_exist() const {
+  return this != internal_default_instance() && exist_ != nullptr;
+}
+inline bool S2C_FindFriendResponse::has_exist() const {
+  return _internal_has_exist();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_FindFriendResponse::_internal_exist() const {
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue* p = exist_;
+  return p != nullptr ? *p : reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::BoolValue&>(
+      ::PROTOBUF_NAMESPACE_ID::_BoolValue_default_instance_);
+}
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_FindFriendResponse::exist() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_FindFriendResponse.exist)
+  return _internal_exist();
+}
+inline void S2C_FindFriendResponse::unsafe_arena_set_allocated_exist(
+    ::PROTOBUF_NAMESPACE_ID::BoolValue* exist) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(exist_);
+  }
+  exist_ = exist;
+  if (exist) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S2C_FindFriendResponse.exist)
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_FindFriendResponse::release_exist() {
+  
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = exist_;
+  exist_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_FindFriendResponse::unsafe_arena_release_exist() {
+  // @@protoc_insertion_point(field_release:Protocol.S2C_FindFriendResponse.exist)
+  
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = exist_;
+  exist_ = nullptr;
+  return temp;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_FindFriendResponse::_internal_mutable_exist() {
+  
+  if (exist_ == nullptr) {
+    auto* p = CreateMaybeMessage<::PROTOBUF_NAMESPACE_ID::BoolValue>(GetArenaForAllocation());
+    exist_ = p;
+  }
+  return exist_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_FindFriendResponse::mutable_exist() {
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* _msg = _internal_mutable_exist();
+  // @@protoc_insertion_point(field_mutable:Protocol.S2C_FindFriendResponse.exist)
+  return _msg;
+}
+inline void S2C_FindFriendResponse::set_allocated_exist(::PROTOBUF_NAMESPACE_ID::BoolValue* exist) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(exist_);
+  }
+  if (exist) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(exist));
+    if (message_arena != submessage_arena) {
+      exist = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, exist, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  exist_ = exist;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_FindFriendResponse.exist)
+}
+
+// .Protocol.FriendInfo friendInfo = 2;
+inline bool S2C_FindFriendResponse::_internal_has_friendinfo() const {
+  return this != internal_default_instance() && friendinfo_ != nullptr;
+}
+inline bool S2C_FindFriendResponse::has_friendinfo() const {
+  return _internal_has_friendinfo();
+}
+inline void S2C_FindFriendResponse::clear_friendinfo() {
+  if (GetArenaForAllocation() == nullptr && friendinfo_ != nullptr) {
+    delete friendinfo_;
+  }
+  friendinfo_ = nullptr;
+}
+inline const ::Protocol::FriendInfo& S2C_FindFriendResponse::_internal_friendinfo() const {
+  const ::Protocol::FriendInfo* p = friendinfo_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::FriendInfo&>(
+      ::Protocol::_FriendInfo_default_instance_);
+}
+inline const ::Protocol::FriendInfo& S2C_FindFriendResponse::friendinfo() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_FindFriendResponse.friendInfo)
+  return _internal_friendinfo();
+}
+inline void S2C_FindFriendResponse::unsafe_arena_set_allocated_friendinfo(
+    ::Protocol::FriendInfo* friendinfo) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(friendinfo_);
+  }
+  friendinfo_ = friendinfo;
+  if (friendinfo) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S2C_FindFriendResponse.friendInfo)
+}
+inline ::Protocol::FriendInfo* S2C_FindFriendResponse::release_friendinfo() {
+  
+  ::Protocol::FriendInfo* temp = friendinfo_;
+  friendinfo_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::Protocol::FriendInfo* S2C_FindFriendResponse::unsafe_arena_release_friendinfo() {
+  // @@protoc_insertion_point(field_release:Protocol.S2C_FindFriendResponse.friendInfo)
+  
+  ::Protocol::FriendInfo* temp = friendinfo_;
+  friendinfo_ = nullptr;
+  return temp;
+}
+inline ::Protocol::FriendInfo* S2C_FindFriendResponse::_internal_mutable_friendinfo() {
+  
+  if (friendinfo_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::FriendInfo>(GetArenaForAllocation());
+    friendinfo_ = p;
+  }
+  return friendinfo_;
+}
+inline ::Protocol::FriendInfo* S2C_FindFriendResponse::mutable_friendinfo() {
+  ::Protocol::FriendInfo* _msg = _internal_mutable_friendinfo();
+  // @@protoc_insertion_point(field_mutable:Protocol.S2C_FindFriendResponse.friendInfo)
+  return _msg;
+}
+inline void S2C_FindFriendResponse::set_allocated_friendinfo(::Protocol::FriendInfo* friendinfo) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete friendinfo_;
+  }
+  if (friendinfo) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::Protocol::FriendInfo>::GetOwningArena(friendinfo);
+    if (message_arena != submessage_arena) {
+      friendinfo = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, friendinfo, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  friendinfo_ = friendinfo;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_FindFriendResponse.friendInfo)
+}
+
+// int32 requestState = 3;
+inline void S2C_FindFriendResponse::clear_requeststate() {
+  requeststate_ = 0;
+}
+inline int32_t S2C_FindFriendResponse::_internal_requeststate() const {
+  return requeststate_;
+}
+inline int32_t S2C_FindFriendResponse::requeststate() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_FindFriendResponse.requestState)
+  return _internal_requeststate();
+}
+inline void S2C_FindFriendResponse::_internal_set_requeststate(int32_t value) {
+  
+  requeststate_ = value;
+}
+inline void S2C_FindFriendResponse::set_requeststate(int32_t value) {
+  _internal_set_requeststate(value);
+  // @@protoc_insertion_point(field_set:Protocol.S2C_FindFriendResponse.requestState)
+}
+
+// -------------------------------------------------------------------
+
+// C2S_AddFriendRequest
+
+// string username = 1;
+inline void C2S_AddFriendRequest::clear_username() {
+  username_.ClearToEmpty();
+}
+inline const std::string& C2S_AddFriendRequest::username() const {
+  // @@protoc_insertion_point(field_get:Protocol.C2S_AddFriendRequest.username)
+  return _internal_username();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C2S_AddFriendRequest::set_username(ArgT0&& arg0, ArgT... args) {
+ 
+ username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C2S_AddFriendRequest.username)
+}
+inline std::string* C2S_AddFriendRequest::mutable_username() {
+  std::string* _s = _internal_mutable_username();
+  // @@protoc_insertion_point(field_mutable:Protocol.C2S_AddFriendRequest.username)
+  return _s;
+}
+inline const std::string& C2S_AddFriendRequest::_internal_username() const {
+  return username_.Get();
+}
+inline void C2S_AddFriendRequest::_internal_set_username(const std::string& value) {
+  
+  username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C2S_AddFriendRequest::_internal_mutable_username() {
+  
+  return username_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C2S_AddFriendRequest::release_username() {
+  // @@protoc_insertion_point(field_release:Protocol.C2S_AddFriendRequest.username)
+  return username_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C2S_AddFriendRequest::set_allocated_username(std::string* username) {
+  if (username != nullptr) {
+    
+  } else {
+    
+  }
+  username_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), username,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (username_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C2S_AddFriendRequest.username)
+}
+
+// -------------------------------------------------------------------
+
+// S2C_AddFriendResponse
+
+// .google.protobuf.BoolValue success = 1;
+inline bool S2C_AddFriendResponse::_internal_has_success() const {
+  return this != internal_default_instance() && success_ != nullptr;
+}
+inline bool S2C_AddFriendResponse::has_success() const {
+  return _internal_has_success();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_AddFriendResponse::_internal_success() const {
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue* p = success_;
+  return p != nullptr ? *p : reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::BoolValue&>(
+      ::PROTOBUF_NAMESPACE_ID::_BoolValue_default_instance_);
+}
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_AddFriendResponse::success() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_AddFriendResponse.success)
+  return _internal_success();
+}
+inline void S2C_AddFriendResponse::unsafe_arena_set_allocated_success(
+    ::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
+  }
+  success_ = success;
+  if (success) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S2C_AddFriendResponse.success)
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_AddFriendResponse::release_success() {
+  
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
+  success_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_AddFriendResponse::unsafe_arena_release_success() {
+  // @@protoc_insertion_point(field_release:Protocol.S2C_AddFriendResponse.success)
+  
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
+  success_ = nullptr;
+  return temp;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_AddFriendResponse::_internal_mutable_success() {
+  
+  if (success_ == nullptr) {
+    auto* p = CreateMaybeMessage<::PROTOBUF_NAMESPACE_ID::BoolValue>(GetArenaForAllocation());
+    success_ = p;
+  }
+  return success_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_AddFriendResponse::mutable_success() {
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* _msg = _internal_mutable_success();
+  // @@protoc_insertion_point(field_mutable:Protocol.S2C_AddFriendResponse.success)
+  return _msg;
+}
+inline void S2C_AddFriendResponse::set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
+  }
+  if (success) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(success));
+    if (message_arena != submessage_arena) {
+      success = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, success, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  success_ = success;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_AddFriendResponse.success)
+}
+
+// -------------------------------------------------------------------
+
+// S2O_AddFriendNotification
+
+// -------------------------------------------------------------------
+
+// C2S_AcceptFriendRequest
+
+// string acceptedUsername = 1;
+inline void C2S_AcceptFriendRequest::clear_acceptedusername() {
+  acceptedusername_.ClearToEmpty();
+}
+inline const std::string& C2S_AcceptFriendRequest::acceptedusername() const {
+  // @@protoc_insertion_point(field_get:Protocol.C2S_AcceptFriendRequest.acceptedUsername)
+  return _internal_acceptedusername();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C2S_AcceptFriendRequest::set_acceptedusername(ArgT0&& arg0, ArgT... args) {
+ 
+ acceptedusername_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C2S_AcceptFriendRequest.acceptedUsername)
+}
+inline std::string* C2S_AcceptFriendRequest::mutable_acceptedusername() {
+  std::string* _s = _internal_mutable_acceptedusername();
+  // @@protoc_insertion_point(field_mutable:Protocol.C2S_AcceptFriendRequest.acceptedUsername)
+  return _s;
+}
+inline const std::string& C2S_AcceptFriendRequest::_internal_acceptedusername() const {
+  return acceptedusername_.Get();
+}
+inline void C2S_AcceptFriendRequest::_internal_set_acceptedusername(const std::string& value) {
+  
+  acceptedusername_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C2S_AcceptFriendRequest::_internal_mutable_acceptedusername() {
+  
+  return acceptedusername_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C2S_AcceptFriendRequest::release_acceptedusername() {
+  // @@protoc_insertion_point(field_release:Protocol.C2S_AcceptFriendRequest.acceptedUsername)
+  return acceptedusername_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C2S_AcceptFriendRequest::set_allocated_acceptedusername(std::string* acceptedusername) {
+  if (acceptedusername != nullptr) {
+    
+  } else {
+    
+  }
+  acceptedusername_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), acceptedusername,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (acceptedusername_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    acceptedusername_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C2S_AcceptFriendRequest.acceptedUsername)
+}
+
+// -------------------------------------------------------------------
+
+// S2C_AcceptFriendResponse
+
+// .google.protobuf.BoolValue success = 1;
+inline bool S2C_AcceptFriendResponse::_internal_has_success() const {
+  return this != internal_default_instance() && success_ != nullptr;
+}
+inline bool S2C_AcceptFriendResponse::has_success() const {
+  return _internal_has_success();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_AcceptFriendResponse::_internal_success() const {
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue* p = success_;
+  return p != nullptr ? *p : reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::BoolValue&>(
+      ::PROTOBUF_NAMESPACE_ID::_BoolValue_default_instance_);
+}
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_AcceptFriendResponse::success() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_AcceptFriendResponse.success)
+  return _internal_success();
+}
+inline void S2C_AcceptFriendResponse::unsafe_arena_set_allocated_success(
+    ::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
+  }
+  success_ = success;
+  if (success) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S2C_AcceptFriendResponse.success)
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_AcceptFriendResponse::release_success() {
+  
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
+  success_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_AcceptFriendResponse::unsafe_arena_release_success() {
+  // @@protoc_insertion_point(field_release:Protocol.S2C_AcceptFriendResponse.success)
+  
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
+  success_ = nullptr;
+  return temp;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_AcceptFriendResponse::_internal_mutable_success() {
+  
+  if (success_ == nullptr) {
+    auto* p = CreateMaybeMessage<::PROTOBUF_NAMESPACE_ID::BoolValue>(GetArenaForAllocation());
+    success_ = p;
+  }
+  return success_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_AcceptFriendResponse::mutable_success() {
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* _msg = _internal_mutable_success();
+  // @@protoc_insertion_point(field_mutable:Protocol.S2C_AcceptFriendResponse.success)
+  return _msg;
+}
+inline void S2C_AcceptFriendResponse::set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
+  }
+  if (success) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(success));
+    if (message_arena != submessage_arena) {
+      success = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, success, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  success_ = success;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_AcceptFriendResponse.success)
+}
+
+// -------------------------------------------------------------------
+
+// S2O_AcceptFriendNotification
+
+// string newFriendName = 1;
+inline void S2O_AcceptFriendNotification::clear_newfriendname() {
+  newfriendname_.ClearToEmpty();
+}
+inline const std::string& S2O_AcceptFriendNotification::newfriendname() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2O_AcceptFriendNotification.newFriendName)
+  return _internal_newfriendname();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void S2O_AcceptFriendNotification::set_newfriendname(ArgT0&& arg0, ArgT... args) {
+ 
+ newfriendname_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.S2O_AcceptFriendNotification.newFriendName)
+}
+inline std::string* S2O_AcceptFriendNotification::mutable_newfriendname() {
+  std::string* _s = _internal_mutable_newfriendname();
+  // @@protoc_insertion_point(field_mutable:Protocol.S2O_AcceptFriendNotification.newFriendName)
+  return _s;
+}
+inline const std::string& S2O_AcceptFriendNotification::_internal_newfriendname() const {
+  return newfriendname_.Get();
+}
+inline void S2O_AcceptFriendNotification::_internal_set_newfriendname(const std::string& value) {
+  
+  newfriendname_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* S2O_AcceptFriendNotification::_internal_mutable_newfriendname() {
+  
+  return newfriendname_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* S2O_AcceptFriendNotification::release_newfriendname() {
+  // @@protoc_insertion_point(field_release:Protocol.S2O_AcceptFriendNotification.newFriendName)
+  return newfriendname_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void S2O_AcceptFriendNotification::set_allocated_newfriendname(std::string* newfriendname) {
+  if (newfriendname != nullptr) {
+    
+  } else {
+    
+  }
+  newfriendname_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), newfriendname,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (newfriendname_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    newfriendname_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S2O_AcceptFriendNotification.newFriendName)
+}
+
+// -------------------------------------------------------------------
+
+// C2S_RefuseFriendRequest
+
+// string refuesedUsername = 1;
+inline void C2S_RefuseFriendRequest::clear_refuesedusername() {
+  refuesedusername_.ClearToEmpty();
+}
+inline const std::string& C2S_RefuseFriendRequest::refuesedusername() const {
+  // @@protoc_insertion_point(field_get:Protocol.C2S_RefuseFriendRequest.refuesedUsername)
+  return _internal_refuesedusername();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C2S_RefuseFriendRequest::set_refuesedusername(ArgT0&& arg0, ArgT... args) {
+ 
+ refuesedusername_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C2S_RefuseFriendRequest.refuesedUsername)
+}
+inline std::string* C2S_RefuseFriendRequest::mutable_refuesedusername() {
+  std::string* _s = _internal_mutable_refuesedusername();
+  // @@protoc_insertion_point(field_mutable:Protocol.C2S_RefuseFriendRequest.refuesedUsername)
+  return _s;
+}
+inline const std::string& C2S_RefuseFriendRequest::_internal_refuesedusername() const {
+  return refuesedusername_.Get();
+}
+inline void C2S_RefuseFriendRequest::_internal_set_refuesedusername(const std::string& value) {
+  
+  refuesedusername_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C2S_RefuseFriendRequest::_internal_mutable_refuesedusername() {
+  
+  return refuesedusername_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C2S_RefuseFriendRequest::release_refuesedusername() {
+  // @@protoc_insertion_point(field_release:Protocol.C2S_RefuseFriendRequest.refuesedUsername)
+  return refuesedusername_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C2S_RefuseFriendRequest::set_allocated_refuesedusername(std::string* refuesedusername) {
+  if (refuesedusername != nullptr) {
+    
+  } else {
+    
+  }
+  refuesedusername_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), refuesedusername,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (refuesedusername_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    refuesedusername_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C2S_RefuseFriendRequest.refuesedUsername)
+}
+
+// -------------------------------------------------------------------
+
+// S2C_RefuseFriendResponse
+
+// .google.protobuf.BoolValue success = 1;
+inline bool S2C_RefuseFriendResponse::_internal_has_success() const {
+  return this != internal_default_instance() && success_ != nullptr;
+}
+inline bool S2C_RefuseFriendResponse::has_success() const {
+  return _internal_has_success();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_RefuseFriendResponse::_internal_success() const {
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue* p = success_;
+  return p != nullptr ? *p : reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::BoolValue&>(
+      ::PROTOBUF_NAMESPACE_ID::_BoolValue_default_instance_);
+}
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_RefuseFriendResponse::success() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_RefuseFriendResponse.success)
+  return _internal_success();
+}
+inline void S2C_RefuseFriendResponse::unsafe_arena_set_allocated_success(
+    ::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
+  }
+  success_ = success;
+  if (success) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S2C_RefuseFriendResponse.success)
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_RefuseFriendResponse::release_success() {
+  
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
+  success_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_RefuseFriendResponse::unsafe_arena_release_success() {
+  // @@protoc_insertion_point(field_release:Protocol.S2C_RefuseFriendResponse.success)
+  
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
+  success_ = nullptr;
+  return temp;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_RefuseFriendResponse::_internal_mutable_success() {
+  
+  if (success_ == nullptr) {
+    auto* p = CreateMaybeMessage<::PROTOBUF_NAMESPACE_ID::BoolValue>(GetArenaForAllocation());
+    success_ = p;
+  }
+  return success_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_RefuseFriendResponse::mutable_success() {
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* _msg = _internal_mutable_success();
+  // @@protoc_insertion_point(field_mutable:Protocol.S2C_RefuseFriendResponse.success)
+  return _msg;
+}
+inline void S2C_RefuseFriendResponse::set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
+  }
+  if (success) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(success));
+    if (message_arena != submessage_arena) {
+      success = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, success, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  success_ = success;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_RefuseFriendResponse.success)
+}
+
+// -------------------------------------------------------------------
+
+// C2S_DelFriendRequest
+
+// string friendName = 1;
+inline void C2S_DelFriendRequest::clear_friendname() {
+  friendname_.ClearToEmpty();
+}
+inline const std::string& C2S_DelFriendRequest::friendname() const {
+  // @@protoc_insertion_point(field_get:Protocol.C2S_DelFriendRequest.friendName)
+  return _internal_friendname();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C2S_DelFriendRequest::set_friendname(ArgT0&& arg0, ArgT... args) {
+ 
+ friendname_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C2S_DelFriendRequest.friendName)
+}
+inline std::string* C2S_DelFriendRequest::mutable_friendname() {
+  std::string* _s = _internal_mutable_friendname();
+  // @@protoc_insertion_point(field_mutable:Protocol.C2S_DelFriendRequest.friendName)
+  return _s;
+}
+inline const std::string& C2S_DelFriendRequest::_internal_friendname() const {
+  return friendname_.Get();
+}
+inline void C2S_DelFriendRequest::_internal_set_friendname(const std::string& value) {
+  
+  friendname_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C2S_DelFriendRequest::_internal_mutable_friendname() {
+  
+  return friendname_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C2S_DelFriendRequest::release_friendname() {
+  // @@protoc_insertion_point(field_release:Protocol.C2S_DelFriendRequest.friendName)
+  return friendname_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C2S_DelFriendRequest::set_allocated_friendname(std::string* friendname) {
+  if (friendname != nullptr) {
+    
+  } else {
+    
+  }
+  friendname_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), friendname,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (friendname_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    friendname_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C2S_DelFriendRequest.friendName)
+}
+
+// -------------------------------------------------------------------
+
+// S2C_DelFriendResponse
+
+// .google.protobuf.BoolValue success = 1;
+inline bool S2C_DelFriendResponse::_internal_has_success() const {
+  return this != internal_default_instance() && success_ != nullptr;
+}
+inline bool S2C_DelFriendResponse::has_success() const {
+  return _internal_has_success();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_DelFriendResponse::_internal_success() const {
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue* p = success_;
+  return p != nullptr ? *p : reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::BoolValue&>(
+      ::PROTOBUF_NAMESPACE_ID::_BoolValue_default_instance_);
+}
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_DelFriendResponse::success() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_DelFriendResponse.success)
+  return _internal_success();
+}
+inline void S2C_DelFriendResponse::unsafe_arena_set_allocated_success(
+    ::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
+  }
+  success_ = success;
+  if (success) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S2C_DelFriendResponse.success)
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_DelFriendResponse::release_success() {
+  
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
+  success_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_DelFriendResponse::unsafe_arena_release_success() {
+  // @@protoc_insertion_point(field_release:Protocol.S2C_DelFriendResponse.success)
+  
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
+  success_ = nullptr;
+  return temp;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_DelFriendResponse::_internal_mutable_success() {
+  
+  if (success_ == nullptr) {
+    auto* p = CreateMaybeMessage<::PROTOBUF_NAMESPACE_ID::BoolValue>(GetArenaForAllocation());
+    success_ = p;
+  }
+  return success_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_DelFriendResponse::mutable_success() {
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* _msg = _internal_mutable_success();
+  // @@protoc_insertion_point(field_mutable:Protocol.S2C_DelFriendResponse.success)
+  return _msg;
+}
+inline void S2C_DelFriendResponse::set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
+  }
+  if (success) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(success));
+    if (message_arena != submessage_arena) {
+      success = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, success, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  success_ = success;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_DelFriendResponse.success)
+}
+
+// -------------------------------------------------------------------
+
+// S2O_UpdateStateNotification
+
+// string username = 1;
+inline void S2O_UpdateStateNotification::clear_username() {
+  username_.ClearToEmpty();
+}
+inline const std::string& S2O_UpdateStateNotification::username() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2O_UpdateStateNotification.username)
+  return _internal_username();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void S2O_UpdateStateNotification::set_username(ArgT0&& arg0, ArgT... args) {
+ 
+ username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.S2O_UpdateStateNotification.username)
+}
+inline std::string* S2O_UpdateStateNotification::mutable_username() {
+  std::string* _s = _internal_mutable_username();
+  // @@protoc_insertion_point(field_mutable:Protocol.S2O_UpdateStateNotification.username)
+  return _s;
+}
+inline const std::string& S2O_UpdateStateNotification::_internal_username() const {
+  return username_.Get();
+}
+inline void S2O_UpdateStateNotification::_internal_set_username(const std::string& value) {
+  
+  username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* S2O_UpdateStateNotification::_internal_mutable_username() {
+  
+  return username_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* S2O_UpdateStateNotification::release_username() {
+  // @@protoc_insertion_point(field_release:Protocol.S2O_UpdateStateNotification.username)
+  return username_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void S2O_UpdateStateNotification::set_allocated_username(std::string* username) {
+  if (username != nullptr) {
+    
+  } else {
+    
+  }
+  username_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), username,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (username_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S2O_UpdateStateNotification.username)
+}
+
+// int32 state = 2;
+inline void S2O_UpdateStateNotification::clear_state() {
+  state_ = 0;
+}
+inline int32_t S2O_UpdateStateNotification::_internal_state() const {
+  return state_;
+}
+inline int32_t S2O_UpdateStateNotification::state() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2O_UpdateStateNotification.state)
+  return _internal_state();
+}
+inline void S2O_UpdateStateNotification::_internal_set_state(int32_t value) {
+  
+  state_ = value;
+}
+inline void S2O_UpdateStateNotification::set_state(int32_t value) {
+  _internal_set_state(value);
+  // @@protoc_insertion_point(field_set:Protocol.S2O_UpdateStateNotification.state)
+}
+
+// -------------------------------------------------------------------
+
 // C2S_CreateRoomRequest
 
 // -------------------------------------------------------------------
@@ -3612,90 +7298,24 @@ inline void C2S_JoinRoomRequest::set_allocated_roomcode(std::string* roomcode) {
 
 // S2C_JoinRoomResponse
 
-// .google.protobuf.BoolValue success = 1;
-inline bool S2C_JoinRoomResponse::_internal_has_success() const {
-  return this != internal_default_instance() && success_ != nullptr;
+// int32 resultCode = 1;
+inline void S2C_JoinRoomResponse::clear_resultcode() {
+  resultcode_ = 0;
 }
-inline bool S2C_JoinRoomResponse::has_success() const {
-  return _internal_has_success();
+inline int32_t S2C_JoinRoomResponse::_internal_resultcode() const {
+  return resultcode_;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_JoinRoomResponse::_internal_success() const {
-  const ::PROTOBUF_NAMESPACE_ID::BoolValue* p = success_;
-  return p != nullptr ? *p : reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::BoolValue&>(
-      ::PROTOBUF_NAMESPACE_ID::_BoolValue_default_instance_);
+inline int32_t S2C_JoinRoomResponse::resultcode() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_JoinRoomResponse.resultCode)
+  return _internal_resultcode();
 }
-inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_JoinRoomResponse::success() const {
-  // @@protoc_insertion_point(field_get:Protocol.S2C_JoinRoomResponse.success)
-  return _internal_success();
-}
-inline void S2C_JoinRoomResponse::unsafe_arena_set_allocated_success(
-    ::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
-  }
-  success_ = success;
-  if (success) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S2C_JoinRoomResponse.success)
-}
-inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_JoinRoomResponse::release_success() {
+inline void S2C_JoinRoomResponse::_internal_set_resultcode(int32_t value) {
   
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
-  success_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
+  resultcode_ = value;
 }
-inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_JoinRoomResponse::unsafe_arena_release_success() {
-  // @@protoc_insertion_point(field_release:Protocol.S2C_JoinRoomResponse.success)
-  
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
-  success_ = nullptr;
-  return temp;
-}
-inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_JoinRoomResponse::_internal_mutable_success() {
-  
-  if (success_ == nullptr) {
-    auto* p = CreateMaybeMessage<::PROTOBUF_NAMESPACE_ID::BoolValue>(GetArenaForAllocation());
-    success_ = p;
-  }
-  return success_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_JoinRoomResponse::mutable_success() {
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* _msg = _internal_mutable_success();
-  // @@protoc_insertion_point(field_mutable:Protocol.S2C_JoinRoomResponse.success)
-  return _msg;
-}
-inline void S2C_JoinRoomResponse::set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
-  }
-  if (success) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
-            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(success));
-    if (message_arena != submessage_arena) {
-      success = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, success, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  success_ = success;
-  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_JoinRoomResponse.success)
+inline void S2C_JoinRoomResponse::set_resultcode(int32_t value) {
+  _internal_set_resultcode(value);
+  // @@protoc_insertion_point(field_set:Protocol.S2C_JoinRoomResponse.resultCode)
 }
 
 // string ipAddress = 2;
@@ -3845,44 +7465,44 @@ inline void S2C_QuitRoomResponse::set_allocated_success(::PROTOBUF_NAMESPACE_ID:
 
 // -------------------------------------------------------------------
 
-// C2S_InviteUserRequest
+// C2S_InviteFriendRequest
 
 // string username = 1;
-inline void C2S_InviteUserRequest::clear_username() {
+inline void C2S_InviteFriendRequest::clear_username() {
   username_.ClearToEmpty();
 }
-inline const std::string& C2S_InviteUserRequest::username() const {
-  // @@protoc_insertion_point(field_get:Protocol.C2S_InviteUserRequest.username)
+inline const std::string& C2S_InviteFriendRequest::username() const {
+  // @@protoc_insertion_point(field_get:Protocol.C2S_InviteFriendRequest.username)
   return _internal_username();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void C2S_InviteUserRequest::set_username(ArgT0&& arg0, ArgT... args) {
+void C2S_InviteFriendRequest::set_username(ArgT0&& arg0, ArgT... args) {
  
  username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Protocol.C2S_InviteUserRequest.username)
+  // @@protoc_insertion_point(field_set:Protocol.C2S_InviteFriendRequest.username)
 }
-inline std::string* C2S_InviteUserRequest::mutable_username() {
+inline std::string* C2S_InviteFriendRequest::mutable_username() {
   std::string* _s = _internal_mutable_username();
-  // @@protoc_insertion_point(field_mutable:Protocol.C2S_InviteUserRequest.username)
+  // @@protoc_insertion_point(field_mutable:Protocol.C2S_InviteFriendRequest.username)
   return _s;
 }
-inline const std::string& C2S_InviteUserRequest::_internal_username() const {
+inline const std::string& C2S_InviteFriendRequest::_internal_username() const {
   return username_.Get();
 }
-inline void C2S_InviteUserRequest::_internal_set_username(const std::string& value) {
+inline void C2S_InviteFriendRequest::_internal_set_username(const std::string& value) {
   
   username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
 }
-inline std::string* C2S_InviteUserRequest::_internal_mutable_username() {
+inline std::string* C2S_InviteFriendRequest::_internal_mutable_username() {
   
   return username_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
 }
-inline std::string* C2S_InviteUserRequest::release_username() {
-  // @@protoc_insertion_point(field_release:Protocol.C2S_InviteUserRequest.username)
+inline std::string* C2S_InviteFriendRequest::release_username() {
+  // @@protoc_insertion_point(field_release:Protocol.C2S_InviteFriendRequest.username)
   return username_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
 }
-inline void C2S_InviteUserRequest::set_allocated_username(std::string* username) {
+inline void C2S_InviteFriendRequest::set_allocated_username(std::string* username) {
   if (username != nullptr) {
     
   } else {
@@ -3895,30 +7515,30 @@ inline void C2S_InviteUserRequest::set_allocated_username(std::string* username)
     username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Protocol.C2S_InviteUserRequest.username)
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C2S_InviteFriendRequest.username)
 }
 
 // -------------------------------------------------------------------
 
-// S2C_InviteUserResponse
+// S2C_InviteFriendResponse
 
 // .google.protobuf.BoolValue success = 1;
-inline bool S2C_InviteUserResponse::_internal_has_success() const {
+inline bool S2C_InviteFriendResponse::_internal_has_success() const {
   return this != internal_default_instance() && success_ != nullptr;
 }
-inline bool S2C_InviteUserResponse::has_success() const {
+inline bool S2C_InviteFriendResponse::has_success() const {
   return _internal_has_success();
 }
-inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_InviteUserResponse::_internal_success() const {
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_InviteFriendResponse::_internal_success() const {
   const ::PROTOBUF_NAMESPACE_ID::BoolValue* p = success_;
   return p != nullptr ? *p : reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::BoolValue&>(
       ::PROTOBUF_NAMESPACE_ID::_BoolValue_default_instance_);
 }
-inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_InviteUserResponse::success() const {
-  // @@protoc_insertion_point(field_get:Protocol.S2C_InviteUserResponse.success)
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_InviteFriendResponse::success() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_InviteFriendResponse.success)
   return _internal_success();
 }
-inline void S2C_InviteUserResponse::unsafe_arena_set_allocated_success(
+inline void S2C_InviteFriendResponse::unsafe_arena_set_allocated_success(
     ::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
   if (GetArenaForAllocation() == nullptr) {
     delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
@@ -3929,9 +7549,9 @@ inline void S2C_InviteUserResponse::unsafe_arena_set_allocated_success(
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S2C_InviteUserResponse.success)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S2C_InviteFriendResponse.success)
 }
-inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_InviteUserResponse::release_success() {
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_InviteFriendResponse::release_success() {
   
   ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
   success_ = nullptr;
@@ -3946,14 +7566,14 @@ inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_InviteUserResponse::release_succe
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_InviteUserResponse::unsafe_arena_release_success() {
-  // @@protoc_insertion_point(field_release:Protocol.S2C_InviteUserResponse.success)
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_InviteFriendResponse::unsafe_arena_release_success() {
+  // @@protoc_insertion_point(field_release:Protocol.S2C_InviteFriendResponse.success)
   
   ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
   success_ = nullptr;
   return temp;
 }
-inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_InviteUserResponse::_internal_mutable_success() {
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_InviteFriendResponse::_internal_mutable_success() {
   
   if (success_ == nullptr) {
     auto* p = CreateMaybeMessage<::PROTOBUF_NAMESPACE_ID::BoolValue>(GetArenaForAllocation());
@@ -3961,12 +7581,12 @@ inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_InviteUserResponse::_internal_mut
   }
   return success_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_InviteUserResponse::mutable_success() {
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_InviteFriendResponse::mutable_success() {
   ::PROTOBUF_NAMESPACE_ID::BoolValue* _msg = _internal_mutable_success();
-  // @@protoc_insertion_point(field_mutable:Protocol.S2C_InviteUserResponse.success)
+  // @@protoc_insertion_point(field_mutable:Protocol.S2C_InviteFriendResponse.success)
   return _msg;
 }
-inline void S2C_InviteUserResponse::set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
+inline void S2C_InviteFriendResponse::set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
     delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
@@ -3985,49 +7605,179 @@ inline void S2C_InviteUserResponse::set_allocated_success(::PROTOBUF_NAMESPACE_I
     
   }
   success_ = success;
-  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_InviteUserResponse.success)
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_InviteFriendResponse.success)
 }
 
 // -------------------------------------------------------------------
 
-// S2C_InviteUserNotification
+// S2C_InviteFriendNotification
 
-// string ipAddress = 1;
-inline void S2C_InviteUserNotification::clear_ipaddress() {
+// string roomCode = 1;
+inline void S2C_InviteFriendNotification::clear_roomcode() {
+  roomcode_.ClearToEmpty();
+}
+inline const std::string& S2C_InviteFriendNotification::roomcode() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_InviteFriendNotification.roomCode)
+  return _internal_roomcode();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void S2C_InviteFriendNotification::set_roomcode(ArgT0&& arg0, ArgT... args) {
+ 
+ roomcode_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.S2C_InviteFriendNotification.roomCode)
+}
+inline std::string* S2C_InviteFriendNotification::mutable_roomcode() {
+  std::string* _s = _internal_mutable_roomcode();
+  // @@protoc_insertion_point(field_mutable:Protocol.S2C_InviteFriendNotification.roomCode)
+  return _s;
+}
+inline const std::string& S2C_InviteFriendNotification::_internal_roomcode() const {
+  return roomcode_.Get();
+}
+inline void S2C_InviteFriendNotification::_internal_set_roomcode(const std::string& value) {
+  
+  roomcode_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* S2C_InviteFriendNotification::_internal_mutable_roomcode() {
+  
+  return roomcode_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* S2C_InviteFriendNotification::release_roomcode() {
+  // @@protoc_insertion_point(field_release:Protocol.S2C_InviteFriendNotification.roomCode)
+  return roomcode_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void S2C_InviteFriendNotification::set_allocated_roomcode(std::string* roomcode) {
+  if (roomcode != nullptr) {
+    
+  } else {
+    
+  }
+  roomcode_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), roomcode,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (roomcode_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    roomcode_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_InviteFriendNotification.roomCode)
+}
+
+// -------------------------------------------------------------------
+
+// C2S_AcceptInvitationRequest
+
+// string roomCode = 1;
+inline void C2S_AcceptInvitationRequest::clear_roomcode() {
+  roomcode_.ClearToEmpty();
+}
+inline const std::string& C2S_AcceptInvitationRequest::roomcode() const {
+  // @@protoc_insertion_point(field_get:Protocol.C2S_AcceptInvitationRequest.roomCode)
+  return _internal_roomcode();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C2S_AcceptInvitationRequest::set_roomcode(ArgT0&& arg0, ArgT... args) {
+ 
+ roomcode_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C2S_AcceptInvitationRequest.roomCode)
+}
+inline std::string* C2S_AcceptInvitationRequest::mutable_roomcode() {
+  std::string* _s = _internal_mutable_roomcode();
+  // @@protoc_insertion_point(field_mutable:Protocol.C2S_AcceptInvitationRequest.roomCode)
+  return _s;
+}
+inline const std::string& C2S_AcceptInvitationRequest::_internal_roomcode() const {
+  return roomcode_.Get();
+}
+inline void C2S_AcceptInvitationRequest::_internal_set_roomcode(const std::string& value) {
+  
+  roomcode_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C2S_AcceptInvitationRequest::_internal_mutable_roomcode() {
+  
+  return roomcode_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C2S_AcceptInvitationRequest::release_roomcode() {
+  // @@protoc_insertion_point(field_release:Protocol.C2S_AcceptInvitationRequest.roomCode)
+  return roomcode_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C2S_AcceptInvitationRequest::set_allocated_roomcode(std::string* roomcode) {
+  if (roomcode != nullptr) {
+    
+  } else {
+    
+  }
+  roomcode_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), roomcode,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (roomcode_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    roomcode_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C2S_AcceptInvitationRequest.roomCode)
+}
+
+// -------------------------------------------------------------------
+
+// S2C_AcceptInvitationResponse
+
+// int32 resultCode = 1;
+inline void S2C_AcceptInvitationResponse::clear_resultcode() {
+  resultcode_ = 0;
+}
+inline int32_t S2C_AcceptInvitationResponse::_internal_resultcode() const {
+  return resultcode_;
+}
+inline int32_t S2C_AcceptInvitationResponse::resultcode() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_AcceptInvitationResponse.resultCode)
+  return _internal_resultcode();
+}
+inline void S2C_AcceptInvitationResponse::_internal_set_resultcode(int32_t value) {
+  
+  resultcode_ = value;
+}
+inline void S2C_AcceptInvitationResponse::set_resultcode(int32_t value) {
+  _internal_set_resultcode(value);
+  // @@protoc_insertion_point(field_set:Protocol.S2C_AcceptInvitationResponse.resultCode)
+}
+
+// string ipAddress = 2;
+inline void S2C_AcceptInvitationResponse::clear_ipaddress() {
   ipaddress_.ClearToEmpty();
 }
-inline const std::string& S2C_InviteUserNotification::ipaddress() const {
-  // @@protoc_insertion_point(field_get:Protocol.S2C_InviteUserNotification.ipAddress)
+inline const std::string& S2C_AcceptInvitationResponse::ipaddress() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_AcceptInvitationResponse.ipAddress)
   return _internal_ipaddress();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void S2C_InviteUserNotification::set_ipaddress(ArgT0&& arg0, ArgT... args) {
+void S2C_AcceptInvitationResponse::set_ipaddress(ArgT0&& arg0, ArgT... args) {
  
  ipaddress_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Protocol.S2C_InviteUserNotification.ipAddress)
+  // @@protoc_insertion_point(field_set:Protocol.S2C_AcceptInvitationResponse.ipAddress)
 }
-inline std::string* S2C_InviteUserNotification::mutable_ipaddress() {
+inline std::string* S2C_AcceptInvitationResponse::mutable_ipaddress() {
   std::string* _s = _internal_mutable_ipaddress();
-  // @@protoc_insertion_point(field_mutable:Protocol.S2C_InviteUserNotification.ipAddress)
+  // @@protoc_insertion_point(field_mutable:Protocol.S2C_AcceptInvitationResponse.ipAddress)
   return _s;
 }
-inline const std::string& S2C_InviteUserNotification::_internal_ipaddress() const {
+inline const std::string& S2C_AcceptInvitationResponse::_internal_ipaddress() const {
   return ipaddress_.Get();
 }
-inline void S2C_InviteUserNotification::_internal_set_ipaddress(const std::string& value) {
+inline void S2C_AcceptInvitationResponse::_internal_set_ipaddress(const std::string& value) {
   
   ipaddress_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
 }
-inline std::string* S2C_InviteUserNotification::_internal_mutable_ipaddress() {
+inline std::string* S2C_AcceptInvitationResponse::_internal_mutable_ipaddress() {
   
   return ipaddress_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
 }
-inline std::string* S2C_InviteUserNotification::release_ipaddress() {
-  // @@protoc_insertion_point(field_release:Protocol.S2C_InviteUserNotification.ipAddress)
+inline std::string* S2C_AcceptInvitationResponse::release_ipaddress() {
+  // @@protoc_insertion_point(field_release:Protocol.S2C_AcceptInvitationResponse.ipAddress)
   return ipaddress_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
 }
-inline void S2C_InviteUserNotification::set_allocated_ipaddress(std::string* ipaddress) {
+inline void S2C_AcceptInvitationResponse::set_allocated_ipaddress(std::string* ipaddress) {
   if (ipaddress != nullptr) {
     
   } else {
@@ -4040,7 +7790,7 @@ inline void S2C_InviteUserNotification::set_allocated_ipaddress(std::string* ipa
     ipaddress_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_InviteUserNotification.ipAddress)
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_AcceptInvitationResponse.ipAddress)
 }
 
 // -------------------------------------------------------------------
@@ -4140,6 +7890,38 @@ inline void S2C_StartGameResponse::set_allocated_success(::PROTOBUF_NAMESPACE_ID
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

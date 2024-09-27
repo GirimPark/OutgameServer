@@ -3,6 +3,12 @@ package Protocol;
 
 import "google/protobuf/wrappers.proto";
 
+message FriendInfo
+{
+	string username = 1;
+	int32 state = 2;
+}
+
 
 // 세션 관리
 message S2C_ValidationRequest
@@ -19,7 +25,7 @@ message S2C_SessionExpiredNotification
 }
 
 
-// 로그인, 로그아웃, 회원가입
+// Authentication
 message C2S_LoginRequest
 {
 	string username = 1;
@@ -28,6 +34,8 @@ message C2S_LoginRequest
 message S2C_LoginResponse
 {
 	google.protobuf.BoolValue success = 1;
+	repeated FriendInfo friendList = 2;
+	repeated FriendInfo pendingList = 3;
 }
 
 message C2S_LogoutRequest
@@ -50,7 +58,78 @@ message S2C_JoinResponse
 }
 
 
-// 방 생성, 참가, 퇴장, 초대
+
+
+message C2S_FindFriendRequest
+{
+	string username = 1;
+}
+message S2C_FindFriendResponse
+{
+	google.protobuf.BoolValue exist = 1;
+	FriendInfo friendInfo = 2;
+	int32 requestState = 3;
+}
+
+message C2S_AddFriendRequest
+{
+	string username = 1;
+}
+message S2C_AddFriendResponse
+{
+	google.protobuf.BoolValue success = 1;
+}
+message S2O_AddFriendNotification
+{
+	string username = 1;
+}
+
+message C2S_AcceptFriendRequest
+{
+	string acceptedUsername = 1;
+}
+message S2C_AcceptFriendResponse
+{
+	google.protobuf.BoolValue success = 1;
+	FriendInfo newFriendInfo = 2;
+}
+message S2O_AcceptFriendNotification
+{
+	FriendInfo newFriendInfo = 1;
+}
+
+message C2S_RefuseFriendRequest
+{
+	string refusedUsername = 1;
+}
+message S2C_RefuseFriendResponse
+{
+	google.protobuf.BoolValue success = 1;
+	string refusedUsername = 2;
+}
+
+message C2S_DelFriendRequest
+{
+	string friendName = 1;
+}
+message S2C_DelFriendResponse
+{
+	google.protobuf.BoolValue success = 1;
+	string delFriendName = 2;
+}
+message S2O_DelFriendNotification
+{
+	string delFriendName = 1;
+}
+
+
+message S2O_UpdateStateNotification
+{
+	FriendInfo friendInfo = 1;
+}
+
+
+// GameRoom
 message C2S_CreateRoomRequest
 {
 
@@ -67,7 +146,7 @@ message C2S_JoinRoomRequest
 }
 message S2C_JoinRoomResponse
 {
-	google.protobuf.BoolValue success = 1;
+	int32 resultCode = 1;
 	string ipAddress = 2;
 }
 
@@ -80,18 +159,29 @@ message S2C_QuitRoomResponse
 	google.protobuf.BoolValue success = 1;
 }
 
-message C2S_InviteUserRequest
+message C2S_InviteFriendRequest
 {
 	string username = 1;
 }
-message S2C_InviteUserResponse
+message S2C_InviteFriendResponse
 {
 	google.protobuf.BoolValue success = 1;
 }
-message S2C_InviteUserNotification
+message S2C_InviteFriendNotification
 {
-	string ipAddress = 1;
+	string roomCode = 1;
 }
+
+message C2S_AcceptInvitationRequest
+{
+	string roomCode = 1;
+}
+message S2C_AcceptInvitationResponse
+{
+	int32 resultCode = 1;
+	string ipAddress = 2;
+}
+
 
 // 게임 시작
 message C2S_StartGameRequest

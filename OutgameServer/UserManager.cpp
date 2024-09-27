@@ -2,6 +2,8 @@
 #include "UserManager.h"
 
 #include "User.h"
+#include "GameRoom.h"
+#include "GameRoomManager.h"
 
 concurrency::concurrent_unordered_map<SessionId, std::shared_ptr<User>> UserManager::s_activeUserMap;
 
@@ -9,17 +11,19 @@ UserManager::UserManager()
 {
 	InitializeCriticalSection(&m_userMapLock);
 
-	int offlineState = EUserStateType::OFFLINE;
+	int offlineState = EUserState::OFFLINE;
+#ifdef DB_INCLUDE_VERSION
 	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
-	DBBind<1, 0> updateStateBind(dbConn, L"UPDATE [dbo].[User] SET state = (?)");
+	DBBind<1, 0> updateStateBind(dbConn, L"UPDATE [dbo].[User] SET State = (?)");
 	updateStateBind.BindParam(0, offlineState);
 	ASSERT_CRASH(updateStateBind.Execute());
 	DBConnectionPool::Instance().ReturnConnection(dbConn);
+#endif
 
-	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_VALIDATION_RESPONSE, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
-	{
-			HandleValidationResponse(receiveStruct);
-	});
+	//OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_VALIDATION_RESPONSE, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
+	//{
+	//		HandleValidationResponse(receiveStruct);
+	//});
 
 	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_LOGIN_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
 		{
@@ -39,12 +43,14 @@ UserManager::~UserManager()
 {
 	DeleteCriticalSection(&m_userMapLock);
 
-	int offlineState = EUserStateType::OFFLINE;
+	int offlineState = EUserState::OFFLINE;
+#ifdef DB_INCLUDE_VERSION
 	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
-	DBBind<1, 0> updateStateBind(dbConn, L"UPDATE [dbo].[User] SET state = (?)");
+	DBBind<1, 0> updateStateBind(dbConn, L"UPDATE [dbo].[User] SET State = (?)");
 	updateStateBind.BindParam(0, offlineState);
 	ASSERT_CRASH(updateStateBind.Execute());
 	DBConnectionPool::Instance().ReturnConnection(dbConn);
+#endif
 
 	s_activeUserMap.clear();
 }
@@ -56,7 +62,6 @@ void UserManager::UpdateActiveUserMap(std::chrono::milliseconds period)
 		EnterCriticalSection(&m_userMapLock);
 		auto snapshot = s_activeUserMap;
 		LeaveCriticalSection(&m_userMapLock);
-
 		std::list<UserId> invalidUserList;
 		for(const auto& iter : snapshot)
 		{
@@ -64,12 +69,27 @@ void UserManager::UpdateActiveUserMap(std::chrono::milliseconds period)
 				invalidUserList.push_back(iter.second->GetId());
 		}
 
+
 		for(const auto& id : invalidUserList)
 		{
 			EnterCriticalSection(&m_userMapLock);
+			// user 종료 처리
 			auto userIter = s_activeUserMap.find(id);
-			userIter->second->UpdateState(EUserStateType::OFFLINE);
+			userIter->second->UpdateState(EUserState::OFFLINE);
 			delete userIter->second->GetSession();
+
+			// 방 퇴장 및 처리
+			std::shared_ptr<GameRoom> activeGameRoom = userIter->second->GetActiveGameRoomRef().lock();
+			if(activeGameRoom)
+			{
+				activeGameRoom->Quit(userIter->second);
+				if (activeGameRoom->GetRoomState() == ERoomStateType::DESTROYING)
+				{
+					GameRoomManager::UpdateActiveGameRooms(activeGameRoom->GetRoomCode());
+				}
+			}
+
+			// user 삭제
 			s_activeUserMap.unsafe_erase(userIter);
 			LeaveCriticalSection(&m_userMapLock);
 		}
@@ -166,19 +186,23 @@ void UserManager::HandleJoinRequest(std::shared_ptr<ReceiveStruct> receiveStruct
 	{
 		response->mutable_success()->set_value(true);
 
+#ifdef DB_INCLUDE_VERSION
 		// DB에 계정 정보 추가
 		DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
-		DBBind<2, 0> dbBind(dbConn, L"INSERT INTO [dbo].[User]([username], [password]) VALUES(?, ?)");
+		DBBind<2, 0> dbBind(dbConn, L"INSERT INTO [dbo].[User]([Nickname], [Password]) VALUES(?, ?)");
 
 		std::wstring username = std::wstring(joinRequest->username().begin(), joinRequest->username().end());
 		dbBind.BindParam(0, username.c_str(), username.size());
 		std::wstring password = std::wstring(joinRequest->password().begin(), joinRequest->password().end());
 		dbBind.BindParam(1, password.c_str(), password.size());
 
-		ASSERT_CRASH(dbBind.Execute());
+		if(!dbBind.Execute())
+			response->mutable_success()->set_value(false);
+		DBConnectionPool::Instance().ReturnConnection(dbConn);
+#endif
 	}
 	else
-		response->mutable_success()->set_value(true);
+		response->mutable_success()->set_value(false);
 
 	sendStruct->session->SetState(eSessionStateType::CLOSE);
 	sendStruct->data = response;
@@ -190,20 +214,20 @@ void UserManager::HandleJoinRequest(std::shared_ptr<ReceiveStruct> receiveStruct
 	OutgameServer::Instance().InsertSendTask(sendStruct);
 }
 
-void UserManager::HandleValidationResponse(std::shared_ptr<ReceiveStruct> receiveStructure)
-{
-	auto validationResponse = std::make_shared<Protocol::C2S_ValidationResponse>();
-	if(PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *validationResponse))
-	{
-		EnterCriticalSection(&m_userMapLock);
-		s_activeUserMap[receiveStructure->session->GetSessionId()]->UpdateLastValidationTime(std::chrono::steady_clock::now());
-		LeaveCriticalSection(&m_userMapLock);
-	}
-	else
-	{
-		LOG_CONTENTS("C2S_VALIDATION_RESPONSE: PakcetBuilder::Deserialize() failed");
-	}
-}
+//void UserManager::HandleValidationResponse(std::shared_ptr<ReceiveStruct> receiveStructure)
+//{
+//	auto validationResponse = std::make_shared<Protocol::C2S_ValidationResponse>();
+//	if(PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *validationResponse))
+//	{
+//		EnterCriticalSection(&m_userMapLock);
+//		s_activeUserMap[receiveStructure->session->GetSessionId()]->UpdateLastValidationTime(std::chrono::steady_clock::now());
+//		LeaveCriticalSection(&m_userMapLock);
+//	}
+//	else
+//	{
+//		LOG_CONTENTS("C2S_VALIDATION_RESPONSE: PakcetBuilder::Deserialize() failed");
+//	}
+//}
 
 void UserManager::CreateActiveUser(Session* session, std::string_view name)
 {
@@ -213,21 +237,68 @@ void UserManager::CreateActiveUser(Session* session, std::string_view name)
 	s_activeUserMap.insert({ session->GetSessionId(), user });
 	LeaveCriticalSection(&m_userMapLock);
 
-	// DB Update
-	std::wstring wUsername = std::wstring(name.begin(), name.end());
+#ifdef DB_INCLUDE_VERSION
+	// User State Update
 	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
-	DBBind<1, 0> updateStateBind(dbConn, L"UPDATE [dbo].[User] SET state = 1 WHERE username = (?)");
+	std::wstring wUsername = std::wstring(name.begin(), name.end());
+	DBBind<1, 0> updateStateBind(dbConn, L"UPDATE [dbo].[User] SET State = 1 WHERE Nickname = (?)");
 	updateStateBind.BindParam(0, wUsername.c_str(), wUsername.size());
 	ASSERT_CRASH(updateStateBind.Execute());
+
+	// Get Friend List(IsMutualFriend == 1)
+	DBBind<1, 2> getFriendBind(dbConn, L"SELECT f.FriendName, u.State FROM[dbo].[Friends] f INNER JOIN[dbo].[User] u ON f.FriendName = u.Nickname WHERE f.UserName = (?) AND f.IsMutualFriend = 1");
+	getFriendBind.BindParam(0, wUsername.c_str(), wUsername.size());
+
+	WCHAR outFriendName[256];
+	int outState;
+	getFriendBind.BindCol(0, outFriendName);
+	getFriendBind.BindCol(1, outState);
+	if(!getFriendBind.Execute())
+	{
+		LOG_CONTENTS("getFriendBind.Execute() Failed");
+		return;
+	}
+
+	while(getFriendBind.Fetch())
+	{
+		std::wstring wFriendName(outFriendName);
+		ZeroMemory(outFriendName, 256);
+		std::string friendName(wFriendName.begin(), wFriendName.end());
+
+		user->AppendFriend(static_cast<EUserState>(outState), friendName);
+	}
+
+	// Get Accept Pending List(IsMutualFriend == 0)
+	DBBind<1, 2> getPendingBind(dbConn, L"SELECT f.UserName, u.State FROM[dbo].[Friends] f INNER JOIN[dbo].[User] u ON f.UserName = u.Nickname WHERE f.FriendName = (?) AND f.IsMutualFriend = 0");
+	getPendingBind.BindParam(0, wUsername.c_str(), wUsername.size());
+
+	getPendingBind.BindCol(0, outFriendName);
+	getPendingBind.BindCol(1, outState);
+	if (!getPendingBind.Execute())
+	{
+		LOG_CONTENTS("getPendingBind.Execute() Failed");
+		return;
+	}
+
+	while(getPendingBind.Fetch())
+	{
+		std::wstring wFriendName(outFriendName);
+		ZeroMemory(outFriendName, 256);
+		std::string friendName(wFriendName.begin(), wFriendName.end());
+
+		user->AppendPendingFriend(static_cast<EUserState>(outState), friendName);
+	}
 	DBConnectionPool::Instance().ReturnConnection(dbConn);
+#endif
 }
 
 bool UserManager::AuthenticateUser(Session* session, const std::string_view& username, const std::string_view& password)
 {
+#ifdef DB_INCLUDE_VERSION
 	// UserDB 조회, validation 확인
 	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
 
-	DBBind<1, 2> loginRequestBind(dbConn, L"SELECT password, state FROM [dbo].[User] WHERE username = (?)");
+	DBBind<1, 2> loginRequestBind(dbConn, L"SELECT Password, State FROM [dbo].[User] WHERE Nickname = (?)");
 	if(dbConn->m_bUsable.load() == true)
 	{
 		int a = 0;
@@ -262,7 +333,7 @@ bool UserManager::AuthenticateUser(Session* session, const std::string_view& use
 	if (dbPassword == inputPassword)
 	{
 		// 로그인 중인지 확인
-		if (outState == EUserStateType::ONLINE || outState == EUserStateType::IN_GAME)
+		if (outState == EUserState::ONLINE || outState == EUserState::IN_GAME)
 		{
 			LOG_CONTENTS("로그인 중인 계정");
 			return false;
@@ -280,7 +351,16 @@ bool UserManager::AuthenticateUser(Session* session, const std::string_view& use
 		LOG_CONTENTS("유효하지 않은 Password");
 		return false;
 	}
-
+#else
+	if ((username == "host" || username == "guest")
+		&& password == "1234")
+	{
+		CreateActiveUser(session, username);
+		return true;
+	}
+	else
+		return false;
+#endif
 }
 
 bool UserManager::LogoutUser(Session* session)
@@ -291,14 +371,16 @@ bool UserManager::LogoutUser(Session* session)
 	ASSERT_CRASH(iter != s_activeUserMap.end());
 	std::wstring username = std::wstring(iter->second->GetName().begin(), iter->second->GetName().end());
 
+#ifdef DB_INCLUDE_VERSION
 	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
-	DBBind<1, 0> updateStateBind(dbConn, L"UPDATE [dbo].[User] SET state = 0 WHERE username = (?)");
+	DBBind<1, 0> updateStateBind(dbConn, L"UPDATE [dbo].[User] SET State = 0 WHERE Nickname = (?)");
 	updateStateBind.BindParam(0, username.c_str(), username.size());
 	ASSERT_CRASH(updateStateBind.Execute());
 	DBConnectionPool::Instance().ReturnConnection(dbConn);
+#endif
 
 	// active User Map에서 해당 유저 정리
-	iter->second->UpdateState(EUserStateType::OFFLINE);
+	iter->second->UpdateState(EUserState::OFFLINE);
 
 	iter = s_activeUserMap.unsafe_erase(iter);
 	LeaveCriticalSection(&m_userMapLock);
@@ -308,14 +390,11 @@ bool UserManager::LogoutUser(Session* session)
 
 bool UserManager::IsAvailableID(const std::string_view& username, const std::string_view& password)
 {
+#ifdef DB_INCLUDE_VERSION
 	// UserDB 조회, validation 확인
 	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
 
-	DBBind<1, 1> joinRequestBind(dbConn, L"SELECT 1 FROM [dbo].[User] WHERE username = (?)");
-	if (dbConn->m_bUsable.load() == true)
-	{
-		int a = 0;
-	}
+	DBBind<1, 1> joinRequestBind(dbConn, L"SELECT 1 FROM [dbo].[User] WHERE Nickname = (?)");
 	std::wstring wUsername = std::wstring(username.begin(), username.end());
 	joinRequestBind.BindParam(0, wUsername.c_str(), wUsername.size());
 
@@ -337,40 +416,6 @@ bool UserManager::IsAvailableID(const std::string_view& username, const std::str
 	}
 
 	DBConnectionPool::Instance().ReturnConnection(dbConn);
+#endif
 	return true;
 }
-
-//void UserManager::UpdateActiveUserMap()
-//{
-//	// 유저 유효성 검사 및 목록 정리
-//	EnterCriticalSection(&m_userMapLock);
-//	for(Concurrency::concurrent_unordered_map<unsigned int, std::shared_ptr<User>>::iterator it = s_activeUserMap.begin(); it!= s_activeUserMap.end();)
-//	{
-//		auto now = std::chrono::steady_clock::now();
-//		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - it->second->GetLastValidationTime());
-//		// 세션 만료 시간이 지났다면
-//		if(duration > m_userTimeout || it->second->GetState() == EUserStateType::OFFLINE)
-//		{
-//			it->second->UpdateState(EUserStateType::OFFLINE);
-//
-//			// 세션 만료 통지 패킷 송신
-//			std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
-//			sendStruct->type = ESendType::UNICAST;
-//			sendStruct->session = it->second->GetSession();
-//			sendStruct->session->SetState(eSessionStateType::UNREGISTER);
-//			sendStruct->data = std::make_shared<Protocol::S2C_SessionExpiredNotification>();
-//			std::string serializedString;
-//			(sendStruct->data)->SerializeToString(&serializedString);
-//			sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2C_SESSION_EXPIRED_NOTIFICATION, serializedString.size()));
-//
-//			OutgameServer::Instance().InsertSendTask(sendStruct);
-//
-//			it = s_activeUserMap.unsafe_erase(it);
-//		}
-//		else
-//		{
-//			++it;
-//		}
-//	}
-//	LeaveCriticalSection(&m_userMapLock);
-//}
