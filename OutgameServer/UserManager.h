@@ -15,7 +15,11 @@ public:
     {
         return s_activeUserMap.find(userId)->second;
     }
-
+    static std::weak_ptr<User> FindActiveUser(std::string username)
+    {
+        UserId userId = s_activeUsername.find(username)->second;
+        return s_activeUserMap.find(userId)->second;
+    }
 
     // 주기적으로 유저 목록 정리 스레드
     void UpdateActiveUserMap(std::chrono::milliseconds period);
@@ -39,6 +43,7 @@ private:
 
 private:
     static concurrency::concurrent_unordered_map<UserId, std::shared_ptr<User>> s_activeUserMap;
+    static concurrency::concurrent_unordered_map<std::string, UserId> s_activeUsername;
     CRITICAL_SECTION m_userMapLock;
 };
 

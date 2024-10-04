@@ -8,8 +8,6 @@ User::User(Session* session, std::string_view name)
 	, m_state(EUserState::ONLINE)
 
 {
-	m_friendList.resize(EUserState::END);
-	m_acceptPendingList.resize(EUserState::END);
 }
 
 void User::UpdateState(EUserState state)

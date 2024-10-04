@@ -26,8 +26,11 @@ public:
 	void SetActiveGameRoomRef(std::weak_ptr<GameRoom> gameRoom) { m_activeGameRoomRef = gameRoom; }
 	void ResetActiveGameRoom() { m_activeGameRoomRef.reset(); }
 
-	void AppendFriend(EUserState state, const std::string_view& friendName) { m_friendList[state].emplace_back(friendName); }
-	void AppendPendingFriend(EUserState state, const std::string_view& appendingFriendName) { m_acceptPendingList[state].emplace_back(appendingFriendName); }
+	void AppendFriend(const std::string& friendName, EUserState state) { m_friendList.insert({ friendName, state }); }
+	void AppendPendingFriend(const std::string& friendName, EUserState state) { m_acceptPendingList.insert({ friendName, state }); }
+
+	const std::unordered_map<std::string, EUserState>& GetFriendListRef() const { return m_friendList; }
+	const std::unordered_map<std::string, EUserState>& GetPendingListRef() const { return m_acceptPendingList; }
 
 private:
 	Session* m_session;
@@ -39,8 +42,8 @@ private:
 	std::weak_ptr<GameRoom> m_activeGameRoomRef;
 
 	// weak_ptr lock시 항상 유효성 확인할 것
-	std::vector<std::vector<std::string>> m_friendList;	// EUserState, Username
-	std::vector<std::vector<std::string>> m_acceptPendingList;
+	std::unordered_map<std::string, EUserState> m_friendList;
+	std::unordered_map<std::string, EUserState> m_acceptPendingList;
 	
 	//std::chrono::steady_clock::time_point m_lastValidationTime;
 

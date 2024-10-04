@@ -24,8 +24,6 @@
 #include <vld/vld.h>
 #endif
 
-#define DB_INCLUDE_VERSION
-
 void OutgameServer::Start()
 {
 #ifdef DB_INCLUDE_VERSION

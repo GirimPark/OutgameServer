@@ -6,6 +6,7 @@
 #include "GameRoomManager.h"
 
 concurrency::concurrent_unordered_map<SessionId, std::shared_ptr<User>> UserManager::s_activeUserMap;
+concurrency::concurrent_unordered_map<std::string, UserId> UserManager::s_activeUsername;
 
 UserManager::UserManager()
 {
@@ -90,6 +91,7 @@ void UserManager::UpdateActiveUserMap(std::chrono::milliseconds period)
 			}
 
 			// user 삭제
+			s_activeUsername.unsafe_erase(userIter->second->GetName());
 			s_activeUserMap.unsafe_erase(userIter);
 			LeaveCriticalSection(&m_userMapLock);
 		}
@@ -118,7 +120,25 @@ void UserManager::HandleLoginRequest(std::shared_ptr<ReceiveStruct> receiveStruc
 	if (AuthenticateUser(sendStruct->session, loginRequest->username(), loginRequest->password()))
 	{
 		response->mutable_success()->set_value(true);
+		// friendList
+		std::shared_ptr<User> user = s_activeUserMap.find(sendStruct->session->GetSessionId())->second;
+		for(const auto& friendInfo : user->GetFriendListRef())
+		{
+			Protocol::FriendInfo* protoFriendInfo = response->add_friendlist();
+			protoFriendInfo->set_username(friendInfo.first);
+			protoFriendInfo->set_state(friendInfo.second);
+		}
+
+		//pendingList
+		for (const auto& pendingInfo : user->GetPendingListRef())
+		{
+			Protocol::FriendInfo* protoPendingInfo = response->add_pendinglist();
+			protoPendingInfo->set_username(pendingInfo.first);
+			protoPendingInfo->set_state(pendingInfo.second);
+		}
+
 		sendStruct->session->SetState(eSessionStateType::REGISTER);
+
 	}
 	else
 	{
@@ -234,6 +254,7 @@ void UserManager::CreateActiveUser(Session* session, std::string_view name)
 	// 새 유저 생성, 세션과 연결
 	EnterCriticalSection(&m_userMapLock);
 	std::shared_ptr<User> user = std::make_shared<User>(session, name);
+	s_activeUsername.insert({ user->GetName(), session->GetSessionId() });
 	s_activeUserMap.insert({ session->GetSessionId(), user });
 	LeaveCriticalSection(&m_userMapLock);
 
@@ -265,7 +286,7 @@ void UserManager::CreateActiveUser(Session* session, std::string_view name)
 		ZeroMemory(outFriendName, 256);
 		std::string friendName(wFriendName.begin(), wFriendName.end());
 
-		user->AppendFriend(static_cast<EUserState>(outState), friendName);
+		user->AppendFriend(friendName, static_cast<EUserState>(outState));
 	}
 
 	// Get Accept Pending List(IsMutualFriend == 0)
@@ -286,7 +307,7 @@ void UserManager::CreateActiveUser(Session* session, std::string_view name)
 		ZeroMemory(outFriendName, 256);
 		std::string friendName(wFriendName.begin(), wFriendName.end());
 
-		user->AppendPendingFriend(static_cast<EUserState>(outState), friendName);
+		user->AppendPendingFriend(friendName, static_cast<EUserState>(outState));
 	}
 	DBConnectionPool::Instance().ReturnConnection(dbConn);
 #endif
@@ -382,7 +403,8 @@ bool UserManager::LogoutUser(Session* session)
 	// active User Map에서 해당 유저 정리
 	iter->second->UpdateState(EUserState::OFFLINE);
 
-	iter = s_activeUserMap.unsafe_erase(iter);
+	s_activeUsername.unsafe_erase(iter->second->GetName());
+	s_activeUserMap.unsafe_erase(iter);
 	LeaveCriticalSection(&m_userMapLock);
 
 	return true;
