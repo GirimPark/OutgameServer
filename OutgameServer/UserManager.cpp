@@ -38,6 +38,10 @@ UserManager::UserManager()
 		{
 			HandleJoinRequest(receiveStruct);
 		});
+	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_FIND_FRIEND_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
+		{
+			HandleFindFriendRequest(receiveStruct);
+		});
 }
 
 UserManager::~UserManager()
@@ -234,6 +238,45 @@ void UserManager::HandleJoinRequest(std::shared_ptr<ReceiveStruct> receiveStruct
 	OutgameServer::Instance().InsertSendTask(sendStruct);
 }
 
+void UserManager::HandleFindFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure)
+{
+	auto findFriendRequest = std::make_shared<Protocol::C2S_FindFriendRequest>();
+	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *findFriendRequest))
+	{
+		LOG_CONTENTS("C2S_FIND_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
+		return;
+	}
+
+	std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
+	// packetID
+	sendStruct->type = ESendType::UNICAST;
+	// session
+	sendStruct->session = receiveStructure->session;
+	// data
+	std::shared_ptr<Protocol::S2C_FindFriendResponse> response = std::make_shared<Protocol::S2C_FindFriendResponse>();
+	EUserState userState; int requestState;
+	if(FindUser(FindActiveUser(sendStruct->session->GetSessionId()).lock()->GetName(), findFriendRequest->username(), userState, requestState))
+	{
+		response->mutable_exist()->set_value(true);
+		Protocol::FriendInfo* friendInfo = response->mutable_friendinfo();
+		friendInfo->set_username(findFriendRequest->username());
+		friendInfo->set_state(userState);
+		response->set_requeststate(requestState);
+	}
+	else
+	{
+		response->mutable_exist()->set_value(false);
+	}
+
+	sendStruct->data = response;
+	// header
+	std::string serializedString;
+	(sendStruct->data)->SerializeToString(&serializedString);
+	sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2C_FIND_FRIEND_RESPONSE, serializedString.size()));
+
+	OutgameServer::Instance().InsertSendTask(sendStruct);
+}
+
 //void UserManager::HandleValidationResponse(std::shared_ptr<ReceiveStruct> receiveStructure)
 //{
 //	auto validationResponse = std::make_shared<Protocol::C2S_ValidationResponse>();
@@ -311,6 +354,8 @@ void UserManager::CreateActiveUser(Session* session, std::string_view name)
 	}
 	DBConnectionPool::Instance().ReturnConnection(dbConn);
 #endif
+
+	user->UpdateState(EUserState::ONLINE);
 }
 
 bool UserManager::AuthenticateUser(Session* session, const std::string_view& username, const std::string_view& password)
@@ -439,5 +484,36 @@ bool UserManager::IsAvailableID(const std::string_view& username, const std::str
 
 	DBConnectionPool::Instance().ReturnConnection(dbConn);
 #endif
+	return true;
+}
+
+bool UserManager::FindUser(const std::string& username, const std::string& friendName, EUserState& friendState, int& requestState)
+{
+#ifdef DB_INCLUDE_VERSION
+	// 유저 상태 쿼리
+	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
+	DBBind<1, 1> findStateBind(dbConn, L"SELECT State FROM [dbo].[User] WHERE Nickname = (?)");
+
+	std::wstring wFriendName = std::wstring(friendName.begin(), friendName.end());
+	findStateBind.BindParam(0, wFriendName.c_str(), wFriendName.size());
+	findStateBind.BindCol(0, friendState);
+
+	if (!findStateBind.Execute())
+		return false;
+
+	// 친구 신청 상태 쿼리
+	DBBind<2, 1> requestStateBind(dbConn, L"SELECT IsMutualFriend FROM [dbo].[Friends] WHERE UserName = (?) AND FriendName = (?)");
+
+	std::wstring wUserName = std::wstring(username.begin(), username.end());
+	requestStateBind.BindParam(0, wUserName.c_str(), wUserName.size());
+	requestStateBind.BindParam(1, wFriendName.c_str(), wFriendName.size());
+	requestStateBind.BindCol(0, requestState);
+
+	if (!requestStateBind.Execute())
+		return false;
+	
+	DBConnectionPool::Instance().ReturnConnection(dbConn);
+#endif
+
 	return true;
 }
