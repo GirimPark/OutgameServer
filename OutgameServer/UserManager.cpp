@@ -254,8 +254,8 @@ void UserManager::HandleFindFriendRequest(std::shared_ptr<ReceiveStruct> receive
 	sendStruct->session = receiveStructure->session;
 	// data
 	std::shared_ptr<Protocol::S2C_FindFriendResponse> response = std::make_shared<Protocol::S2C_FindFriendResponse>();
-	EUserState userState; int requestState;
-	if(FindUser(FindActiveUser(sendStruct->session->GetSessionId()).lock()->GetName(), findFriendRequest->username(), userState, requestState))
+	int userState; int requestState;
+	if(FindUser(FindActiveUser(sendStruct->session->GetSessionId()).lock()->GetName(), findFriendRequest->username(),  userState, requestState))
 	{
 		response->mutable_exist()->set_value(true);
 		Protocol::FriendInfo* friendInfo = response->mutable_friendinfo();
@@ -487,7 +487,7 @@ bool UserManager::IsAvailableID(const std::string_view& username, const std::str
 	return true;
 }
 
-bool UserManager::FindUser(const std::string& username, const std::string& friendName, EUserState& friendState, int& requestState)
+bool UserManager::FindUser(const std::string& username, const std::string& friendName, int& friendState, int& requestState)
 {
 #ifdef DB_INCLUDE_VERSION
 	// 유저 상태 쿼리

@@ -42,7 +42,7 @@ private:
     // 아이디 중복 확인
     bool IsAvailableID(const std::string_view& username, const std::string_view& password);
     // 친구 검색
-    bool FindUser(const std::string& username, const std::string& friendName, OUT EUserState& friendState, OUT int& requestState);
+    bool FindUser(const std::string& username, const std::string& friendName, OUT int& friendState, OUT int& requestState);
 
 private:
     static concurrency::concurrent_unordered_map<UserId, std::shared_ptr<User>> s_activeUserMap;
