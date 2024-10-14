@@ -47,8 +47,8 @@ void User::UpdateState(EUserState state)
 		sendStruct->session = session;
 		// data
 		std::shared_ptr<Protocol::S2O_UpdateStateNotification> response = std::make_shared<Protocol::S2O_UpdateStateNotification>();
-		response->set_username(m_name);
-		response->set_state(state);
+		response->mutable_friendinfo()->set_username(m_name);
+		response->mutable_friendinfo()->set_state(state);
 		sendStruct->data = response;
 		// header
 		std::string serializedString;

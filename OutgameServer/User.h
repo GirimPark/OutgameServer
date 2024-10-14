@@ -26,8 +26,8 @@ public:
 	void SetActiveGameRoomRef(std::weak_ptr<GameRoom> gameRoom) { m_activeGameRoomRef = gameRoom; }
 	void ResetActiveGameRoom() { m_activeGameRoomRef.reset(); }
 
-	void AppendFriend(const std::string& friendName, EUserState state) { m_friendList.insert({ friendName, state }); }
-	void AppendPendingFriend(const std::string& friendName, EUserState state) { m_acceptPendingList.insert({ friendName, state }); }
+	void AppendFriend(const std::string_view& friendName, EUserState state) { m_friendList.insert({ std::string(friendName.begin(), friendName.end()), state }); }
+	void AppendPendingFriend(const std::string_view& friendName, EUserState state) { m_acceptPendingList.insert({ std::string(friendName.begin(), friendName.end()), state }); }
 
 	const std::unordered_map<std::string, EUserState>& GetFriendListRef() const { return m_friendList; }
 	const std::unordered_map<std::string, EUserState>& GetPendingListRef() const { return m_acceptPendingList; }

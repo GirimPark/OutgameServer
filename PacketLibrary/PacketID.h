@@ -65,7 +65,15 @@ enum EUserState
 	ONLINE,
 	IN_GAME,
 	OFFLINE,
-	END
+	END_USER_STATE
+};
+
+enum ERequestState
+{
+	NON,
+	ALREADY_REQUEST,
+	ALREADY_FRIEND,
+	END_REQUEST_STATE
 };
 
 enum EJoinRoomResponse
@@ -76,4 +84,3 @@ enum EJoinRoomResponse
 	INVALID_ROOM,
 	UNKNOWN
 };
-

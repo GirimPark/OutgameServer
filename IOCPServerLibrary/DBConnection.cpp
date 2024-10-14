@@ -107,7 +107,7 @@ bool DBConnection::ExecuteFile(const std::string_view fileName)
 	}
 }
 
-bool DBConnection::Fetch()
+DB_RESULT DBConnection::Fetch()
 {
 	SQLRETURN rt = ::SQLFetch(m_statement);
 
@@ -115,14 +115,14 @@ bool DBConnection::Fetch()
 	{
 	case SQL_SUCCESS:
 	case SQL_SUCCESS_WITH_INFO:
-		return true;
+		return DB_RESULT::SUCCESS;
 	case SQL_NO_DATA:
-		return false;
+		return DB_RESULT::DB_NO_DATA;
 	case SQL_ERROR:
 		HandleError(rt);
-		return false;
+		return DB_RESULT::FAILED;
 	default:
-		return true;
+		return DB_RESULT::SUCCESS;
 	}
 }
 

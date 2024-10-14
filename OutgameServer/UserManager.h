@@ -13,12 +13,21 @@ public:
 
     static std::weak_ptr<User> FindActiveUser(UserId userId)
     {
-        return s_activeUserMap.find(userId)->second;
+        auto it = s_activeUserMap.find(userId);
+        if (it != s_activeUserMap.end()) 
+            return it->second;
+
+        LOG_CONTENTS("FindActiveUser Failed: This UserId is Invalid");
+    	return std::weak_ptr<User>();
     }
-    static std::weak_ptr<User> FindActiveUser(std::string username)
+    static std::weak_ptr<User> FindActiveUser(const std::string_view& username)
     {
-        UserId userId = s_activeUsername.find(username)->second;
-        return s_activeUserMap.find(userId)->second;
+        auto it = s_activeUsername.find(std::string(username.begin(), username.end()));
+        if (it != s_activeUsername.end())
+            return s_activeUserMap.find(it->second)->second;
+
+        LOG_CONTENTS("FindActiveUser Failed: This UserName is Invalid");
+    	return std::weak_ptr<User>();
     }
 
     // 주기적으로 유저 목록 정리 스레드
@@ -29,6 +38,7 @@ public:
     void HandleLogoutRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
     void HandleJoinRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
     void HandleFindFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
+    void HandleAddFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
 
     //void HandleValidationResponse(std::shared_ptr<ReceiveStruct> receiveStructure);
 
@@ -42,7 +52,9 @@ private:
     // 아이디 중복 확인
     bool IsAvailableID(const std::string_view& username, const std::string_view& password);
     // 친구 검색
-    bool FindUser(const std::string& username, const std::string& friendName, OUT int& friendState, OUT int& requestState);
+    bool FindUser(const std::string_view& username, const std::string_view& friendName, OUT int& friendState, OUT int& requestState);
+    // 친구 신청
+    bool AddFriend(const std::string_view& username, const std::string_view& friendName);
 
 private:
     static concurrency::concurrent_unordered_map<UserId, std::shared_ptr<User>> s_activeUserMap;

@@ -42,7 +42,7 @@ public:
 		return m_DBConnection->Execute(m_query);
 	}
 
-	bool Fetch()
+	DB_RESULT Fetch()
 	{
 		return m_DBConnection->Fetch();
 	}

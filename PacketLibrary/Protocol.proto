@@ -131,7 +131,7 @@ message S2O_UpdateStateNotification
 
 // GameRoom
 message C2S_CreateRoomRequest
-{
+{ 
 
 }
 message S2C_CreateRoomResponse

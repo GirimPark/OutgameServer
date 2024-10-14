@@ -42,6 +42,10 @@ UserManager::UserManager()
 		{
 			HandleFindFriendRequest(receiveStruct);
 		});
+	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_ADD_FRIEND_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
+		{
+			HandleAddFriendRequest(receiveStruct);
+		});
 }
 
 UserManager::~UserManager()
@@ -277,6 +281,40 @@ void UserManager::HandleFindFriendRequest(std::shared_ptr<ReceiveStruct> receive
 	OutgameServer::Instance().InsertSendTask(sendStruct);
 }
 
+void UserManager::HandleAddFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure)
+{
+	auto addFriendRequest = std::make_shared<Protocol::C2S_AddFriendRequest>();
+	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *addFriendRequest))
+	{
+		LOG_CONTENTS("C2S_ADD_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
+		return;
+	}
+
+	std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
+	// packetID
+	sendStruct->type = ESendType::UNICAST;
+	// session
+	sendStruct->session = receiveStructure->session;
+	// data
+	std::shared_ptr<Protocol::S2C_AddFriendResponse> response = std::make_shared<Protocol::S2C_AddFriendResponse>();
+	if (AddFriend(FindActiveUser(sendStruct->session->GetSessionId()).lock()->GetName(), addFriendRequest->username()))
+	{
+		response->mutable_success()->set_value(true);
+	}
+	else
+	{
+		response->mutable_success()->set_value(false);
+	}
+
+	sendStruct->data = response;
+	// header
+	std::string serializedString;
+	(sendStruct->data)->SerializeToString(&serializedString);
+	sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2C_FIND_FRIEND_RESPONSE, serializedString.size()));
+
+	OutgameServer::Instance().InsertSendTask(sendStruct);
+}
+
 //void UserManager::HandleValidationResponse(std::shared_ptr<ReceiveStruct> receiveStructure)
 //{
 //	auto validationResponse = std::make_shared<Protocol::C2S_ValidationResponse>();
@@ -323,7 +361,7 @@ void UserManager::CreateActiveUser(Session* session, std::string_view name)
 		return;
 	}
 
-	while(getFriendBind.Fetch())
+	while(getFriendBind.Fetch() == DB_RESULT::SUCCESS)
 	{
 		std::wstring wFriendName(outFriendName);
 		ZeroMemory(outFriendName, 256);
@@ -344,7 +382,7 @@ void UserManager::CreateActiveUser(Session* session, std::string_view name)
 		return;
 	}
 
-	while(getPendingBind.Fetch())
+	while(getPendingBind.Fetch() == DB_RESULT::SUCCESS)
 	{
 		std::wstring wFriendName(outFriendName);
 		ZeroMemory(outFriendName, 256);
@@ -384,7 +422,7 @@ bool UserManager::AuthenticateUser(Session* session, const std::string_view& use
 		return false;
 	}
 
-	if (!loginRequestBind.Fetch())
+	if (loginRequestBind.Fetch() != DB_RESULT::SUCCESS)
 	{
 		LOG_CONTENTS("유효하지 않은 ID");
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
@@ -475,7 +513,7 @@ bool UserManager::IsAvailableID(const std::string_view& username, const std::str
 		return false;
 	}
 
-	if (joinRequestBind.Fetch())
+	if (joinRequestBind.Fetch() != DB_RESULT::DB_NO_DATA)
 	{
 		LOG_CONTENTS("중복된 ID");
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
@@ -487,11 +525,15 @@ bool UserManager::IsAvailableID(const std::string_view& username, const std::str
 	return true;
 }
 
-bool UserManager::FindUser(const std::string& username, const std::string& friendName, int& friendState, int& requestState)
+bool UserManager::FindUser(const std::string_view& username, const std::string_view& friendName, int& friendState, int& requestState)
 {
+	if (username == friendName)
+		return false;
+
 #ifdef DB_INCLUDE_VERSION
 	// 유저 상태 쿼리
 	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
+
 	DBBind<1, 1> findStateBind(dbConn, L"SELECT State FROM [dbo].[User] WHERE Nickname = (?)");
 
 	std::wstring wFriendName = std::wstring(friendName.begin(), friendName.end());
@@ -499,21 +541,137 @@ bool UserManager::FindUser(const std::string& username, const std::string& frien
 	findStateBind.BindCol(0, friendState);
 
 	if (!findStateBind.Execute())
+	{
+		DBConnectionPool::Instance().ReturnConnection(dbConn);
 		return false;
+	}
+	if (findStateBind.Fetch() != DB_RESULT::SUCCESS)
+	{
+		DBConnectionPool::Instance().ReturnConnection(dbConn);
+		return false;
+	}
 
 	// 친구 신청 상태 쿼리
 	DBBind<2, 1> requestStateBind(dbConn, L"SELECT IsMutualFriend FROM [dbo].[Friends] WHERE UserName = (?) AND FriendName = (?)");
 
 	std::wstring wUserName = std::wstring(username.begin(), username.end());
+	bool bMutual;
 	requestStateBind.BindParam(0, wUserName.c_str(), wUserName.size());
 	requestStateBind.BindParam(1, wFriendName.c_str(), wFriendName.size());
-	requestStateBind.BindCol(0, requestState);
+	requestStateBind.BindCol(0, bMutual);
 
 	if (!requestStateBind.Execute())
+	{
+		DBConnectionPool::Instance().ReturnConnection(dbConn);
 		return false;
-	
+	}
+
+	DB_RESULT rt = requestStateBind.Fetch();
+	if (rt == DB_RESULT::FAILED)
+	{
+		DBConnectionPool::Instance().ReturnConnection(dbConn);
+		return false;
+	}
+
+	if (rt == DB_RESULT::SUCCESS)
+	{
+		if (bMutual)
+			requestState = ERequestState::ALREADY_FRIEND;
+		else
+			requestState = ERequestState::ALREADY_REQUEST;
+	}
+	else if(rt == DB_RESULT::DB_NO_DATA)
+	{
+		requestState = ERequestState::NON;
+	}
 	DBConnectionPool::Instance().ReturnConnection(dbConn);
 #endif
+	return true;
+}
 
+bool UserManager::AddFriend(const std::string_view& username, const std::string_view& friendName)
+{
+	/// AcceptFriend로 넘기기
+	//// 반대로 신청된 경우가 있는지 확인
+	//DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
+
+	//DBBind<2, 0> reverseRequestBind(dbConn, L"SELECT 1 FROM [dbo].[Friends] WHERE UserName = (?) AND FriendName = (?)");
+	//std::wstring wUserName = std::wstring(username.begin(), username.end());
+	//std::wstring wFriendName = std::wstring(friendName.begin(), friendName.end());
+	//reverseRequestBind.BindParam(0, wFriendName.c_str(), wFriendName.size());
+	//reverseRequestBind.BindParam(1, wUserName.c_str(), wUserName.size());
+
+	//if (!reverseRequestBind.Execute())
+	//{
+	//	DBConnectionPool::Instance().ReturnConnection(dbConn);
+	//	return false;
+	//}
+
+	//if (reverseRequestBind.Fetch() == DB_RESULT::SUCCESS)
+	//{
+	//	/// DB 상호간 친구로 수정 및 데이터 추가, 상대에게 AcceptFriendNotification/요청자에게 AcceptFriendResponse 발송, 정보 수정
+	//	// 이미 신청된 내역의 IsMutualFriend 수정
+	//	DBBind<2, 0> updateMutualBind(dbConn, L"UPDATE [dbo].[Friends] SET IsMutualFriend = 1 WHERE UserName = (?) AND FriendName = (?)");
+	//	updateMutualBind.BindParam(0, wFriendName.c_str(), wFriendName.size());
+	//	updateMutualBind.BindParam(1, wUserName.c_str(), wUserName.size());
+	//	if(!updateMutualBind.Execute())
+	//	{
+	//		DBConnectionPool::Instance().ReturnConnection(dbConn);
+	//		return false;
+	//	}
+	//	// 새로운 항목 추가
+	//	DBBind<2, 0> insertFriendBind(dbConn, L"INSERT INTO[dbo].[Friends]([UserName], [FriendName], [IsMutualFriend]) VALUES(? , ? , 1)");
+	//	insertFriendBind.BindParam(0, wUserName.c_str(), wUserName.size());
+	//	insertFriendBind.BindParam(1, wFriendName.c_str(), wFriendName.size());
+	//	if (!insertFriendBind.Execute())
+	//	{
+	//		DBConnectionPool::Instance().ReturnConnection(dbConn);
+	//		LOG_DB("Frinds Table Requires Rollback");
+	//		return false;
+	//	}
+
+	//	// todo 상대에게 AcceptFriendNotification 발송
+	//	// todo 요청자에게 AcceptFriendResponse 발송
+	//}
+
+#ifdef DB_INCLUDE_VERSION
+	// DB 테이블에 새로운 항목 추가
+	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
+
+	DBBind<2, 0> insertFriendBind(dbConn, L"INSERT INTO [dbo].[Friends]([UserName], [FriendName], [IsMutualFriend]) VALUES(? , ? , 0)");
+	std::wstring wUserName = std::wstring(username.begin(), username.end());
+	std::wstring wFriendName = std::wstring(friendName.begin(), friendName.end());
+	insertFriendBind.BindParam(0, wUserName.c_str(), wUserName.size());
+	insertFriendBind.BindParam(1, wFriendName.c_str(), wFriendName.size());
+	if (!insertFriendBind.Execute())
+	{
+		DBConnectionPool::Instance().ReturnConnection(dbConn);
+		return false;
+	}
+
+	// 상대가 활성 상태라면, 상대 유저 정보 수정 및 AddFriendNotification 발송
+	if(std::shared_ptr<User> otherUser = FindActiveUser(friendName).lock())
+	{
+		otherUser->AppendPendingFriend(friendName, EUserState::ONLINE);
+
+		std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
+		// packetID
+		sendStruct->type = ESendType::UNICAST;
+		// session
+		sendStruct->session = otherUser->GetSession();
+		// data
+		std::shared_ptr<Protocol::S2O_AddFriendNotification> response = std::make_shared<Protocol::S2O_AddFriendNotification>();
+		response->set_username(std::string(username.begin(), username.end()));
+		sendStruct->data = response;
+		// header
+		std::string serializedString;
+		(sendStruct->data)->SerializeToString(&serializedString);
+		sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2O_ADD_FRIEND_NOTIFICATION, serializedString.size()));
+
+		OutgameServer::Instance().InsertSendTask(sendStruct);
+	}
+
+	DBConnectionPool::Instance().ReturnConnection(dbConn);
+#endif
 	return true;
 }

@@ -1,5 +1,12 @@
 #pragma once
 
+enum class DB_RESULT
+{
+	SUCCESS,
+	DB_NO_DATA,
+	FAILED
+};
+
 class DBConnection
 {
 public:
@@ -11,7 +18,7 @@ public:
 
 	bool Execute(const WCHAR* query);
 	bool ExecuteFile(const std::string_view fileName);
-	bool Fetch();
+	DB_RESULT Fetch();
 
 	void Unbind();
 	int GetRowCount();
