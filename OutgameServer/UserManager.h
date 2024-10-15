@@ -39,8 +39,9 @@ public:
     void HandleJoinRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
     void HandleFindFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
     void HandleAddFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
+    void HandleAcceptFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
+    void HandleRefuseFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
 
-    //void HandleValidationResponse(std::shared_ptr<ReceiveStruct> receiveStructure);
 
 private:
     // 새 유저 생성(todo 풀에서 할당 받는 형태로 변경)
@@ -55,6 +56,10 @@ private:
     bool FindUser(const std::string_view& username, const std::string_view& friendName, OUT int& friendState, OUT int& requestState);
     // 친구 신청
     bool AddFriend(const std::string_view& username, const std::string_view& friendName);
+    // 친구 수락
+    bool AcceptFriend(const std::string_view& username, const std::string_view& friendName, OUT int& friendState);
+    // 친구 거절
+    bool RefuseFriend(const std::string_view& username, const std::string_view& friendName);
 
 private:
     static concurrency::concurrent_unordered_map<UserId, std::shared_ptr<User>> s_activeUserMap;
