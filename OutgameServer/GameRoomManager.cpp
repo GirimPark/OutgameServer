@@ -24,6 +24,10 @@ GameRoomManager::GameRoomManager()
 		{
 			HandleQuitRoomRequest(receiveStruct);
 		});
+	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_INVITE_FRIEND_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
+		{
+			HandleInviteFriendRequest(receiveStruct);
+		});
 }
 
 GameRoomManager::~GameRoomManager()
@@ -143,6 +147,40 @@ void GameRoomManager::HandleQuitRoomRequest(std::shared_ptr<ReceiveStruct> recei
 	OutgameServer::Instance().InsertSendTask(sendStruct);
 }
 
+void GameRoomManager::HandleInviteFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure)
+{
+	auto inviteFriendRequest = std::make_shared<Protocol::C2S_InviteFriendRequest>();
+	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *inviteFriendRequest))
+	{
+		LOG_CONTENTS("C2S_INVITE_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
+		return;
+	}
+
+	std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
+	// packetID
+	sendStruct->type = ESendType::UNICAST;
+	// session
+	sendStruct->session = receiveStructure->session;
+	// data
+	std::shared_ptr<Protocol::S2C_InviteFriendResponse> response = std::make_shared<Protocol::S2C_InviteFriendResponse>();
+	if (InviteFriend(UserManager::FindActiveUser(receiveStructure->session->GetSessionId()).lock()->GetName(), inviteFriendRequest->username()))
+	{
+		response->mutable_success()->set_value(true);
+		response->set_invitedusername(inviteFriendRequest->username());
+	}
+	else
+	{
+		response->mutable_success()->set_value(false);
+	}
+	sendStruct->data = response;
+	//header
+	std::string serializedString;
+	(sendStruct->data)->SerializeToString(&serializedString);
+	sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2C_INVITE_FRIEND_RESPONSE, serializedString.size()));
+
+	OutgameServer::Instance().InsertSendTask(sendStruct);
+}
+
 std::shared_ptr<GameRoom> GameRoomManager::CreateGameRoom(SessionId sessionId)
 {
 	std::shared_ptr<User> hostPlayer = UserManager::FindActiveUser(sessionId).lock();
@@ -168,7 +206,7 @@ std::shared_ptr<GameRoom> GameRoomManager::CreateGameRoom(SessionId sessionId)
 	return gameRoom;
 }
 
-EJoinRoomResponse GameRoomManager::JoinGameRoom(SessionId sessionId, std::string roomCode, std::string& ipAddress)
+EJoinRoomResponse GameRoomManager::JoinGameRoom(SessionId sessionId, const std::string_view& roomCode, OUT std::string& ipAddress)
 {
 	// Find Player
 	std::shared_ptr<User> player = UserManager::FindActiveUser(sessionId).lock();
@@ -177,7 +215,7 @@ EJoinRoomResponse GameRoomManager::JoinGameRoom(SessionId sessionId, std::string
 
 	// Find Room
 	EnterCriticalSection(&s_gameRoomsLock);
-	auto gameRoomIter = s_activeGameRooms.find(roomCode);
+	auto gameRoomIter = s_activeGameRooms.find(std::string(roomCode));
 	if (gameRoomIter == s_activeGameRooms.end())	// 없는 방
 	{
 		LeaveCriticalSection(&s_gameRoomsLock);
@@ -219,6 +257,39 @@ bool GameRoomManager::QuitGameRoom(SessionId sessionId)
 		s_activeGameRooms.unsafe_erase(activeRoom->GetRoomCode());
 		LeaveCriticalSection(&s_gameRoomsLock);
 	}
+
+	return true;
+}
+
+bool GameRoomManager::InviteFriend(const std::string_view& username, const std::string_view& friendName)
+{
+	// 상대가 온라인이고, 방 상태가 WAIT인지 확인(다른 확인절차는 JoinRoom에서 거친다)
+	// Notification 발송
+	std::shared_ptr<User> inviteUser = UserManager::FindActiveUser(username).lock();
+	std::shared_ptr<GameRoom> GameRoom = inviteUser->GetActiveGameRoomRef().lock();
+	if (GameRoom->GetRoomState() != ERoomStateType::WAIT)
+		return false;
+
+	std::shared_ptr<User> invitedUser = UserManager::FindActiveUser(friendName).lock();
+	if (!invitedUser)
+		return false;
+
+	std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
+	// packetID
+	sendStruct->type = ESendType::UNICAST;
+	// session
+	sendStruct->session = invitedUser->GetSession();
+	// data
+	std::shared_ptr<Protocol::S2O_InviteFriendNotification> response = std::make_shared<Protocol::S2O_InviteFriendNotification>();
+	response->set_username(std::string(username));
+	response->set_roomcode(GameRoom->GetRoomCode());
+	sendStruct->data = response;
+	// header
+	std::string serializedString;
+	(sendStruct->data)->SerializeToString(&serializedString);
+	sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2O_INVITE_FRIEND_NOTIFICATION, serializedString.size()));
+
+	OutgameServer::Instance().InsertSendTask(sendStruct);
 
 	return true;
 }

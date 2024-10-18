@@ -55,7 +55,7 @@ void OutgameServer::Start()
 	m_workers.emplace_back(new std::thread(&ServerCore::Run, m_pServerCore));					// Server Core(Recv)
 	m_workers.emplace_back(new std::thread(&OutgameServer::SendThread, this));						// Send
 	m_workers.emplace_back(new std::thread(&PacketHandler::Run, m_pPacketHandler));				// Handle
-	m_workers.emplace_back(new std::thread(&OutgameServer::QuitThread, this));						// Quit
+	//m_workers.emplace_back(new std::thread(&OutgameServer::QuitThread, this));						// Quit
 
 	m_workers.emplace_back(new std::thread(&UserManager::UpdateActiveUserMap, m_pUserManager, std::chrono::milliseconds(10000)));	// User 목록 정리
 	

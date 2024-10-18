@@ -84,6 +84,20 @@ message S2O_AddFriendNotification
 	string username = 1;
 }
 
+message C2S_CancelAddFriendRequest
+{
+	string username = 1;
+}
+message S2C_CancelAddFriendResponse
+{
+	google.protobuf.BoolValue success = 1;
+}
+message S2O_CancelAddFriendNotification
+{
+	string username = 1;
+}
+
+
 message C2S_AcceptFriendRequest
 {
 	string acceptedUsername = 1;
@@ -166,20 +180,12 @@ message C2S_InviteFriendRequest
 message S2C_InviteFriendResponse
 {
 	google.protobuf.BoolValue success = 1;
+	string invitedUserName = 2;
 }
-message S2C_InviteFriendNotification
+message S2O_InviteFriendNotification
 {
-	string roomCode = 1;
-}
-
-message C2S_AcceptInvitationRequest
-{
-	string roomCode = 1;
-}
-message S2C_AcceptInvitationResponse
-{
-	int32 resultCode = 1;
-	string ipAddress = 2;
+	string username = 1;
+	string roomCode = 2;
 }
 
 

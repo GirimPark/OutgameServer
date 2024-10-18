@@ -199,6 +199,42 @@ struct S2O_AddFriendNotificationDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S2O_AddFriendNotificationDefaultTypeInternal _S2O_AddFriendNotification_default_instance_;
+constexpr C2S_CancelAddFriendRequest::C2S_CancelAddFriendRequest(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : username_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+struct C2S_CancelAddFriendRequestDefaultTypeInternal {
+  constexpr C2S_CancelAddFriendRequestDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~C2S_CancelAddFriendRequestDefaultTypeInternal() {}
+  union {
+    C2S_CancelAddFriendRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C2S_CancelAddFriendRequestDefaultTypeInternal _C2S_CancelAddFriendRequest_default_instance_;
+constexpr S2C_CancelAddFriendResponse::S2C_CancelAddFriendResponse(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : success_(nullptr){}
+struct S2C_CancelAddFriendResponseDefaultTypeInternal {
+  constexpr S2C_CancelAddFriendResponseDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~S2C_CancelAddFriendResponseDefaultTypeInternal() {}
+  union {
+    S2C_CancelAddFriendResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S2C_CancelAddFriendResponseDefaultTypeInternal _S2C_CancelAddFriendResponse_default_instance_;
+constexpr S2O_CancelAddFriendNotification::S2O_CancelAddFriendNotification(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : username_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+struct S2O_CancelAddFriendNotificationDefaultTypeInternal {
+  constexpr S2O_CancelAddFriendNotificationDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~S2O_CancelAddFriendNotificationDefaultTypeInternal() {}
+  union {
+    S2O_CancelAddFriendNotification _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S2O_CancelAddFriendNotificationDefaultTypeInternal _S2O_CancelAddFriendNotification_default_instance_;
 constexpr C2S_AcceptFriendRequest::C2S_AcceptFriendRequest(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : acceptedusername_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
@@ -396,7 +432,8 @@ struct C2S_InviteFriendRequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C2S_InviteFriendRequestDefaultTypeInternal _C2S_InviteFriendRequest_default_instance_;
 constexpr S2C_InviteFriendResponse::S2C_InviteFriendResponse(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : success_(nullptr){}
+  : invitedusername_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , success_(nullptr){}
 struct S2C_InviteFriendResponseDefaultTypeInternal {
   constexpr S2C_InviteFriendResponseDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -406,43 +443,19 @@ struct S2C_InviteFriendResponseDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S2C_InviteFriendResponseDefaultTypeInternal _S2C_InviteFriendResponse_default_instance_;
-constexpr S2C_InviteFriendNotification::S2C_InviteFriendNotification(
+constexpr S2O_InviteFriendNotification::S2O_InviteFriendNotification(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : roomcode_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
-struct S2C_InviteFriendNotificationDefaultTypeInternal {
-  constexpr S2C_InviteFriendNotificationDefaultTypeInternal()
+  : username_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , roomcode_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+struct S2O_InviteFriendNotificationDefaultTypeInternal {
+  constexpr S2O_InviteFriendNotificationDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~S2C_InviteFriendNotificationDefaultTypeInternal() {}
+  ~S2O_InviteFriendNotificationDefaultTypeInternal() {}
   union {
-    S2C_InviteFriendNotification _instance;
+    S2O_InviteFriendNotification _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S2C_InviteFriendNotificationDefaultTypeInternal _S2C_InviteFriendNotification_default_instance_;
-constexpr C2S_AcceptInvitationRequest::C2S_AcceptInvitationRequest(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : roomcode_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
-struct C2S_AcceptInvitationRequestDefaultTypeInternal {
-  constexpr C2S_AcceptInvitationRequestDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~C2S_AcceptInvitationRequestDefaultTypeInternal() {}
-  union {
-    C2S_AcceptInvitationRequest _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C2S_AcceptInvitationRequestDefaultTypeInternal _C2S_AcceptInvitationRequest_default_instance_;
-constexpr S2C_AcceptInvitationResponse::S2C_AcceptInvitationResponse(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : ipaddress_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
-  , resultcode_(0){}
-struct S2C_AcceptInvitationResponseDefaultTypeInternal {
-  constexpr S2C_AcceptInvitationResponseDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~S2C_AcceptInvitationResponseDefaultTypeInternal() {}
-  union {
-    S2C_AcceptInvitationResponse _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S2C_AcceptInvitationResponseDefaultTypeInternal _S2C_AcceptInvitationResponse_default_instance_;
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S2O_InviteFriendNotificationDefaultTypeInternal _S2O_InviteFriendNotification_default_instance_;
 constexpr C2S_StartGameRequest::C2S_StartGameRequest(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
 struct C2S_StartGameRequestDefaultTypeInternal {
@@ -467,7 +480,7 @@ struct S2C_StartGameResponseDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S2C_StartGameResponseDefaultTypeInternal _S2C_StartGameResponse_default_instance_;
 }  // namespace Protocol
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Protocol_2eproto[37];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Protocol_2eproto[38];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_Protocol_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_Protocol_2eproto = nullptr;
 
@@ -579,6 +592,27 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::S2O_AddFriendNotification, username_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_CancelAddFriendRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_CancelAddFriendRequest, username_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_CancelAddFriendResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_CancelAddFriendResponse, success_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2O_CancelAddFriendNotification, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2O_CancelAddFriendNotification, username_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::C2S_AcceptFriendRequest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -701,28 +735,15 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::S2C_InviteFriendResponse, success_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_InviteFriendResponse, invitedusername_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_InviteFriendNotification, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2O_InviteFriendNotification, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_InviteFriendNotification, roomcode_),
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_AcceptInvitationRequest, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_AcceptInvitationRequest, roomcode_),
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_AcceptInvitationResponse, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_AcceptInvitationResponse, resultcode_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_AcceptInvitationResponse, ipaddress_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2O_InviteFriendNotification, username_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2O_InviteFriendNotification, roomcode_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::C2S_StartGameRequest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -753,28 +774,29 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 86, -1, -1, sizeof(::Protocol::C2S_AddFriendRequest)},
   { 93, -1, -1, sizeof(::Protocol::S2C_AddFriendResponse)},
   { 100, -1, -1, sizeof(::Protocol::S2O_AddFriendNotification)},
-  { 107, -1, -1, sizeof(::Protocol::C2S_AcceptFriendRequest)},
-  { 114, -1, -1, sizeof(::Protocol::S2C_AcceptFriendResponse)},
-  { 122, -1, -1, sizeof(::Protocol::S2O_AcceptFriendNotification)},
-  { 129, -1, -1, sizeof(::Protocol::C2S_RefuseFriendRequest)},
-  { 136, -1, -1, sizeof(::Protocol::S2C_RefuseFriendResponse)},
-  { 144, -1, -1, sizeof(::Protocol::C2S_DelFriendRequest)},
-  { 151, -1, -1, sizeof(::Protocol::S2C_DelFriendResponse)},
-  { 159, -1, -1, sizeof(::Protocol::S2O_DelFriendNotification)},
-  { 166, -1, -1, sizeof(::Protocol::S2O_UpdateStateNotification)},
-  { 173, -1, -1, sizeof(::Protocol::C2S_CreateRoomRequest)},
-  { 179, -1, -1, sizeof(::Protocol::S2C_CreateRoomResponse)},
-  { 187, -1, -1, sizeof(::Protocol::C2S_JoinRoomRequest)},
-  { 194, -1, -1, sizeof(::Protocol::S2C_JoinRoomResponse)},
-  { 202, -1, -1, sizeof(::Protocol::C2S_QuitRoomRequest)},
-  { 208, -1, -1, sizeof(::Protocol::S2C_QuitRoomResponse)},
-  { 215, -1, -1, sizeof(::Protocol::C2S_InviteFriendRequest)},
-  { 222, -1, -1, sizeof(::Protocol::S2C_InviteFriendResponse)},
-  { 229, -1, -1, sizeof(::Protocol::S2C_InviteFriendNotification)},
-  { 236, -1, -1, sizeof(::Protocol::C2S_AcceptInvitationRequest)},
-  { 243, -1, -1, sizeof(::Protocol::S2C_AcceptInvitationResponse)},
-  { 251, -1, -1, sizeof(::Protocol::C2S_StartGameRequest)},
-  { 257, -1, -1, sizeof(::Protocol::S2C_StartGameResponse)},
+  { 107, -1, -1, sizeof(::Protocol::C2S_CancelAddFriendRequest)},
+  { 114, -1, -1, sizeof(::Protocol::S2C_CancelAddFriendResponse)},
+  { 121, -1, -1, sizeof(::Protocol::S2O_CancelAddFriendNotification)},
+  { 128, -1, -1, sizeof(::Protocol::C2S_AcceptFriendRequest)},
+  { 135, -1, -1, sizeof(::Protocol::S2C_AcceptFriendResponse)},
+  { 143, -1, -1, sizeof(::Protocol::S2O_AcceptFriendNotification)},
+  { 150, -1, -1, sizeof(::Protocol::C2S_RefuseFriendRequest)},
+  { 157, -1, -1, sizeof(::Protocol::S2C_RefuseFriendResponse)},
+  { 165, -1, -1, sizeof(::Protocol::C2S_DelFriendRequest)},
+  { 172, -1, -1, sizeof(::Protocol::S2C_DelFriendResponse)},
+  { 180, -1, -1, sizeof(::Protocol::S2O_DelFriendNotification)},
+  { 187, -1, -1, sizeof(::Protocol::S2O_UpdateStateNotification)},
+  { 194, -1, -1, sizeof(::Protocol::C2S_CreateRoomRequest)},
+  { 200, -1, -1, sizeof(::Protocol::S2C_CreateRoomResponse)},
+  { 208, -1, -1, sizeof(::Protocol::C2S_JoinRoomRequest)},
+  { 215, -1, -1, sizeof(::Protocol::S2C_JoinRoomResponse)},
+  { 223, -1, -1, sizeof(::Protocol::C2S_QuitRoomRequest)},
+  { 229, -1, -1, sizeof(::Protocol::S2C_QuitRoomResponse)},
+  { 236, -1, -1, sizeof(::Protocol::C2S_InviteFriendRequest)},
+  { 243, -1, -1, sizeof(::Protocol::S2C_InviteFriendResponse)},
+  { 251, -1, -1, sizeof(::Protocol::S2O_InviteFriendNotification)},
+  { 259, -1, -1, sizeof(::Protocol::C2S_StartGameRequest)},
+  { 265, -1, -1, sizeof(::Protocol::S2C_StartGameResponse)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -793,6 +815,9 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C2S_AddFriendRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_AddFriendResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2O_AddFriendNotification_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C2S_CancelAddFriendRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_CancelAddFriendResponse_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2O_CancelAddFriendNotification_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C2S_AcceptFriendRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_AcceptFriendResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2O_AcceptFriendNotification_default_instance_),
@@ -810,9 +835,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_QuitRoomResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C2S_InviteFriendRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_InviteFriendResponse_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_InviteFriendNotification_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C2S_AcceptInvitationRequest_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_AcceptInvitationResponse_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2O_InviteFriendNotification_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C2S_StartGameRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S2C_StartGameResponse_default_instance_),
 };
@@ -840,49 +863,51 @@ const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "st\022\020\n\010username\030\001 \001(\t\"D\n\025S2C_AddFriendRes"
   "ponse\022+\n\007success\030\001 \001(\0132\032.google.protobuf"
   ".BoolValue\"-\n\031S2O_AddFriendNotification\022"
-  "\020\n\010username\030\001 \001(\t\"3\n\027C2S_AcceptFriendReq"
-  "uest\022\030\n\020acceptedUsername\030\001 \001(\t\"t\n\030S2C_Ac"
-  "ceptFriendResponse\022+\n\007success\030\001 \001(\0132\032.go"
-  "ogle.protobuf.BoolValue\022+\n\rnewFriendInfo"
-  "\030\002 \001(\0132\024.Protocol.FriendInfo\"K\n\034S2O_Acce"
-  "ptFriendNotification\022+\n\rnewFriendInfo\030\001 "
-  "\001(\0132\024.Protocol.FriendInfo\"2\n\027C2S_RefuseF"
-  "riendRequest\022\027\n\017refusedUsername\030\001 \001(\t\"`\n"
-  "\030S2C_RefuseFriendResponse\022+\n\007success\030\001 \001"
-  "(\0132\032.google.protobuf.BoolValue\022\027\n\017refuse"
-  "dUsername\030\002 \001(\t\"*\n\024C2S_DelFriendRequest\022"
-  "\022\n\nfriendName\030\001 \001(\t\"[\n\025S2C_DelFriendResp"
-  "onse\022+\n\007success\030\001 \001(\0132\032.google.protobuf."
-  "BoolValue\022\025\n\rdelFriendName\030\002 \001(\t\"2\n\031S2O_"
-  "DelFriendNotification\022\025\n\rdelFriendName\030\001"
-  " \001(\t\"G\n\033S2O_UpdateStateNotification\022(\n\nf"
-  "riendInfo\030\001 \001(\0132\024.Protocol.FriendInfo\"\027\n"
-  "\025C2S_CreateRoomRequest\"W\n\026S2C_CreateRoom"
-  "Response\022+\n\007success\030\001 \001(\0132\032.google.proto"
-  "buf.BoolValue\022\020\n\010roomCode\030\002 \001(\t\"\'\n\023C2S_J"
-  "oinRoomRequest\022\020\n\010roomCode\030\001 \001(\t\"=\n\024S2C_"
-  "JoinRoomResponse\022\022\n\nresultCode\030\001 \001(\005\022\021\n\t"
-  "ipAddress\030\002 \001(\t\"\025\n\023C2S_QuitRoomRequest\"C"
-  "\n\024S2C_QuitRoomResponse\022+\n\007success\030\001 \001(\0132"
-  "\032.google.protobuf.BoolValue\"+\n\027C2S_Invit"
-  "eFriendRequest\022\020\n\010username\030\001 \001(\t\"G\n\030S2C_"
-  "InviteFriendResponse\022+\n\007success\030\001 \001(\0132\032."
-  "google.protobuf.BoolValue\"0\n\034S2C_InviteF"
-  "riendNotification\022\020\n\010roomCode\030\001 \001(\t\"/\n\033C"
-  "2S_AcceptInvitationRequest\022\020\n\010roomCode\030\001"
-  " \001(\t\"E\n\034S2C_AcceptInvitationResponse\022\022\n\n"
-  "resultCode\030\001 \001(\005\022\021\n\tipAddress\030\002 \001(\t\"\026\n\024C"
-  "2S_StartGameRequest\"D\n\025S2C_StartGameResp"
-  "onse\022+\n\007success\030\001 \001(\0132\032.google.protobuf."
-  "BoolValueb\006proto3"
+  "\020\n\010username\030\001 \001(\t\".\n\032C2S_CancelAddFriend"
+  "Request\022\020\n\010username\030\001 \001(\t\"J\n\033S2C_CancelA"
+  "ddFriendResponse\022+\n\007success\030\001 \001(\0132\032.goog"
+  "le.protobuf.BoolValue\"3\n\037S2O_CancelAddFr"
+  "iendNotification\022\020\n\010username\030\001 \001(\t\"3\n\027C2"
+  "S_AcceptFriendRequest\022\030\n\020acceptedUsernam"
+  "e\030\001 \001(\t\"t\n\030S2C_AcceptFriendResponse\022+\n\007s"
+  "uccess\030\001 \001(\0132\032.google.protobuf.BoolValue"
+  "\022+\n\rnewFriendInfo\030\002 \001(\0132\024.Protocol.Frien"
+  "dInfo\"K\n\034S2O_AcceptFriendNotification\022+\n"
+  "\rnewFriendInfo\030\001 \001(\0132\024.Protocol.FriendIn"
+  "fo\"2\n\027C2S_RefuseFriendRequest\022\027\n\017refused"
+  "Username\030\001 \001(\t\"`\n\030S2C_RefuseFriendRespon"
+  "se\022+\n\007success\030\001 \001(\0132\032.google.protobuf.Bo"
+  "olValue\022\027\n\017refusedUsername\030\002 \001(\t\"*\n\024C2S_"
+  "DelFriendRequest\022\022\n\nfriendName\030\001 \001(\t\"[\n\025"
+  "S2C_DelFriendResponse\022+\n\007success\030\001 \001(\0132\032"
+  ".google.protobuf.BoolValue\022\025\n\rdelFriendN"
+  "ame\030\002 \001(\t\"2\n\031S2O_DelFriendNotification\022\025"
+  "\n\rdelFriendName\030\001 \001(\t\"G\n\033S2O_UpdateState"
+  "Notification\022(\n\nfriendInfo\030\001 \001(\0132\024.Proto"
+  "col.FriendInfo\"\027\n\025C2S_CreateRoomRequest\""
+  "W\n\026S2C_CreateRoomResponse\022+\n\007success\030\001 \001"
+  "(\0132\032.google.protobuf.BoolValue\022\020\n\010roomCo"
+  "de\030\002 \001(\t\"\'\n\023C2S_JoinRoomRequest\022\020\n\010roomC"
+  "ode\030\001 \001(\t\"=\n\024S2C_JoinRoomResponse\022\022\n\nres"
+  "ultCode\030\001 \001(\005\022\021\n\tipAddress\030\002 \001(\t\"\025\n\023C2S_"
+  "QuitRoomRequest\"C\n\024S2C_QuitRoomResponse\022"
+  "+\n\007success\030\001 \001(\0132\032.google.protobuf.BoolV"
+  "alue\"+\n\027C2S_InviteFriendRequest\022\020\n\010usern"
+  "ame\030\001 \001(\t\"`\n\030S2C_InviteFriendResponse\022+\n"
+  "\007success\030\001 \001(\0132\032.google.protobuf.BoolVal"
+  "ue\022\027\n\017invitedUserName\030\002 \001(\t\"B\n\034S2O_Invit"
+  "eFriendNotification\022\020\n\010username\030\001 \001(\t\022\020\n"
+  "\010roomCode\030\002 \001(\t\"\026\n\024C2S_StartGameRequest\""
+  "D\n\025S2C_StartGameResponse\022+\n\007success\030\001 \001("
+  "\0132\032.google.protobuf.BoolValueb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Protocol_2eproto_deps[1] = {
   &::descriptor_table_google_2fprotobuf_2fwrappers_2eproto,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Protocol_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Protocol_2eproto = {
-  false, false, 2257, descriptor_table_protodef_Protocol_2eproto, "Protocol.proto", 
-  &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 1, 37,
+  false, false, 2357, descriptor_table_protodef_Protocol_2eproto, "Protocol.proto", 
+  &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 1, 38,
   schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
   file_level_metadata_Protocol_2eproto, file_level_enum_descriptors_Protocol_2eproto, file_level_service_descriptors_Protocol_2eproto,
 };
@@ -3376,6 +3401,613 @@ void S2O_AddFriendNotification::InternalSwap(S2O_AddFriendNotification* other) {
 
 // ===================================================================
 
+class C2S_CancelAddFriendRequest::_Internal {
+ public:
+};
+
+C2S_CancelAddFriendRequest::C2S_CancelAddFriendRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:Protocol.C2S_CancelAddFriendRequest)
+}
+C2S_CancelAddFriendRequest::C2S_CancelAddFriendRequest(const C2S_CancelAddFriendRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  username_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_username().empty()) {
+    username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_username(), 
+      GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:Protocol.C2S_CancelAddFriendRequest)
+}
+
+inline void C2S_CancelAddFriendRequest::SharedCtor() {
+username_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+C2S_CancelAddFriendRequest::~C2S_CancelAddFriendRequest() {
+  // @@protoc_insertion_point(destructor:Protocol.C2S_CancelAddFriendRequest)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void C2S_CancelAddFriendRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  username_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void C2S_CancelAddFriendRequest::ArenaDtor(void* object) {
+  C2S_CancelAddFriendRequest* _this = reinterpret_cast< C2S_CancelAddFriendRequest* >(object);
+  (void)_this;
+}
+void C2S_CancelAddFriendRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void C2S_CancelAddFriendRequest::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void C2S_CancelAddFriendRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.C2S_CancelAddFriendRequest)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  username_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* C2S_CancelAddFriendRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string username = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_username();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C2S_CancelAddFriendRequest.username"));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* C2S_CancelAddFriendRequest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.C2S_CancelAddFriendRequest)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string username = 1;
+  if (!this->_internal_username().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_username().data(), static_cast<int>(this->_internal_username().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C2S_CancelAddFriendRequest.username");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_username(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.C2S_CancelAddFriendRequest)
+  return target;
+}
+
+size_t C2S_CancelAddFriendRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.C2S_CancelAddFriendRequest)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string username = 1;
+  if (!this->_internal_username().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_username());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData C2S_CancelAddFriendRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    C2S_CancelAddFriendRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C2S_CancelAddFriendRequest::GetClassData() const { return &_class_data_; }
+
+void C2S_CancelAddFriendRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<C2S_CancelAddFriendRequest *>(to)->MergeFrom(
+      static_cast<const C2S_CancelAddFriendRequest &>(from));
+}
+
+
+void C2S_CancelAddFriendRequest::MergeFrom(const C2S_CancelAddFriendRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.C2S_CancelAddFriendRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_username().empty()) {
+    _internal_set_username(from._internal_username());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void C2S_CancelAddFriendRequest::CopyFrom(const C2S_CancelAddFriendRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.C2S_CancelAddFriendRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool C2S_CancelAddFriendRequest::IsInitialized() const {
+  return true;
+}
+
+void C2S_CancelAddFriendRequest::InternalSwap(C2S_CancelAddFriendRequest* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &username_, lhs_arena,
+      &other->username_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata C2S_CancelAddFriendRequest::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
+      file_level_metadata_Protocol_2eproto[15]);
+}
+
+// ===================================================================
+
+class S2C_CancelAddFriendResponse::_Internal {
+ public:
+  static const ::PROTOBUF_NAMESPACE_ID::BoolValue& success(const S2C_CancelAddFriendResponse* msg);
+};
+
+const ::PROTOBUF_NAMESPACE_ID::BoolValue&
+S2C_CancelAddFriendResponse::_Internal::success(const S2C_CancelAddFriendResponse* msg) {
+  return *msg->success_;
+}
+void S2C_CancelAddFriendResponse::clear_success() {
+  if (GetArenaForAllocation() == nullptr && success_ != nullptr) {
+    delete success_;
+  }
+  success_ = nullptr;
+}
+S2C_CancelAddFriendResponse::S2C_CancelAddFriendResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:Protocol.S2C_CancelAddFriendResponse)
+}
+S2C_CancelAddFriendResponse::S2C_CancelAddFriendResponse(const S2C_CancelAddFriendResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_success()) {
+    success_ = new ::PROTOBUF_NAMESPACE_ID::BoolValue(*from.success_);
+  } else {
+    success_ = nullptr;
+  }
+  // @@protoc_insertion_point(copy_constructor:Protocol.S2C_CancelAddFriendResponse)
+}
+
+inline void S2C_CancelAddFriendResponse::SharedCtor() {
+success_ = nullptr;
+}
+
+S2C_CancelAddFriendResponse::~S2C_CancelAddFriendResponse() {
+  // @@protoc_insertion_point(destructor:Protocol.S2C_CancelAddFriendResponse)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void S2C_CancelAddFriendResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete success_;
+}
+
+void S2C_CancelAddFriendResponse::ArenaDtor(void* object) {
+  S2C_CancelAddFriendResponse* _this = reinterpret_cast< S2C_CancelAddFriendResponse* >(object);
+  (void)_this;
+}
+void S2C_CancelAddFriendResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void S2C_CancelAddFriendResponse::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void S2C_CancelAddFriendResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.S2C_CancelAddFriendResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaForAllocation() == nullptr && success_ != nullptr) {
+    delete success_;
+  }
+  success_ = nullptr;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* S2C_CancelAddFriendResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // .google.protobuf.BoolValue success = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_success(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* S2C_CancelAddFriendResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S2C_CancelAddFriendResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .google.protobuf.BoolValue success = 1;
+  if (this->_internal_has_success()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        1, _Internal::success(this), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S2C_CancelAddFriendResponse)
+  return target;
+}
+
+size_t S2C_CancelAddFriendResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.S2C_CancelAddFriendResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .google.protobuf.BoolValue success = 1;
+  if (this->_internal_has_success()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *success_);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData S2C_CancelAddFriendResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    S2C_CancelAddFriendResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*S2C_CancelAddFriendResponse::GetClassData() const { return &_class_data_; }
+
+void S2C_CancelAddFriendResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<S2C_CancelAddFriendResponse *>(to)->MergeFrom(
+      static_cast<const S2C_CancelAddFriendResponse &>(from));
+}
+
+
+void S2C_CancelAddFriendResponse::MergeFrom(const S2C_CancelAddFriendResponse& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S2C_CancelAddFriendResponse)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_has_success()) {
+    _internal_mutable_success()->::PROTOBUF_NAMESPACE_ID::BoolValue::MergeFrom(from._internal_success());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void S2C_CancelAddFriendResponse::CopyFrom(const S2C_CancelAddFriendResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S2C_CancelAddFriendResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool S2C_CancelAddFriendResponse::IsInitialized() const {
+  return true;
+}
+
+void S2C_CancelAddFriendResponse::InternalSwap(S2C_CancelAddFriendResponse* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(success_, other->success_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata S2C_CancelAddFriendResponse::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
+      file_level_metadata_Protocol_2eproto[16]);
+}
+
+// ===================================================================
+
+class S2O_CancelAddFriendNotification::_Internal {
+ public:
+};
+
+S2O_CancelAddFriendNotification::S2O_CancelAddFriendNotification(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:Protocol.S2O_CancelAddFriendNotification)
+}
+S2O_CancelAddFriendNotification::S2O_CancelAddFriendNotification(const S2O_CancelAddFriendNotification& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  username_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_username().empty()) {
+    username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_username(), 
+      GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:Protocol.S2O_CancelAddFriendNotification)
+}
+
+inline void S2O_CancelAddFriendNotification::SharedCtor() {
+username_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+S2O_CancelAddFriendNotification::~S2O_CancelAddFriendNotification() {
+  // @@protoc_insertion_point(destructor:Protocol.S2O_CancelAddFriendNotification)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void S2O_CancelAddFriendNotification::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  username_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void S2O_CancelAddFriendNotification::ArenaDtor(void* object) {
+  S2O_CancelAddFriendNotification* _this = reinterpret_cast< S2O_CancelAddFriendNotification* >(object);
+  (void)_this;
+}
+void S2O_CancelAddFriendNotification::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void S2O_CancelAddFriendNotification::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void S2O_CancelAddFriendNotification::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.S2O_CancelAddFriendNotification)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  username_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* S2O_CancelAddFriendNotification::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string username = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_username();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S2O_CancelAddFriendNotification.username"));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* S2O_CancelAddFriendNotification::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S2O_CancelAddFriendNotification)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string username = 1;
+  if (!this->_internal_username().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_username().data(), static_cast<int>(this->_internal_username().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.S2O_CancelAddFriendNotification.username");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_username(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S2O_CancelAddFriendNotification)
+  return target;
+}
+
+size_t S2O_CancelAddFriendNotification::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.S2O_CancelAddFriendNotification)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string username = 1;
+  if (!this->_internal_username().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_username());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData S2O_CancelAddFriendNotification::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    S2O_CancelAddFriendNotification::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*S2O_CancelAddFriendNotification::GetClassData() const { return &_class_data_; }
+
+void S2O_CancelAddFriendNotification::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<S2O_CancelAddFriendNotification *>(to)->MergeFrom(
+      static_cast<const S2O_CancelAddFriendNotification &>(from));
+}
+
+
+void S2O_CancelAddFriendNotification::MergeFrom(const S2O_CancelAddFriendNotification& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S2O_CancelAddFriendNotification)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_username().empty()) {
+    _internal_set_username(from._internal_username());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void S2O_CancelAddFriendNotification::CopyFrom(const S2O_CancelAddFriendNotification& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S2O_CancelAddFriendNotification)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool S2O_CancelAddFriendNotification::IsInitialized() const {
+  return true;
+}
+
+void S2O_CancelAddFriendNotification::InternalSwap(S2O_CancelAddFriendNotification* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &username_, lhs_arena,
+      &other->username_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata S2O_CancelAddFriendNotification::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
+      file_level_metadata_Protocol_2eproto[17]);
+}
+
+// ===================================================================
+
 class C2S_AcceptFriendRequest::_Internal {
  public:
 };
@@ -3574,7 +4206,7 @@ void C2S_AcceptFriendRequest::InternalSwap(C2S_AcceptFriendRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_AcceptFriendRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[15]);
+      file_level_metadata_Protocol_2eproto[18]);
 }
 
 // ===================================================================
@@ -3824,7 +4456,7 @@ void S2C_AcceptFriendResponse::InternalSwap(S2C_AcceptFriendResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_AcceptFriendResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[16]);
+      file_level_metadata_Protocol_2eproto[19]);
 }
 
 // ===================================================================
@@ -4019,7 +4651,7 @@ void S2O_AcceptFriendNotification::InternalSwap(S2O_AcceptFriendNotification* ot
 ::PROTOBUF_NAMESPACE_ID::Metadata S2O_AcceptFriendNotification::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[17]);
+      file_level_metadata_Protocol_2eproto[20]);
 }
 
 // ===================================================================
@@ -4222,7 +4854,7 @@ void C2S_RefuseFriendRequest::InternalSwap(C2S_RefuseFriendRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_RefuseFriendRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[18]);
+      file_level_metadata_Protocol_2eproto[21]);
 }
 
 // ===================================================================
@@ -4474,7 +5106,7 @@ void S2C_RefuseFriendResponse::InternalSwap(S2C_RefuseFriendResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_RefuseFriendResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[19]);
+      file_level_metadata_Protocol_2eproto[22]);
 }
 
 // ===================================================================
@@ -4677,7 +5309,7 @@ void C2S_DelFriendRequest::InternalSwap(C2S_DelFriendRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_DelFriendRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[20]);
+      file_level_metadata_Protocol_2eproto[23]);
 }
 
 // ===================================================================
@@ -4929,7 +5561,7 @@ void S2C_DelFriendResponse::InternalSwap(S2C_DelFriendResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_DelFriendResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[21]);
+      file_level_metadata_Protocol_2eproto[24]);
 }
 
 // ===================================================================
@@ -5132,7 +5764,7 @@ void S2O_DelFriendNotification::InternalSwap(S2O_DelFriendNotification* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2O_DelFriendNotification::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[22]);
+      file_level_metadata_Protocol_2eproto[25]);
 }
 
 // ===================================================================
@@ -5327,7 +5959,7 @@ void S2O_UpdateStateNotification::InternalSwap(S2O_UpdateStateNotification* othe
 ::PROTOBUF_NAMESPACE_ID::Metadata S2O_UpdateStateNotification::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[23]);
+      file_level_metadata_Protocol_2eproto[26]);
 }
 
 // ===================================================================
@@ -5366,7 +5998,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C2S_CreateRoomRequest::GetClas
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_CreateRoomRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[24]);
+      file_level_metadata_Protocol_2eproto[27]);
 }
 
 // ===================================================================
@@ -5618,7 +6250,7 @@ void S2C_CreateRoomResponse::InternalSwap(S2C_CreateRoomResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_CreateRoomResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[25]);
+      file_level_metadata_Protocol_2eproto[28]);
 }
 
 // ===================================================================
@@ -5821,7 +6453,7 @@ void C2S_JoinRoomRequest::InternalSwap(C2S_JoinRoomRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_JoinRoomRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[26]);
+      file_level_metadata_Protocol_2eproto[29]);
 }
 
 // ===================================================================
@@ -6050,7 +6682,7 @@ void S2C_JoinRoomResponse::InternalSwap(S2C_JoinRoomResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_JoinRoomResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[27]);
+      file_level_metadata_Protocol_2eproto[30]);
 }
 
 // ===================================================================
@@ -6089,7 +6721,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C2S_QuitRoomRequest::GetClassD
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_QuitRoomRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[28]);
+      file_level_metadata_Protocol_2eproto[31]);
 }
 
 // ===================================================================
@@ -6290,7 +6922,7 @@ void S2C_QuitRoomResponse::InternalSwap(S2C_QuitRoomResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_QuitRoomResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[29]);
+      file_level_metadata_Protocol_2eproto[32]);
 }
 
 // ===================================================================
@@ -6493,7 +7125,7 @@ void C2S_InviteFriendRequest::InternalSwap(C2S_InviteFriendRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_InviteFriendRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[30]);
+      file_level_metadata_Protocol_2eproto[33]);
 }
 
 // ===================================================================
@@ -6525,6 +7157,14 @@ S2C_InviteFriendResponse::S2C_InviteFriendResponse(::PROTOBUF_NAMESPACE_ID::Aren
 S2C_InviteFriendResponse::S2C_InviteFriendResponse(const S2C_InviteFriendResponse& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  invitedusername_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    invitedusername_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_invitedusername().empty()) {
+    invitedusername_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_invitedusername(), 
+      GetArenaForAllocation());
+  }
   if (from._internal_has_success()) {
     success_ = new ::PROTOBUF_NAMESPACE_ID::BoolValue(*from.success_);
   } else {
@@ -6534,6 +7174,10 @@ S2C_InviteFriendResponse::S2C_InviteFriendResponse(const S2C_InviteFriendRespons
 }
 
 inline void S2C_InviteFriendResponse::SharedCtor() {
+invitedusername_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  invitedusername_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 success_ = nullptr;
 }
 
@@ -6546,6 +7190,7 @@ S2C_InviteFriendResponse::~S2C_InviteFriendResponse() {
 
 inline void S2C_InviteFriendResponse::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  invitedusername_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (this != internal_default_instance()) delete success_;
 }
 
@@ -6565,6 +7210,7 @@ void S2C_InviteFriendResponse::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  invitedusername_.ClearToEmpty();
   if (GetArenaForAllocation() == nullptr && success_ != nullptr) {
     delete success_;
   }
@@ -6582,6 +7228,16 @@ const char* S2C_InviteFriendResponse::_InternalParse(const char* ptr, ::PROTOBUF
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr = ctx->ParseMessage(_internal_mutable_success(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string invitedUserName = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_invitedusername();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S2C_InviteFriendResponse.invitedUserName"));
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -6623,6 +7279,16 @@ uint8_t* S2C_InviteFriendResponse::_InternalSerialize(
         1, _Internal::success(this), target, stream);
   }
 
+  // string invitedUserName = 2;
+  if (!this->_internal_invitedusername().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_invitedusername().data(), static_cast<int>(this->_internal_invitedusername().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.S2C_InviteFriendResponse.invitedUserName");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_invitedusername(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -6638,6 +7304,13 @@ size_t S2C_InviteFriendResponse::ByteSizeLong() const {
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
+
+  // string invitedUserName = 2;
+  if (!this->_internal_invitedusername().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_invitedusername());
+  }
 
   // .google.protobuf.BoolValue success = 1;
   if (this->_internal_has_success()) {
@@ -6668,6 +7341,9 @@ void S2C_InviteFriendResponse::MergeFrom(const S2C_InviteFriendResponse& from) {
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (!from._internal_invitedusername().empty()) {
+    _internal_set_invitedusername(from._internal_invitedusername());
+  }
   if (from._internal_has_success()) {
     _internal_mutable_success()->::PROTOBUF_NAMESPACE_ID::BoolValue::MergeFrom(from._internal_success());
   }
@@ -6687,34 +7363,49 @@ bool S2C_InviteFriendResponse::IsInitialized() const {
 
 void S2C_InviteFriendResponse::InternalSwap(S2C_InviteFriendResponse* other) {
   using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &invitedusername_, lhs_arena,
+      &other->invitedusername_, rhs_arena
+  );
   swap(success_, other->success_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_InviteFriendResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[31]);
+      file_level_metadata_Protocol_2eproto[34]);
 }
 
 // ===================================================================
 
-class S2C_InviteFriendNotification::_Internal {
+class S2O_InviteFriendNotification::_Internal {
  public:
 };
 
-S2C_InviteFriendNotification::S2C_InviteFriendNotification(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+S2O_InviteFriendNotification::S2O_InviteFriendNotification(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
   }
-  // @@protoc_insertion_point(arena_constructor:Protocol.S2C_InviteFriendNotification)
+  // @@protoc_insertion_point(arena_constructor:Protocol.S2O_InviteFriendNotification)
 }
-S2C_InviteFriendNotification::S2C_InviteFriendNotification(const S2C_InviteFriendNotification& from)
+S2O_InviteFriendNotification::S2O_InviteFriendNotification(const S2O_InviteFriendNotification& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  username_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_username().empty()) {
+    username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_username(), 
+      GetArenaForAllocation());
+  }
   roomcode_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     roomcode_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
@@ -6723,477 +7414,76 @@ S2C_InviteFriendNotification::S2C_InviteFriendNotification(const S2C_InviteFrien
     roomcode_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_roomcode(), 
       GetArenaForAllocation());
   }
-  // @@protoc_insertion_point(copy_constructor:Protocol.S2C_InviteFriendNotification)
+  // @@protoc_insertion_point(copy_constructor:Protocol.S2O_InviteFriendNotification)
 }
 
-inline void S2C_InviteFriendNotification::SharedCtor() {
+inline void S2O_InviteFriendNotification::SharedCtor() {
+username_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 roomcode_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
   roomcode_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
-S2C_InviteFriendNotification::~S2C_InviteFriendNotification() {
-  // @@protoc_insertion_point(destructor:Protocol.S2C_InviteFriendNotification)
+S2O_InviteFriendNotification::~S2O_InviteFriendNotification() {
+  // @@protoc_insertion_point(destructor:Protocol.S2O_InviteFriendNotification)
   if (GetArenaForAllocation() != nullptr) return;
   SharedDtor();
   _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-inline void S2C_InviteFriendNotification::SharedDtor() {
+inline void S2O_InviteFriendNotification::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  username_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   roomcode_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
-void S2C_InviteFriendNotification::ArenaDtor(void* object) {
-  S2C_InviteFriendNotification* _this = reinterpret_cast< S2C_InviteFriendNotification* >(object);
+void S2O_InviteFriendNotification::ArenaDtor(void* object) {
+  S2O_InviteFriendNotification* _this = reinterpret_cast< S2O_InviteFriendNotification* >(object);
   (void)_this;
 }
-void S2C_InviteFriendNotification::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+void S2O_InviteFriendNotification::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 }
-void S2C_InviteFriendNotification::SetCachedSize(int size) const {
+void S2O_InviteFriendNotification::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 
-void S2C_InviteFriendNotification::Clear() {
-// @@protoc_insertion_point(message_clear_start:Protocol.S2C_InviteFriendNotification)
+void S2O_InviteFriendNotification::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.S2O_InviteFriendNotification)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  username_.ClearToEmpty();
   roomcode_.ClearToEmpty();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* S2C_InviteFriendNotification::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* S2O_InviteFriendNotification::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string roomCode = 1;
+      // string username = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_roomcode();
+          auto str = _internal_mutable_username();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S2C_InviteFriendNotification.roomCode"));
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S2O_InviteFriendNotification.username"));
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
-}
-
-uint8_t* S2C_InviteFriendNotification::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S2C_InviteFriendNotification)
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // string roomCode = 1;
-  if (!this->_internal_roomcode().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_roomcode().data(), static_cast<int>(this->_internal_roomcode().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "Protocol.S2C_InviteFriendNotification.roomCode");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_roomcode(), target);
-  }
-
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S2C_InviteFriendNotification)
-  return target;
-}
-
-size_t S2C_InviteFriendNotification::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:Protocol.S2C_InviteFriendNotification)
-  size_t total_size = 0;
-
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // string roomCode = 1;
-  if (!this->_internal_roomcode().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_roomcode());
-  }
-
-  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
-}
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData S2C_InviteFriendNotification::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
-    S2C_InviteFriendNotification::MergeImpl
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*S2C_InviteFriendNotification::GetClassData() const { return &_class_data_; }
-
-void S2C_InviteFriendNotification::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
-                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-  static_cast<S2C_InviteFriendNotification *>(to)->MergeFrom(
-      static_cast<const S2C_InviteFriendNotification &>(from));
-}
-
-
-void S2C_InviteFriendNotification::MergeFrom(const S2C_InviteFriendNotification& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S2C_InviteFriendNotification)
-  GOOGLE_DCHECK_NE(&from, this);
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  if (!from._internal_roomcode().empty()) {
-    _internal_set_roomcode(from._internal_roomcode());
-  }
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-}
-
-void S2C_InviteFriendNotification::CopyFrom(const S2C_InviteFriendNotification& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S2C_InviteFriendNotification)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool S2C_InviteFriendNotification::IsInitialized() const {
-  return true;
-}
-
-void S2C_InviteFriendNotification::InternalSwap(S2C_InviteFriendNotification* other) {
-  using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      &roomcode_, lhs_arena,
-      &other->roomcode_, rhs_arena
-  );
-}
-
-::PROTOBUF_NAMESPACE_ID::Metadata S2C_InviteFriendNotification::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
-      &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[32]);
-}
-
-// ===================================================================
-
-class C2S_AcceptInvitationRequest::_Internal {
- public:
-};
-
-C2S_AcceptInvitationRequest::C2S_AcceptInvitationRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor();
-  if (!is_message_owned) {
-    RegisterArenaDtor(arena);
-  }
-  // @@protoc_insertion_point(arena_constructor:Protocol.C2S_AcceptInvitationRequest)
-}
-C2S_AcceptInvitationRequest::C2S_AcceptInvitationRequest(const C2S_AcceptInvitationRequest& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  roomcode_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    roomcode_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_roomcode().empty()) {
-    roomcode_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_roomcode(), 
-      GetArenaForAllocation());
-  }
-  // @@protoc_insertion_point(copy_constructor:Protocol.C2S_AcceptInvitationRequest)
-}
-
-inline void C2S_AcceptInvitationRequest::SharedCtor() {
-roomcode_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  roomcode_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-}
-
-C2S_AcceptInvitationRequest::~C2S_AcceptInvitationRequest() {
-  // @@protoc_insertion_point(destructor:Protocol.C2S_AcceptInvitationRequest)
-  if (GetArenaForAllocation() != nullptr) return;
-  SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-inline void C2S_AcceptInvitationRequest::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  roomcode_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-}
-
-void C2S_AcceptInvitationRequest::ArenaDtor(void* object) {
-  C2S_AcceptInvitationRequest* _this = reinterpret_cast< C2S_AcceptInvitationRequest* >(object);
-  (void)_this;
-}
-void C2S_AcceptInvitationRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
-void C2S_AcceptInvitationRequest::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
-}
-
-void C2S_AcceptInvitationRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:Protocol.C2S_AcceptInvitationRequest)
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  roomcode_.ClearToEmpty();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-const char* C2S_AcceptInvitationRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // string roomCode = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_roomcode();
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C2S_AcceptInvitationRequest.roomCode"));
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
-}
-
-uint8_t* C2S_AcceptInvitationRequest::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:Protocol.C2S_AcceptInvitationRequest)
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // string roomCode = 1;
-  if (!this->_internal_roomcode().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_roomcode().data(), static_cast<int>(this->_internal_roomcode().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "Protocol.C2S_AcceptInvitationRequest.roomCode");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_roomcode(), target);
-  }
-
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:Protocol.C2S_AcceptInvitationRequest)
-  return target;
-}
-
-size_t C2S_AcceptInvitationRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:Protocol.C2S_AcceptInvitationRequest)
-  size_t total_size = 0;
-
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // string roomCode = 1;
-  if (!this->_internal_roomcode().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_roomcode());
-  }
-
-  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
-}
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData C2S_AcceptInvitationRequest::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
-    C2S_AcceptInvitationRequest::MergeImpl
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C2S_AcceptInvitationRequest::GetClassData() const { return &_class_data_; }
-
-void C2S_AcceptInvitationRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
-                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-  static_cast<C2S_AcceptInvitationRequest *>(to)->MergeFrom(
-      static_cast<const C2S_AcceptInvitationRequest &>(from));
-}
-
-
-void C2S_AcceptInvitationRequest::MergeFrom(const C2S_AcceptInvitationRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.C2S_AcceptInvitationRequest)
-  GOOGLE_DCHECK_NE(&from, this);
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  if (!from._internal_roomcode().empty()) {
-    _internal_set_roomcode(from._internal_roomcode());
-  }
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-}
-
-void C2S_AcceptInvitationRequest::CopyFrom(const C2S_AcceptInvitationRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.C2S_AcceptInvitationRequest)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool C2S_AcceptInvitationRequest::IsInitialized() const {
-  return true;
-}
-
-void C2S_AcceptInvitationRequest::InternalSwap(C2S_AcceptInvitationRequest* other) {
-  using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      &roomcode_, lhs_arena,
-      &other->roomcode_, rhs_arena
-  );
-}
-
-::PROTOBUF_NAMESPACE_ID::Metadata C2S_AcceptInvitationRequest::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
-      &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[33]);
-}
-
-// ===================================================================
-
-class S2C_AcceptInvitationResponse::_Internal {
- public:
-};
-
-S2C_AcceptInvitationResponse::S2C_AcceptInvitationResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor();
-  if (!is_message_owned) {
-    RegisterArenaDtor(arena);
-  }
-  // @@protoc_insertion_point(arena_constructor:Protocol.S2C_AcceptInvitationResponse)
-}
-S2C_AcceptInvitationResponse::S2C_AcceptInvitationResponse(const S2C_AcceptInvitationResponse& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ipaddress_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    ipaddress_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_ipaddress().empty()) {
-    ipaddress_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_ipaddress(), 
-      GetArenaForAllocation());
-  }
-  resultcode_ = from.resultcode_;
-  // @@protoc_insertion_point(copy_constructor:Protocol.S2C_AcceptInvitationResponse)
-}
-
-inline void S2C_AcceptInvitationResponse::SharedCtor() {
-ipaddress_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  ipaddress_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-resultcode_ = 0;
-}
-
-S2C_AcceptInvitationResponse::~S2C_AcceptInvitationResponse() {
-  // @@protoc_insertion_point(destructor:Protocol.S2C_AcceptInvitationResponse)
-  if (GetArenaForAllocation() != nullptr) return;
-  SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-inline void S2C_AcceptInvitationResponse::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  ipaddress_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-}
-
-void S2C_AcceptInvitationResponse::ArenaDtor(void* object) {
-  S2C_AcceptInvitationResponse* _this = reinterpret_cast< S2C_AcceptInvitationResponse* >(object);
-  (void)_this;
-}
-void S2C_AcceptInvitationResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
-void S2C_AcceptInvitationResponse::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
-}
-
-void S2C_AcceptInvitationResponse::Clear() {
-// @@protoc_insertion_point(message_clear_start:Protocol.S2C_AcceptInvitationResponse)
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  ipaddress_.ClearToEmpty();
-  resultcode_ = 0;
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-const char* S2C_AcceptInvitationResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // int32 resultCode = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          resultcode_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // string ipAddress = 2;
+      // string roomCode = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          auto str = _internal_mutable_ipaddress();
+          auto str = _internal_mutable_roomcode();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S2C_AcceptInvitationResponse.ipAddress"));
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S2O_InviteFriendNotification.roomCode"));
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -7221,115 +7511,125 @@ failure:
 #undef CHK_
 }
 
-uint8_t* S2C_AcceptInvitationResponse::_InternalSerialize(
+uint8_t* S2O_InviteFriendNotification::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S2C_AcceptInvitationResponse)
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S2O_InviteFriendNotification)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 resultCode = 1;
-  if (this->_internal_resultcode() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_resultcode(), target);
+  // string username = 1;
+  if (!this->_internal_username().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_username().data(), static_cast<int>(this->_internal_username().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.S2O_InviteFriendNotification.username");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_username(), target);
   }
 
-  // string ipAddress = 2;
-  if (!this->_internal_ipaddress().empty()) {
+  // string roomCode = 2;
+  if (!this->_internal_roomcode().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_ipaddress().data(), static_cast<int>(this->_internal_ipaddress().length()),
+      this->_internal_roomcode().data(), static_cast<int>(this->_internal_roomcode().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "Protocol.S2C_AcceptInvitationResponse.ipAddress");
+      "Protocol.S2O_InviteFriendNotification.roomCode");
     target = stream->WriteStringMaybeAliased(
-        2, this->_internal_ipaddress(), target);
+        2, this->_internal_roomcode(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S2C_AcceptInvitationResponse)
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S2O_InviteFriendNotification)
   return target;
 }
 
-size_t S2C_AcceptInvitationResponse::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:Protocol.S2C_AcceptInvitationResponse)
+size_t S2O_InviteFriendNotification::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.S2O_InviteFriendNotification)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string ipAddress = 2;
-  if (!this->_internal_ipaddress().empty()) {
+  // string username = 1;
+  if (!this->_internal_username().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_ipaddress());
+        this->_internal_username());
   }
 
-  // int32 resultCode = 1;
-  if (this->_internal_resultcode() != 0) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_resultcode());
+  // string roomCode = 2;
+  if (!this->_internal_roomcode().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_roomcode());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData S2C_AcceptInvitationResponse::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData S2O_InviteFriendNotification::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
-    S2C_AcceptInvitationResponse::MergeImpl
+    S2O_InviteFriendNotification::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*S2C_AcceptInvitationResponse::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*S2O_InviteFriendNotification::GetClassData() const { return &_class_data_; }
 
-void S2C_AcceptInvitationResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+void S2O_InviteFriendNotification::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
                       const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-  static_cast<S2C_AcceptInvitationResponse *>(to)->MergeFrom(
-      static_cast<const S2C_AcceptInvitationResponse &>(from));
+  static_cast<S2O_InviteFriendNotification *>(to)->MergeFrom(
+      static_cast<const S2O_InviteFriendNotification &>(from));
 }
 
 
-void S2C_AcceptInvitationResponse::MergeFrom(const S2C_AcceptInvitationResponse& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S2C_AcceptInvitationResponse)
+void S2O_InviteFriendNotification::MergeFrom(const S2O_InviteFriendNotification& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S2O_InviteFriendNotification)
   GOOGLE_DCHECK_NE(&from, this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_ipaddress().empty()) {
-    _internal_set_ipaddress(from._internal_ipaddress());
+  if (!from._internal_username().empty()) {
+    _internal_set_username(from._internal_username());
   }
-  if (from._internal_resultcode() != 0) {
-    _internal_set_resultcode(from._internal_resultcode());
+  if (!from._internal_roomcode().empty()) {
+    _internal_set_roomcode(from._internal_roomcode());
   }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void S2C_AcceptInvitationResponse::CopyFrom(const S2C_AcceptInvitationResponse& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S2C_AcceptInvitationResponse)
+void S2O_InviteFriendNotification::CopyFrom(const S2O_InviteFriendNotification& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S2O_InviteFriendNotification)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool S2C_AcceptInvitationResponse::IsInitialized() const {
+bool S2O_InviteFriendNotification::IsInitialized() const {
   return true;
 }
 
-void S2C_AcceptInvitationResponse::InternalSwap(S2C_AcceptInvitationResponse* other) {
+void S2O_InviteFriendNotification::InternalSwap(S2O_InviteFriendNotification* other) {
   using std::swap;
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      &ipaddress_, lhs_arena,
-      &other->ipaddress_, rhs_arena
+      &username_, lhs_arena,
+      &other->username_, rhs_arena
   );
-  swap(resultcode_, other->resultcode_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &roomcode_, lhs_arena,
+      &other->roomcode_, rhs_arena
+  );
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata S2C_AcceptInvitationResponse::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata S2O_InviteFriendNotification::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[34]);
+      file_level_metadata_Protocol_2eproto[35]);
 }
 
 // ===================================================================
@@ -7368,7 +7668,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C2S_StartGameRequest::GetClass
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_StartGameRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[35]);
+      file_level_metadata_Protocol_2eproto[36]);
 }
 
 // ===================================================================
@@ -7569,7 +7869,7 @@ void S2C_StartGameResponse::InternalSwap(S2C_StartGameResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_StartGameResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
-      file_level_metadata_Protocol_2eproto[36]);
+      file_level_metadata_Protocol_2eproto[37]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -7619,6 +7919,15 @@ template<> PROTOBUF_NOINLINE ::Protocol::S2C_AddFriendResponse* Arena::CreateMay
 }
 template<> PROTOBUF_NOINLINE ::Protocol::S2O_AddFriendNotification* Arena::CreateMaybeMessage< ::Protocol::S2O_AddFriendNotification >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::S2O_AddFriendNotification >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::C2S_CancelAddFriendRequest* Arena::CreateMaybeMessage< ::Protocol::C2S_CancelAddFriendRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::C2S_CancelAddFriendRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::S2C_CancelAddFriendResponse* Arena::CreateMaybeMessage< ::Protocol::S2C_CancelAddFriendResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::S2C_CancelAddFriendResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::S2O_CancelAddFriendNotification* Arena::CreateMaybeMessage< ::Protocol::S2O_CancelAddFriendNotification >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::S2O_CancelAddFriendNotification >(arena);
 }
 template<> PROTOBUF_NOINLINE ::Protocol::C2S_AcceptFriendRequest* Arena::CreateMaybeMessage< ::Protocol::C2S_AcceptFriendRequest >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::C2S_AcceptFriendRequest >(arena);
@@ -7671,14 +7980,8 @@ template<> PROTOBUF_NOINLINE ::Protocol::C2S_InviteFriendRequest* Arena::CreateM
 template<> PROTOBUF_NOINLINE ::Protocol::S2C_InviteFriendResponse* Arena::CreateMaybeMessage< ::Protocol::S2C_InviteFriendResponse >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::S2C_InviteFriendResponse >(arena);
 }
-template<> PROTOBUF_NOINLINE ::Protocol::S2C_InviteFriendNotification* Arena::CreateMaybeMessage< ::Protocol::S2C_InviteFriendNotification >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::Protocol::S2C_InviteFriendNotification >(arena);
-}
-template<> PROTOBUF_NOINLINE ::Protocol::C2S_AcceptInvitationRequest* Arena::CreateMaybeMessage< ::Protocol::C2S_AcceptInvitationRequest >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::Protocol::C2S_AcceptInvitationRequest >(arena);
-}
-template<> PROTOBUF_NOINLINE ::Protocol::S2C_AcceptInvitationResponse* Arena::CreateMaybeMessage< ::Protocol::S2C_AcceptInvitationResponse >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::Protocol::S2C_AcceptInvitationResponse >(arena);
+template<> PROTOBUF_NOINLINE ::Protocol::S2O_InviteFriendNotification* Arena::CreateMaybeMessage< ::Protocol::S2O_InviteFriendNotification >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::S2O_InviteFriendNotification >(arena);
 }
 template<> PROTOBUF_NOINLINE ::Protocol::C2S_StartGameRequest* Arena::CreateMaybeMessage< ::Protocol::C2S_StartGameRequest >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::C2S_StartGameRequest >(arena);

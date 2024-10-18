@@ -21,11 +21,6 @@ UserManager::UserManager()
 	DBConnectionPool::Instance().ReturnConnection(dbConn);
 #endif
 
-	//OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_VALIDATION_RESPONSE, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
-	//{
-	//		HandleValidationResponse(receiveStruct);
-	//});
-
 	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_LOGIN_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
 		{
 			HandleLoginRequest(receiveStruct);
@@ -46,6 +41,10 @@ UserManager::UserManager()
 		{
 			HandleAddFriendRequest(receiveStruct);
 		});
+	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_CANCEL_ADD_FRIEND_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
+		{
+			HandleCancelAddFriendRequest(receiveStruct);
+		});
 	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_ACCEPT_FRIEND_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
 		{
 			HandleAcceptFriendRequest(receiveStruct);
@@ -53,6 +52,10 @@ UserManager::UserManager()
 	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_REFUSE_FRIEND_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
 		{
 			HandleRefuseFriendRequest(receiveStruct);
+		});
+	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_DEL_FRIEND_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
+		{
+			HandleDeleteFriendRequest(receiveStruct);
 		});
 }
 
@@ -318,6 +321,40 @@ void UserManager::HandleAddFriendRequest(std::shared_ptr<ReceiveStruct> receiveS
 	OutgameServer::Instance().InsertSendTask(sendStruct);
 }
 
+void UserManager::HandleCancelAddFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure)
+{
+	auto cancelAddFriendRequest = std::make_shared<Protocol::C2S_CancelAddFriendRequest>();
+	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *cancelAddFriendRequest))
+	{
+		LOG_CONTENTS("C2S_CANCEL_ADD_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
+		return;
+	}
+
+	std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
+	// packetID
+	sendStruct->type = ESendType::UNICAST;
+	// session
+	sendStruct->session = receiveStructure->session;
+	// data
+	std::shared_ptr<Protocol::S2C_CancelAddFriendResponse> response = std::make_shared<Protocol::S2C_CancelAddFriendResponse>();
+	if (CancelAddFriend(FindActiveUser(sendStruct->session->GetSessionId()).lock()->GetName(), cancelAddFriendRequest->username()))
+	{
+		response->mutable_success()->set_value(true);
+	}
+	else
+	{
+		response->mutable_success()->set_value(false);
+	}
+
+	sendStruct->data = response;
+	// header
+	std::string serializedString;
+	(sendStruct->data)->SerializeToString(&serializedString);
+	sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2C_CANCEL_ADD_FRIEND_RESPONSE, serializedString.size()));
+
+	OutgameServer::Instance().InsertSendTask(sendStruct);
+}
+
 void UserManager::HandleAcceptFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure)
 {
 	auto acceptFriendRequest = std::make_shared<Protocol::C2S_AcceptFriendRequest>();
@@ -386,6 +423,41 @@ void UserManager::HandleRefuseFriendRequest(std::shared_ptr<ReceiveStruct> recei
 	std::string serializedString;
 	(sendStruct->data)->SerializeToString(&serializedString);
 	sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2C_REFUSE_FRIEND_RESPONSE, serializedString.size()));
+
+	OutgameServer::Instance().InsertSendTask(sendStruct);
+}
+
+void UserManager::HandleDeleteFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure)
+{
+	auto deleteFriendRequest = std::make_shared<Protocol::C2S_DelFriendRequest>();
+	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *deleteFriendRequest))
+	{
+		LOG_CONTENTS("C2S_DEL_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
+		return;
+	}
+
+	std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
+	// packetID
+	sendStruct->type = ESendType::UNICAST;
+	// session
+	sendStruct->session = receiveStructure->session;
+	// data
+	std::shared_ptr<Protocol::S2C_DelFriendResponse> response = std::make_shared<Protocol::S2C_DelFriendResponse>();
+	if (DeleteFriend(FindActiveUser(sendStruct->session->GetSessionId()).lock()->GetName(), deleteFriendRequest->friendname()))
+	{
+		response->mutable_success()->set_value(true);
+		response->set_delfriendname(deleteFriendRequest->friendname());
+	}
+	else
+	{
+		response->mutable_success()->set_value(false);
+	}
+
+	sendStruct->data = response;
+	// header
+	std::string serializedString;
+	(sendStruct->data)->SerializeToString(&serializedString);
+	sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2C_DEL_FRIEND_RESPONSE, serializedString.size()));
 
 	OutgameServer::Instance().InsertSendTask(sendStruct);
 }
@@ -672,7 +744,7 @@ bool UserManager::AddFriend(const std::string_view& username, const std::string_
 	// 상대가 활성 상태라면, 상대 유저 정보 수정 및 AddFriendNotification 발송
 	if (std::shared_ptr<User> otherUser = FindActiveUser(friendName).lock())
 	{
-		otherUser->AppendPendingUser(friendName, EUserState::ONLINE);
+		otherUser->AppendPendingUser(username, EUserState::ONLINE);
 
 		std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
 		// packetID
@@ -687,6 +759,52 @@ bool UserManager::AddFriend(const std::string_view& username, const std::string_
 		std::string serializedString;
 		(sendStruct->data)->SerializeToString(&serializedString);
 		sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2O_ADD_FRIEND_NOTIFICATION, serializedString.size()));
+
+		OutgameServer::Instance().InsertSendTask(sendStruct);
+	}
+
+	return true;
+}
+
+bool UserManager::CancelAddFriend(const std::string_view& username, const std::string_view& friendName)
+{
+#ifdef DB_INCLUDE_VERSION
+	// 신청한 내역 삭제
+	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
+
+	DBBind<2, 0> cancelRequestBind(dbConn, L"DELETE FROM [dbo].[Friends] WHERE UserName = (?) AND FriendName = (?)");
+	std::wstring wUserName = std::wstring(username.begin(), username.end());
+	std::wstring wFriendName = std::wstring(friendName.begin(), friendName.end());
+	cancelRequestBind.BindParam(0, wUserName.c_str(), wUserName.size());
+	cancelRequestBind.BindParam(1, wFriendName.c_str(), wFriendName.size());
+	if (!cancelRequestBind.Execute())
+	{
+		LOG_DB("cancelRequestBind Execute Failed");
+		DBConnectionPool::Instance().ReturnConnection(dbConn);
+		return false;
+	}
+
+	DBConnectionPool::Instance().ReturnConnection(dbConn);
+#endif
+
+	// 상대가 활성 상태라면, 상대 유저 정보 수정 및 CancelAddFriendNotification 발송
+	if (std::shared_ptr<User> otherUser = FindActiveUser(friendName).lock())
+	{
+		otherUser->RemovePendingUser(username);
+
+		std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
+		// packetID
+		sendStruct->type = ESendType::UNICAST;
+		// session
+		sendStruct->session = otherUser->GetSession();
+		// data
+		std::shared_ptr<Protocol::S2O_CancelAddFriendNotification> notification = std::make_shared<Protocol::S2O_CancelAddFriendNotification>();
+		notification->set_username(std::string(username.begin(), username.end()));
+		sendStruct->data = notification;
+		// header
+		std::string serializedString;
+		(sendStruct->data)->SerializeToString(&serializedString);
+		sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2O_CANCEL_ADD_FRIEND_NOTIFICATION, serializedString.size()));
 
 		OutgameServer::Instance().InsertSendTask(sendStruct);
 	}
@@ -796,5 +914,58 @@ bool UserManager::RefuseFriend(const std::string_view& username, const std::stri
 
 	DBConnectionPool::Instance().ReturnConnection(dbConn);
 #endif
+	return true;
+}
+
+bool UserManager::DeleteFriend(const std::string_view& username, const std::string_view& friendName)
+{
+#ifdef DB_INCLUDE_VERSION
+	// 친구 내역 삭제
+	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
+
+	DBBind<4, 0> deleteFriendBind(dbConn, L"DELETE FROM [dbo].[Friends] WHERE (UserName = (?) AND FriendName = (?)) OR (UserName = (?) AND FriendName = (?))");
+	std::wstring wUserName = std::wstring(username.begin(), username.end());
+	std::wstring wFriendName = std::wstring(friendName.begin(), friendName.end());
+	deleteFriendBind.BindParam(0, wFriendName.c_str(), wFriendName.size());
+	deleteFriendBind.BindParam(1, wUserName.c_str(), wUserName.size());
+	deleteFriendBind.BindParam(2, wUserName.c_str(), wUserName.size());
+	deleteFriendBind.BindParam(3, wFriendName.c_str(), wFriendName.size());
+
+	if (!deleteFriendBind.Execute())
+	{
+		LOG_DB("deleteFriendBind Execute Failed");
+		DBConnectionPool::Instance().ReturnConnection(dbConn);
+		return false;
+	}
+
+	DBConnectionPool::Instance().ReturnConnection(dbConn);
+#endif
+
+	std::shared_ptr<User> user = FindActiveUser(username).lock();
+	user->RemoveFriend(friendName);
+
+	// 상대가 활성 상태라면 User 정보 수정 및 DelFriendNotification 발송
+	if (std::shared_ptr<User> otherUser = FindActiveUser(friendName).lock())
+	{
+		// 친구의 친구 리스트에 추가
+		otherUser->RemoveFriend(username);
+
+		std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
+		// packetID
+		sendStruct->type = ESendType::UNICAST;
+		// session
+		sendStruct->session = otherUser->GetSession();
+		// data
+		std::shared_ptr<Protocol::S2O_DelFriendNotification> response = std::make_shared<Protocol::S2O_DelFriendNotification>();
+		response->set_delfriendname(std::string(username.begin(), username.end()));
+		sendStruct->data = response;
+		// header
+		std::string serializedString;
+		(sendStruct->data)->SerializeToString(&serializedString);
+		sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2O_DEL_FRIEND_NOTIFICATION, serializedString.size()));
+
+		OutgameServer::Instance().InsertSendTask(sendStruct);
+	}
+
 	return true;
 }

@@ -39,8 +39,10 @@ public:
     void HandleJoinRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
     void HandleFindFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
     void HandleAddFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
+    void HandleCancelAddFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
     void HandleAcceptFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
     void HandleRefuseFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
+    void HandleDeleteFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
 
 
 private:
@@ -56,10 +58,14 @@ private:
     bool FindUser(const std::string_view& username, const std::string_view& friendName, OUT int& friendState, OUT int& requestState);
     // 模备 脚没
     bool AddFriend(const std::string_view& username, const std::string_view& friendName);
+    // 模备 脚没 秒家
+    bool CancelAddFriend(const std::string_view& username, const std::string_view& friendName);
     // 模备 荐遏
     bool AcceptFriend(const std::string_view& username, const std::string_view& friendName, OUT int& friendState);
     // 模备 芭例
     bool RefuseFriend(const std::string_view& username, const std::string_view& friendName);
+    // 模备 昏力
+    bool DeleteFriend(const std::string_view& username, const std::string_view& friendName);
 
 private:
     static concurrency::concurrent_unordered_map<UserId, std::shared_ptr<User>> s_activeUserMap;
