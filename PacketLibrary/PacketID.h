@@ -66,9 +66,9 @@ enum PacketID : unsigned short
 
 enum EUserState
 {
-	ONLINE,
-	IN_GAME,
 	OFFLINE,
+	IN_GAME,
+	ONLINE,
 	END_USER_STATE
 };
 

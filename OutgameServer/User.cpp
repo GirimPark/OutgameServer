@@ -33,7 +33,9 @@ void User::UpdateState(EUserState state)
 	{
 		if(friendInfo.second != EUserState::OFFLINE)
 		{
-			activeFriends.emplace_back(UserManager::FindActiveUser(friendInfo.first).lock()->GetSession());
+			std::shared_ptr<User> curUser = UserManager::FindActiveUser(friendInfo.first).lock();
+			if(curUser)
+				activeFriends.emplace_back(curUser->GetSession());
 		}
 	}
 

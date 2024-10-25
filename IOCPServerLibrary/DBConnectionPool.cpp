@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "DBConnectionPool.h"
 
+#include "../UtilityLibrary/Logger.h"
+
 bool DBConnectionPool::Connect(int connectionCount, const WCHAR* connectionString)
 {
 	if (::SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &m_environment) != SQL_SUCCESS)
@@ -55,10 +57,16 @@ DBConnection* DBConnectionPool::GetConnection()
 			bool expected = true;
 			if (con->m_bUsable.compare_exchange_strong(expected, false))
 			{
+				++m_getCnt;
 				return con;
 			}
 		}
 
+		if ((m_getCnt - m_returnCnt) > 5)
+		{
+			LOG_WARNING("DBConnectionPool GetConnectionCount and ReturnConnectionCount have difference over 5 counts");
+			LOG_DB("DBConnectionPool GetConnectionCount and ReturnConnectionCount have difference over 5 counts");
+		}
 		std::this_thread::yield();
 	}
 }
@@ -66,4 +74,5 @@ DBConnection* DBConnectionPool::GetConnection()
 void DBConnectionPool::ReturnConnection(DBConnection* connection)
 {
 	connection->m_bUsable.store(true);
+	++m_returnCnt;
 }

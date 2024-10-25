@@ -1,5 +1,5 @@
 #ifdef _DEBUG
-#pragma comment(lib, "vld.lib")
+//#pragma comment(lib, "vld.lib")
 
 #pragma comment(lib, "libprotobufd.lib")
 #else
@@ -18,7 +18,7 @@
 #include <iomanip>
 
 #ifdef _DEBUG
-#include <vld/vld.h>
+//#include <vld/vld.h>
 #endif
 
 #include "../UtilityLibrary/Logger.h"

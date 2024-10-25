@@ -1,5 +1,5 @@
 #ifdef _DEBUG
-#pragma comment(lib, "vld.lib")
+//#pragma comment(lib, "vld.lib")
 
 #pragma comment(lib, "libprotobufd.lib")
 #else
@@ -21,13 +21,13 @@
 
 
 #ifdef _DEBUG
-#include <vld/vld.h>
+//#include <vld/vld.h>
 #endif
 
 void OutgameServer::Start()
 {
 #ifdef DB_INCLUDE_VERSION
-	ASSERT_CRASH(DBConnectionPool::Instance().Connect(5, L"Driver={SQL Server};Server=localhost\\SQLEXPRESS;Database=ServerDB;Trusted_Connection=Yes;"));
+	ASSERT_CRASH(DBConnectionPool::Instance().Connect(1, L"Driver={SQL Server};Server=localhost\\SQLEXPRESS;Database=ServerDB;Trusted_Connection=Yes;"));
 
 	// Create Table
 	{

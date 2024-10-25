@@ -490,6 +490,7 @@ void UserManager::CreateActiveUser(Session* session, std::string_view name)
 	if(!getFriendBind.Execute())
 	{
 		LOG_CONTENTS("getFriendBind.Execute() Failed");
+		DBConnectionPool::Instance().ReturnConnection(dbConn);
 		return;
 	}
 
@@ -511,6 +512,7 @@ void UserManager::CreateActiveUser(Session* session, std::string_view name)
 	if (!getPendingBind.Execute())
 	{
 		LOG_CONTENTS("getPendingBind.Execute() Failed");
+		DBConnectionPool::Instance().ReturnConnection(dbConn);
 		return;
 	}
 
@@ -535,10 +537,6 @@ bool UserManager::AuthenticateUser(Session* session, const std::string_view& use
 	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
 
 	DBBind<1, 2> loginRequestBind(dbConn, L"SELECT Password, State FROM [dbo].[User] WHERE Nickname = (?)");
-	if(dbConn->m_bUsable.load() == true)
-	{
-		int a = 0;
-	}
 	std::wstring wUsername = std::wstring(username.begin(), username.end());
 	loginRequestBind.BindParam(0, wUsername.c_str(), wUsername.size());
 
@@ -863,6 +861,8 @@ bool UserManager::AcceptFriend(const std::string_view& username, const std::stri
 #endif
 	// user의 펜딩 리스트 및 친구 리스트 수정
 	std::shared_ptr<User> user = FindActiveUser(username).lock();
+	if (!user)
+		return false;
 	user->RemovePendingUser(friendName);
 	user->AppendFriend(friendName, static_cast<EUserState>(friendState));
 
@@ -942,6 +942,8 @@ bool UserManager::DeleteFriend(const std::string_view& username, const std::stri
 #endif
 
 	std::shared_ptr<User> user = FindActiveUser(username).lock();
+	if (!user)
+		return false;
 	user->RemoveFriend(friendName);
 
 	// 상대가 활성 상태라면 User 정보 수정 및 DelFriendNotification 발송

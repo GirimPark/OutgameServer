@@ -24,6 +24,8 @@ public:
 	const ERoomStateType& GetRoomState() const { return m_roomState; }
 	std::weak_ptr<User> GetHostPlayer() const { return m_hostPlayer; }
 
+	void SetRoomState(ERoomStateType roomState) { m_roomState = roomState; }
+
 	bool Enter(std::weak_ptr<User> playerRef);
 	void Quit(std::weak_ptr<User> playerRef);
 

@@ -44,17 +44,15 @@ bool GameRoom::Enter(std::weak_ptr<User> playerRef)
 void GameRoom::Quit(std::weak_ptr<User> playerRef)
 {
 	std::shared_ptr<User> player = playerRef.lock();
-
+	if (!player)
+		return;
 	player->ResetActiveGameRoom();
-	if(player == m_hostPlayer.lock())
+
+	if((m_hostPlayer.lock()) && (player == m_hostPlayer.lock()))
 	{
 		m_roomState = ERoomStateType::DESTROYING;
 	}
-	else
-	{
-		m_players.erase(player->GetName());
-	}
-
+	m_players.erase(player->GetName());
 }
 
 void GameRoom::RegenerateRoomCode()

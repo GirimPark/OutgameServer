@@ -28,6 +28,10 @@ GameRoomManager::GameRoomManager()
 		{
 			HandleInviteFriendRequest(receiveStruct);
 		});
+	OutgameServer::Instance().RegisterPacketHanlder(PacketID::C2S_START_GAME_REQUEST, [this](std::shared_ptr<ReceiveStruct> receiveStruct)
+		{
+			HandleStartGameRequest(receiveStruct);
+		});
 }
 
 GameRoomManager::~GameRoomManager()
@@ -181,6 +185,39 @@ void GameRoomManager::HandleInviteFriendRequest(std::shared_ptr<ReceiveStruct> r
 	OutgameServer::Instance().InsertSendTask(sendStruct);
 }
 
+void GameRoomManager::HandleStartGameRequest(std::shared_ptr<ReceiveStruct> receiveStructure)
+{
+	auto startGameRequest = std::make_shared<Protocol::C2S_StartGameRequest>();
+	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *startGameRequest))
+	{
+		LOG_CONTENTS("C2S_START_GAME_REQUEST: PakcetBuilder::Deserialize() failed");
+		return;
+	}
+
+	std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
+	// packetID
+	sendStruct->type = ESendType::UNICAST;
+	// session
+	sendStruct->session = receiveStructure->session;
+	// data
+	std::shared_ptr<Protocol::S2C_StartGameResponse> response = std::make_shared<Protocol::S2C_StartGameResponse>();
+	if (StartGame(receiveStructure->session->GetSessionId()))
+	{
+		response->mutable_success()->set_value(true);
+	}
+	else
+	{
+		response->mutable_success()->set_value(false);
+	}
+	sendStruct->data = response;
+	//header
+	std::string serializedString;
+	(sendStruct->data)->SerializeToString(&serializedString);
+	sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2C_START_GAME_RESPONSE, serializedString.size()));
+
+	OutgameServer::Instance().InsertSendTask(sendStruct);
+}
+
 std::shared_ptr<GameRoom> GameRoomManager::CreateGameRoom(SessionId sessionId)
 {
 	std::shared_ptr<User> hostPlayer = UserManager::FindActiveUser(sessionId).lock();
@@ -224,7 +261,7 @@ EJoinRoomResponse GameRoomManager::JoinGameRoom(SessionId sessionId, const std::
 	std::shared_ptr<GameRoom> gameRoom = gameRoomIter->second;
 
 	// Check Room State
-	if (gameRoom->GetRoomState() == ERoomStateType::DESTROYING)
+	if (gameRoom->GetRoomState() != ERoomStateType::WAIT)
 	{
 		LeaveCriticalSection(&s_gameRoomsLock);
 		return EJoinRoomResponse::INVALID_ROOM;
@@ -236,14 +273,16 @@ EJoinRoomResponse GameRoomManager::JoinGameRoom(SessionId sessionId, const std::
 		LeaveCriticalSection(&s_gameRoomsLock);
 		return EJoinRoomResponse::OVER_PLAYER;
 	}
-	LeaveCriticalSection(&s_gameRoomsLock);
 
 	ipAddress = gameRoom->GetRoomIpAddress();
-	return SUCCESS;
+	LeaveCriticalSection(&s_gameRoomsLock);
+
+	return EJoinRoomResponse::SUCCESS;
 }
 
 bool GameRoomManager::QuitGameRoom(SessionId sessionId)
 {
+	EnterCriticalSection(&s_gameRoomsLock);
 	std::shared_ptr<User> player = UserManager::FindActiveUser(sessionId).lock();
 	if (!player)
 		return false;
@@ -253,11 +292,9 @@ bool GameRoomManager::QuitGameRoom(SessionId sessionId)
 
 	if (activeRoom->GetRoomState() == ERoomStateType::DESTROYING)
 	{
-		EnterCriticalSection(&s_gameRoomsLock);
 		s_activeGameRooms.unsafe_erase(activeRoom->GetRoomCode());
-		LeaveCriticalSection(&s_gameRoomsLock);
 	}
-
+	LeaveCriticalSection(&s_gameRoomsLock);
 	return true;
 }
 
@@ -266,6 +303,8 @@ bool GameRoomManager::InviteFriend(const std::string_view& username, const std::
 	// 상대가 온라인이고, 방 상태가 WAIT인지 확인(다른 확인절차는 JoinRoom에서 거친다)
 	// Notification 발송
 	std::shared_ptr<User> inviteUser = UserManager::FindActiveUser(username).lock();
+	if (!inviteUser)
+		return false;
 	std::shared_ptr<GameRoom> GameRoom = inviteUser->GetActiveGameRoomRef().lock();
 	if (GameRoom->GetRoomState() != ERoomStateType::WAIT)
 		return false;
@@ -290,6 +329,36 @@ bool GameRoomManager::InviteFriend(const std::string_view& username, const std::
 	sendStruct->header = std::make_shared<PacketHeader>(PacketBuilder::Instance().CreateHeader(PacketID::S2O_INVITE_FRIEND_NOTIFICATION, serializedString.size()));
 
 	OutgameServer::Instance().InsertSendTask(sendStruct);
+
+	return true;
+}
+
+bool GameRoomManager::StartGame(SessionId sessionId)
+{
+	// Find Player
+	std::shared_ptr<User> player = UserManager::FindActiveUser(sessionId).lock();
+	if (!player)
+		return false;
+
+	// Find Room
+	EnterCriticalSection(&s_gameRoomsLock);
+	auto gameRoomIter = s_activeGameRooms.find(player->GetActiveGameRoomRef().lock()->GetRoomCode());
+	if (gameRoomIter == s_activeGameRooms.end())
+	{
+		LeaveCriticalSection(&s_gameRoomsLock);
+		return false;
+	}
+	std::shared_ptr<GameRoom> gameRoom = gameRoomIter->second;
+
+	// Check Room State
+	if (gameRoom->GetRoomState() != ERoomStateType::WAIT)
+	{
+		LeaveCriticalSection(&s_gameRoomsLock);
+		return false;
+	}
+
+	gameRoom->SetRoomState(ERoomStateType::IN_GAME);
+	LeaveCriticalSection(&s_gameRoomsLock);
 
 	return true;
 }

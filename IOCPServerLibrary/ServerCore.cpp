@@ -332,16 +332,18 @@ void ServerCore::ProcessThread()
             if(GetLastError() != ERROR_NETNAME_DELETED && GetLastError() != ERROR_IO_PENDING)
             {
 				printf("GetQueuedCompletionStatus() failed: %d\n", GetLastError());
-                LOG_ERROR("GetQueuedCompletionStatus failed : " + GetLastError());
+                LOG_WARNING("GetQueuedCompletionStatus failed : " + GetLastError());
                 continue;
             }
         }
         if(!m_pListenSocketCtxt)
         {
+            LOG_ERROR("m_pListenSocketCtxt is nullptr");
             return;
         }
         if(m_bEndServer)
         {
+            LOG_ERROR("m_bEndServer is true");
             return;
         }
 
@@ -365,7 +367,7 @@ void ServerCore::ProcessThread()
             }
 
             // READ or WRITE
-            switch (overlappedStruct->IOOperation)
+            switch (overlappedStruct->IOOperation) 
             {
             case OVERLAPPED_STRUCT::eIOType::READ:
             {
@@ -384,7 +386,6 @@ void ServerCore::ProcessThread()
             default:
             {
                 printf("정의되지 않은 IO Type\n");
-                return;
             }
             }
         }
@@ -543,7 +544,7 @@ bool ServerCore::StartAccept()
         printf("failed to create new accept socket\n");
         return false;
     }
-    //sizeof(m_pListenSocketCtxt->acceptBuffer),
+    
     DWORD nRecvByte = 0;
     int rt = AcceptEx(
         m_pListenSocketCtxt->listenSocket,
