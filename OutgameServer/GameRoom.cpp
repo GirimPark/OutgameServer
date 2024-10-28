@@ -28,6 +28,30 @@ GameRoom::~GameRoom()
 	m_players.clear();
 }
 
+void GameRoom::SetRoomState(ERoomStateType roomState)
+{
+	m_roomState = roomState;
+
+	if (m_roomState == ERoomStateType::IN_GAME)
+	{
+		for (auto& playerIter : m_players)
+		{
+			std::shared_ptr<User> player = playerIter.second.lock();
+			if (player)
+				player->UpdateState(EUserState::IN_GAME);
+		}
+	}
+	else if(m_roomState == ERoomStateType::WAIT)
+	{
+		for (auto& playerIter : m_players)
+		{
+			std::shared_ptr<User> player = playerIter.second.lock();
+			if (player)
+				player->UpdateState(EUserState::ONLINE);
+		}
+	}
+}
+
 bool GameRoom::Enter(std::weak_ptr<User> playerRef)
 {
 	if (m_players.size() >= MAX_PLAYER_NUM)

@@ -48,7 +48,7 @@ struct TableStruct_Protocol_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[38]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[40]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -71,6 +71,9 @@ extern C2S_CreateRoomRequestDefaultTypeInternal _C2S_CreateRoomRequest_default_i
 class C2S_DelFriendRequest;
 struct C2S_DelFriendRequestDefaultTypeInternal;
 extern C2S_DelFriendRequestDefaultTypeInternal _C2S_DelFriendRequest_default_instance_;
+class C2S_EndGameRequest;
+struct C2S_EndGameRequestDefaultTypeInternal;
+extern C2S_EndGameRequestDefaultTypeInternal _C2S_EndGameRequest_default_instance_;
 class C2S_FindFriendRequest;
 struct C2S_FindFriendRequestDefaultTypeInternal;
 extern C2S_FindFriendRequestDefaultTypeInternal _C2S_FindFriendRequest_default_instance_;
@@ -119,6 +122,9 @@ extern S2C_CreateRoomResponseDefaultTypeInternal _S2C_CreateRoomResponse_default
 class S2C_DelFriendResponse;
 struct S2C_DelFriendResponseDefaultTypeInternal;
 extern S2C_DelFriendResponseDefaultTypeInternal _S2C_DelFriendResponse_default_instance_;
+class S2C_EndGameResponse;
+struct S2C_EndGameResponseDefaultTypeInternal;
+extern S2C_EndGameResponseDefaultTypeInternal _S2C_EndGameResponse_default_instance_;
 class S2C_FindFriendResponse;
 struct S2C_FindFriendResponseDefaultTypeInternal;
 extern S2C_FindFriendResponseDefaultTypeInternal _S2C_FindFriendResponse_default_instance_;
@@ -177,6 +183,7 @@ template<> ::Protocol::C2S_AddFriendRequest* Arena::CreateMaybeMessage<::Protoco
 template<> ::Protocol::C2S_CancelAddFriendRequest* Arena::CreateMaybeMessage<::Protocol::C2S_CancelAddFriendRequest>(Arena*);
 template<> ::Protocol::C2S_CreateRoomRequest* Arena::CreateMaybeMessage<::Protocol::C2S_CreateRoomRequest>(Arena*);
 template<> ::Protocol::C2S_DelFriendRequest* Arena::CreateMaybeMessage<::Protocol::C2S_DelFriendRequest>(Arena*);
+template<> ::Protocol::C2S_EndGameRequest* Arena::CreateMaybeMessage<::Protocol::C2S_EndGameRequest>(Arena*);
 template<> ::Protocol::C2S_FindFriendRequest* Arena::CreateMaybeMessage<::Protocol::C2S_FindFriendRequest>(Arena*);
 template<> ::Protocol::C2S_InviteFriendRequest* Arena::CreateMaybeMessage<::Protocol::C2S_InviteFriendRequest>(Arena*);
 template<> ::Protocol::C2S_JoinRequest* Arena::CreateMaybeMessage<::Protocol::C2S_JoinRequest>(Arena*);
@@ -193,6 +200,7 @@ template<> ::Protocol::S2C_AddFriendResponse* Arena::CreateMaybeMessage<::Protoc
 template<> ::Protocol::S2C_CancelAddFriendResponse* Arena::CreateMaybeMessage<::Protocol::S2C_CancelAddFriendResponse>(Arena*);
 template<> ::Protocol::S2C_CreateRoomResponse* Arena::CreateMaybeMessage<::Protocol::S2C_CreateRoomResponse>(Arena*);
 template<> ::Protocol::S2C_DelFriendResponse* Arena::CreateMaybeMessage<::Protocol::S2C_DelFriendResponse>(Arena*);
+template<> ::Protocol::S2C_EndGameResponse* Arena::CreateMaybeMessage<::Protocol::S2C_EndGameResponse>(Arena*);
 template<> ::Protocol::S2C_FindFriendResponse* Arena::CreateMaybeMessage<::Protocol::S2C_FindFriendResponse>(Arena*);
 template<> ::Protocol::S2C_InviteFriendResponse* Arena::CreateMaybeMessage<::Protocol::S2C_InviteFriendResponse>(Arena*);
 template<> ::Protocol::S2C_JoinResponse* Arena::CreateMaybeMessage<::Protocol::S2C_JoinResponse>(Arena*);
@@ -5968,6 +5976,279 @@ class S2C_StartGameResponse final :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Protocol_2eproto;
 };
+// -------------------------------------------------------------------
+
+class C2S_EndGameRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:Protocol.C2S_EndGameRequest) */ {
+ public:
+  inline C2S_EndGameRequest() : C2S_EndGameRequest(nullptr) {}
+  explicit constexpr C2S_EndGameRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C2S_EndGameRequest(const C2S_EndGameRequest& from);
+  C2S_EndGameRequest(C2S_EndGameRequest&& from) noexcept
+    : C2S_EndGameRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline C2S_EndGameRequest& operator=(const C2S_EndGameRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C2S_EndGameRequest& operator=(C2S_EndGameRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C2S_EndGameRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C2S_EndGameRequest* internal_default_instance() {
+    return reinterpret_cast<const C2S_EndGameRequest*>(
+               &_C2S_EndGameRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    38;
+
+  friend void swap(C2S_EndGameRequest& a, C2S_EndGameRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C2S_EndGameRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C2S_EndGameRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  C2S_EndGameRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<C2S_EndGameRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyFrom;
+  inline void CopyFrom(const C2S_EndGameRequest& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl(this, from);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeFrom;
+  void MergeFrom(const C2S_EndGameRequest& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl(this, from);
+  }
+  public:
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C2S_EndGameRequest";
+  }
+  protected:
+  explicit C2S_EndGameRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:Protocol.C2S_EndGameRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S2C_EndGameResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S2C_EndGameResponse) */ {
+ public:
+  inline S2C_EndGameResponse() : S2C_EndGameResponse(nullptr) {}
+  ~S2C_EndGameResponse() override;
+  explicit constexpr S2C_EndGameResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S2C_EndGameResponse(const S2C_EndGameResponse& from);
+  S2C_EndGameResponse(S2C_EndGameResponse&& from) noexcept
+    : S2C_EndGameResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline S2C_EndGameResponse& operator=(const S2C_EndGameResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S2C_EndGameResponse& operator=(S2C_EndGameResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S2C_EndGameResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S2C_EndGameResponse* internal_default_instance() {
+    return reinterpret_cast<const S2C_EndGameResponse*>(
+               &_S2C_EndGameResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    39;
+
+  friend void swap(S2C_EndGameResponse& a, S2C_EndGameResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S2C_EndGameResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S2C_EndGameResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S2C_EndGameResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S2C_EndGameResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S2C_EndGameResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const S2C_EndGameResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S2C_EndGameResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S2C_EndGameResponse";
+  }
+  protected:
+  explicit S2C_EndGameResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kSuccessFieldNumber = 1,
+  };
+  // .google.protobuf.BoolValue success = 1;
+  bool has_success() const;
+  private:
+  bool _internal_has_success() const;
+  public:
+  void clear_success();
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue& success() const;
+  PROTOBUF_NODISCARD ::PROTOBUF_NAMESPACE_ID::BoolValue* release_success();
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* mutable_success();
+  void set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success);
+  private:
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue& _internal_success() const;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* _internal_mutable_success();
+  public:
+  void unsafe_arena_set_allocated_success(
+      ::PROTOBUF_NAMESPACE_ID::BoolValue* success);
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* unsafe_arena_release_success();
+
+  // @@protoc_insertion_point(class_scope:Protocol.S2C_EndGameResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* success_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Protocol_2eproto;
+};
 // ===================================================================
 
 
@@ -8832,9 +9113,107 @@ inline void S2C_StartGameResponse::set_allocated_success(::PROTOBUF_NAMESPACE_ID
   // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_StartGameResponse.success)
 }
 
+// -------------------------------------------------------------------
+
+// C2S_EndGameRequest
+
+// -------------------------------------------------------------------
+
+// S2C_EndGameResponse
+
+// .google.protobuf.BoolValue success = 1;
+inline bool S2C_EndGameResponse::_internal_has_success() const {
+  return this != internal_default_instance() && success_ != nullptr;
+}
+inline bool S2C_EndGameResponse::has_success() const {
+  return _internal_has_success();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_EndGameResponse::_internal_success() const {
+  const ::PROTOBUF_NAMESPACE_ID::BoolValue* p = success_;
+  return p != nullptr ? *p : reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::BoolValue&>(
+      ::PROTOBUF_NAMESPACE_ID::_BoolValue_default_instance_);
+}
+inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_EndGameResponse::success() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_EndGameResponse.success)
+  return _internal_success();
+}
+inline void S2C_EndGameResponse::unsafe_arena_set_allocated_success(
+    ::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
+  }
+  success_ = success;
+  if (success) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S2C_EndGameResponse.success)
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_EndGameResponse::release_success() {
+  
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
+  success_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_EndGameResponse::unsafe_arena_release_success() {
+  // @@protoc_insertion_point(field_release:Protocol.S2C_EndGameResponse.success)
+  
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
+  success_ = nullptr;
+  return temp;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_EndGameResponse::_internal_mutable_success() {
+  
+  if (success_ == nullptr) {
+    auto* p = CreateMaybeMessage<::PROTOBUF_NAMESPACE_ID::BoolValue>(GetArenaForAllocation());
+    success_ = p;
+  }
+  return success_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_EndGameResponse::mutable_success() {
+  ::PROTOBUF_NAMESPACE_ID::BoolValue* _msg = _internal_mutable_success();
+  // @@protoc_insertion_point(field_mutable:Protocol.S2C_EndGameResponse.success)
+  return _msg;
+}
+inline void S2C_EndGameResponse::set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
+  }
+  if (success) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
+            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(success));
+    if (message_arena != submessage_arena) {
+      success = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, success, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  success_ = success;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_EndGameResponse.success)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -189,12 +189,21 @@ message S2O_InviteFriendNotification
 }
 
 
-// 게임 시작
+// 게임 시작, 종료
 message C2S_StartGameRequest
 {
 
 }
 message S2C_StartGameResponse
+{
+	google.protobuf.BoolValue success = 1;
+}
+
+message C2S_EndGameRequest
+{
+	
+}
+message S2C_EndGameResponse
 {
 	google.protobuf.BoolValue success = 1;
 }

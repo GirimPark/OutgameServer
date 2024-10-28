@@ -62,6 +62,9 @@ enum PacketID : unsigned short
 
 	C2S_START_GAME_REQUEST,
 	S2C_START_GAME_RESPONSE,
+
+	C2S_END_GAME_REQUEST,
+	S2C_END_GAME_RESPONSE,
 };
 
 enum EUserState

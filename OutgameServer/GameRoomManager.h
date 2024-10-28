@@ -22,6 +22,7 @@ public:
 	void HandleQuitRoomRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
 	void HandleInviteFriendRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
 	void HandleStartGameRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
+	void HandleEndGameRequest(std::shared_ptr<ReceiveStruct> receiveStructure);
 
 private:
 	std::shared_ptr<GameRoom> CreateGameRoom(SessionId sessionId);
@@ -29,6 +30,7 @@ private:
 	bool QuitGameRoom(SessionId sessionId);
 	bool InviteFriend(const std::string_view& username, const std::string_view& friendName);
 	bool StartGame(SessionId sessionId);
+	bool EndGame(SessionId sessionId);
 
 private:
 	static CRITICAL_SECTION s_gameRoomsLock;

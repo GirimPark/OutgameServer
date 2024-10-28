@@ -354,6 +354,8 @@ void ServerCore::ProcessThread()
 
         if(listenCtxt && listenCtxt->type == eCompletionKeyType::LISTEN_CONTEXT)
         {
+            if (nTransferredByte <= 0)
+                continue;
             HandleAcceptCompletion(nTransferredByte);
         }
         else if(session && session->GetType() == eCompletionKeyType::SESSION)
