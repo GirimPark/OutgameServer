@@ -6,7 +6,7 @@ void PacketHandler::RegisterHandler(PacketID headerType, PacketHandlerCallback c
 	auto iter = m_packetCallbacks.find(headerType);
 	if(iter != m_packetCallbacks.end())
 	{
-		LOG_CONTENTS("PacketHandler::RegisterHandler: 이미 등록된 콜백에서 대체됩니다.");
+		PRINT_CONTENTS("PacketHandler::RegisterHandler: 이미 등록된 콜백에서 대체됩니다.");
 	}
 
 	m_packetCallbacks.emplace(headerType, callback);

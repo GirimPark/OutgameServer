@@ -115,7 +115,7 @@ void OutgameServer::SendThread()
 		char* serializedPacket = PacketBuilder::Instance().Serialize(sendStruct->header->packetId, *sendStruct->data);
 		if (!serializedPacket)
 		{
-			LOG_CONTENTS("Packet Serialize Failed");
+			PRINT_CONTENTS("Packet Serialize Failed");
 			return;
 		}
 
@@ -124,20 +124,20 @@ void OutgameServer::SendThread()
 		case ESendType::UNICAST:
 			{
 			if(!m_pServerCore->Unicast(sendStruct->session, serializedPacket, sendStruct->header->length))
-				LOG_CONTENTS("Unicast Failed");
+				PRINT_CONTENTS("Unicast Failed");
 
 			break;
 			}
 		case ESendType::BROADCAST:
 			{
 			if (!m_pServerCore->Broadcast(serializedPacket, sendStruct->header->length))
-				LOG_CONTENTS("Broadcast Failed");
+				PRINT_CONTENTS("Broadcast Failed");
 
 			break;
 			}
 		default:
 			{
-			LOG_CONTENTS("Undefined Send Type");
+			PRINT_CONTENTS("Undefined Send Type");
 			break;
 			}
 		}
@@ -153,7 +153,7 @@ void OutgameServer::QuitThread()
 		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
 		{
 			TriggerShutdown();
-			printf("QuitThread() : Cleanup event triggered\n");
+			PRINT_SERVER_CORE("QuitThread() : Cleanup event triggered");
 			break;
 		}
 

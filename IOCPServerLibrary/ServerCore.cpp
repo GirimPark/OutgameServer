@@ -26,7 +26,8 @@ void ServerCore::Run()
     int rt = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (rt != 0)
     {
-        printf("WSAStartup() faild: %d\n", rt);
+        std::cerr << "WSAStartup() failed: " << rt << '\n';
+        LOG_ERROR("WSAStartup() failed: " + std::to_string(rt));
         Finalize();
         return;
     }
@@ -34,8 +35,8 @@ void ServerCore::Run()
     m_hIOCP = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
     if (m_hIOCP == NULL)
     {
-        printf("CreateIoCompletionPort() failed to create I/O completion port: %d\n",
-            GetLastError());
+        std::cerr << "CreateIoCompletionPort() failed to create I/O completion port: " << GetLastError() << '\n';
+        LOG_ERROR("CreateIoCompletionPort() failed to create I/O completion port: " + std::to_string(GetLastError()));
         Finalize();
         return;
     }
@@ -43,7 +44,8 @@ void ServerCore::Run()
     // 리슨 소켓 및 컨텍스트 생성 + acceptEx 게시
     if(!CreateListenContext())
     {
-        printf("Create Listen Socket Context failed\n");
+        std::cerr << "Create Listen Socket Context failed\n";
+        LOG_ERROR("Create Listen Socket Context failed");
         Finalize();
         return;
     }
@@ -54,7 +56,8 @@ void ServerCore::Run()
         m_IOCPThreads[i] = new std::thread(&ServerCore::ProcessThread, this);
         if(!m_IOCPThreads[i])
         {
-            printf("std::thread() failed to create process thread: %d\n", GetLastError());
+            std::cerr << "std::thread() failed to create process thread: " << GetLastError() << '\n';
+            LOG_ERROR("std::thread() failed to create process thread: " + std::to_string(GetLastError()));
             Finalize();
             return;
         }
@@ -149,24 +152,25 @@ SOCKET ServerCore::CreateSocket()
     SOCKET newSocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_IP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (newSocket == INVALID_SOCKET)
     {
-        printf("WSASocket(sdSocket) failed: %d\n", WSAGetLastError());
+        std::cerr << "WSASocket(sdSocket) failed: " << WSAGetLastError() << '\n';
+        LOG_ERROR("WSASocket(sdSocket) failed: " + std::to_string(WSAGetLastError()));
         return newSocket;
     }
 
     int zero = 0;
     int rt = setsockopt(newSocket, SOL_SOCKET, SO_SNDBUF, (char*)&zero, sizeof(zero));
-    //    int enable = 1;
-    //int rt = setsockopt(newSocket, SOL_SOCKET, SO_KEEPALIVE, (char*)&enable, sizeof(enable));
     if (rt == SOCKET_ERROR)
     {
-        printf("setsockopt(SNDBUF) failed: %d\n", WSAGetLastError());
+        std::cerr << "setsockopt(SNDBUF) failed: " << WSAGetLastError() << '\n';
+        LOG_ERROR("setsockopt(SNDBUF) failed: " + std::to_string(WSAGetLastError()));
         return newSocket;
     }
 
     if(newSocket == NULL)
     {
         closesocket(newSocket);
-        printf("create Socket failed: %d\n", GetLastError());
+        std::cerr << "create Socket failed: " << GetLastError() << '\n';
+        LOG_ERROR("create Socket failed: " + std::to_string(GetLastError()));
         return newSocket;
     }
 
@@ -182,7 +186,8 @@ bool ServerCore::CreateListenContext()
         m_pListenSocketCtxt->listenSocket = CreateListenSocket();
         if(m_pListenSocketCtxt->listenSocket == INVALID_SOCKET)
         {
-            printf("create Listen Socket failed: %d\n", GetLastError());
+            std::cerr << "create Listen Socket failed: " << GetLastError() << '\n';
+            LOG_ERROR("create Listen Socket failed: " + std::to_string(GetLastError()));
             delete m_pListenSocketCtxt;
             return false;
         }
@@ -192,14 +197,16 @@ bool ServerCore::CreateListenContext()
     else
     {
         delete m_pListenSocketCtxt;
-        printf("new ListenContext failed: %d\n", GetLastError());
+        std::cerr << "new ListenContext failed: " << GetLastError() << '\n';
+        LOG_ERROR("new ListenContext failed: " + std::to_string(GetLastError()));
         return false;
     }
 
     m_hIOCP = CreateIoCompletionPort((HANDLE)m_pListenSocketCtxt->listenSocket, m_hIOCP, (ULONG_PTR)m_pListenSocketCtxt, 0);
     if (!m_hIOCP)
     {
-        printf("CreateIoCompletionPort failed to associate socket with error: %d\n", GetLastError());
+        std::cerr << "CreateIoCompletionPort failed to associate socket with error: " << GetLastError() << '\n';
+        LOG_ERROR("CreateIoCompletionPort failed to associate socket with error: " + std::to_string(GetLastError()));
         delete m_pListenSocketCtxt;
         return false;
     }
@@ -227,13 +234,15 @@ SOCKET ServerCore::CreateListenSocket()
 
     if (getaddrinfo(NULL, m_listeningPort, &hints, &addrlocal) != 0) 
     {
-        printf("getaddrinfo() failed with error %d\n", WSAGetLastError());
+        std::cerr << "getaddrinfo() failed with error: " << WSAGetLastError() << '\n';
+        LOG_ERROR("getaddrinfo() failed with error: " + std::to_string(WSAGetLastError()));
         return NULL;
     }
 
     if (addrlocal == NULL) 
     {
-        printf("getaddrinfo() failed to resolve/convert the interface\n");
+        std::cerr << "getaddrinfo() failed to resolve/convert the interface\n";
+        LOG_ERROR("getaddrinfo() failed to resolve/convert the interface");
         return NULL;
     }
 
@@ -247,7 +256,8 @@ SOCKET ServerCore::CreateListenSocket()
     rt = bind(listenSocket, addrlocal->ai_addr, (int)addrlocal->ai_addrlen);
     if (rt == SOCKET_ERROR) 
     {
-        printf("bind() failed: %d\n", WSAGetLastError());
+        std::cerr << "bind() failed: " << WSAGetLastError() << '\n';
+        LOG_ERROR("bind() failed: " + std::to_string(WSAGetLastError()));
         freeaddrinfo(addrlocal);
         return NULL;
     }
@@ -255,7 +265,8 @@ SOCKET ServerCore::CreateListenSocket()
     rt = listen(listenSocket, m_backlog);
     if (rt == SOCKET_ERROR) 
     {
-        printf("listen() failed: %d\n", WSAGetLastError());
+        std::cerr << "listen() failed: " << WSAGetLastError() << '\n';
+        LOG_ERROR("listen() failed: " + std::to_string(WSAGetLastError()));
         freeaddrinfo(addrlocal);
         return NULL;
     }
@@ -272,7 +283,8 @@ void ServerCore::RegisterSession(Session* session)
     auto result = m_sessionMap.insert({ session->GetSessionId(), session });
     if (!result.second)
     {
-        printf("RegisterSession: 중복된 세션 등록\n");
+        std::cerr << "RegisterSession: 중복된 세션 등록\n";
+        LOG_WARNING("RegisterSession: 중복된 세션 등록");
     }
     LeaveCriticalSection(&m_sessionMapLock);
 }
@@ -290,7 +302,8 @@ void ServerCore::UnregisterSession(SessionId sessionId)
     if(!session)
     {
         LeaveCriticalSection(&m_sessionMapLock);
-        printf("UnregisterSession : invalid session\n");
+        std::cerr << "UnregisterSession : invalid session\n";
+        LOG_WARNING("UnregisterSession : invalid session");
         return;
     }
 
@@ -298,7 +311,6 @@ void ServerCore::UnregisterSession(SessionId sessionId)
     LeaveCriticalSection(&m_sessionMapLock);
 
     session->Close();
-    //delete session; // todo 풀에 반환하는 방식으로 변경
 }
 
 void ServerCore::ProcessThread()
@@ -322,27 +334,29 @@ void ServerCore::ProcessThread()
             // 비정상적 종료
             if(nTransferredByte <= 0)
             {
-                LOG_SERVER_CORE("비정상적 종료");
+                PRINT_SERVER_CORE("비정상적 종료");
                 session = reinterpret_cast<Session*>(completionKey);
                 UnregisterSession(session->GetSessionId());
             }
 
             DWORD errorCode = GetLastError();
 
-            if(GetLastError() != ERROR_NETNAME_DELETED && GetLastError() != ERROR_IO_PENDING)
+            if(!(errorCode == ERROR_NETNAME_DELETED || errorCode == ERROR_IO_PENDING
+                || errorCode == ERROR_SUCCESS || errorCode == ERROR_CONNECTION_ABORTED))
             {
-				printf("GetQueuedCompletionStatus() failed: %d\n", GetLastError());
-                LOG_WARNING("GetQueuedCompletionStatus failed : " + GetLastError());
+                LOG_WARNING("GetQueuedCompletionStatus failed : " + std::to_string(GetLastError()));
                 continue;
             }
         }
         if(!m_pListenSocketCtxt)
         {
+            std::cerr << "m_pListenSocketCtxt is nullptr\n";
             LOG_ERROR("m_pListenSocketCtxt is nullptr");
             return;
         }
         if(m_bEndServer)
         {
+            std::cerr << "m_bEndServer is true\n";
             LOG_ERROR("m_bEndServer is true");
             return;
         }
@@ -363,7 +377,7 @@ void ServerCore::ProcessThread()
             // 정상종료(클라이언트 측에서 closesocket 호출)
             if(nTransferredByte <= 0)
             {
-                LOG_SERVER_CORE("정상적 종료");
+                PRINT_SERVER_CORE("정상적 종료");
                 UnregisterSession(session->GetSessionId());
                 continue;
             }
@@ -387,13 +401,15 @@ void ServerCore::ProcessThread()
             }
             default:
             {
-                printf("정의되지 않은 IO Type\n");
+                std::cerr << "정의되지 않은 IO Type\n";
+                LOG_ERROR("정의되지 않은 IO Type");
             }
             }
         }
         else if(session->GetType() == eCompletionKeyType::SESSION && !session)
         {
-            printf("이미 해제된 세션\n");
+            std::cerr << "이미 해제된 세션\n";
+            LOG_WARNING("이미 해제된 세션");
             continue;
         }
         
@@ -420,7 +436,8 @@ void ServerCore::HandleAcceptCompletion(int nReceivedByte)
     // 수락 클라이언트 소켓 옵션 설정
     if (m_pListenSocketCtxt->acceptedSocket == INVALID_SOCKET)
     {
-        printf("HandleAcceptCompletion: acceptedSocket is invalid\n");
+        std::cerr << "HandleAcceptCompletion: acceptedSocket is invalid\n";
+        LOG_ERROR("HandleAcceptCompletion: acceptedSocket is invalid");
     	closesocket(m_pListenSocketCtxt->acceptedSocket);
         return;
     }
@@ -432,7 +449,8 @@ void ServerCore::HandleAcceptCompletion(int nReceivedByte)
         sizeof(m_pListenSocketCtxt->listenSocket));
     if (rt == SOCKET_ERROR)
     {
-        printf("setsockopt(SO_UPDATE_ACCEPT_CONTEXT) failed to update accept socket : %d\n", GetLastError());
+        std::cerr << "setsockopt(SO_UPDATE_ACCEPT_CONTEXT) failed to update accept socket : " << GetLastError() << '\n';
+        LOG_ERROR("setsockopt(SO_UPDATE_ACCEPT_CONTEXT) failed to update accept socket : " + std::to_string(GetLastError()));
         m_bEndServer = true;
         return;
     }
@@ -446,16 +464,17 @@ void ServerCore::HandleAcceptCompletion(int nReceivedByte)
     m_hIOCP = CreateIoCompletionPort((HANDLE)session->GetClientSocket(), m_hIOCP, (ULONG_PTR)session, 0);
     if (!m_hIOCP)
     {
-        printf("CreateIoCompletionPort failed to associate socket with error: %d\n", GetLastError());
+        std::cerr << "CreateIoCompletionPort failed to associate socket with error: " << GetLastError() << '\n';
+        LOG_ERROR("CreateIoCompletionPort failed to associate socket with error: " + std::to_string(GetLastError()));
         m_bEndServer = true;
         return;
     }
 
     char addr[INET_ADDRSTRLEN];
     inet_ntop(AF_INET, &localAddr->sin_addr, addr, INET_ADDRSTRLEN);
-    printf("Local Address: %s\n", addr);
+    PRINT_SERVER_CORE("AcceptCompletion Local Address: " + std::string(addr));
     inet_ntop(AF_INET, &remoteAddr->sin_addr, addr, INET_ADDRSTRLEN);
-    printf("Remote Address: %s\n", addr);
+    PRINT_SERVER_CORE("AcceptCompletion Remote Address: " + std::string(addr));
 
     // 초기데이터 처리
     OnReceiveData(session, m_pListenSocketCtxt->acceptBuffer, nReceivedByte);
@@ -543,7 +562,8 @@ bool ServerCore::StartAccept()
     m_pListenSocketCtxt->acceptedSocket = CreateSocket();
     if (m_pListenSocketCtxt->acceptedSocket == INVALID_SOCKET)
     {
-        printf("failed to create new accept socket\n");
+        std::cerr << "failed to create new accept socket\n";
+        LOG_ERROR("failed to create new accept socket");
         return false;
     }
     
@@ -559,7 +579,8 @@ bool ServerCore::StartAccept()
         &m_pListenSocketCtxt->acceptOverlapped);
     if (rt == SOCKET_ERROR && (WSAGetLastError() != ERROR_IO_PENDING))
     {
-        printf("AcceptEx() failed: %d\n", WSAGetLastError());
+        std::cerr << "AcceptEx() failed: " << WSAGetLastError() << '\n';
+        LOG_ERROR("AcceptEx() failed: " + std::to_string(WSAGetLastError()));
         closesocket(m_pListenSocketCtxt->acceptedSocket);
         m_pListenSocketCtxt->acceptedSocket = INVALID_SOCKET; // 소켓 상태 초기화
         return false;

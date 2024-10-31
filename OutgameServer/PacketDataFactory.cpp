@@ -18,7 +18,7 @@ std::shared_ptr<Payload> PacketDataFactory::CreateInstance(const std::string& cl
 		return it->second();
 	}
 
-	LOG_CONTENTS("PacketDataFactory::CreateInstance Failed");
+	PRINT_CONTENTS("PacketDataFactory::CreateInstance Failed");
 	return nullptr;
 }
 

@@ -17,7 +17,7 @@ public:
         if (it != s_activeUserMap.end()) 
             return it->second;
 
-        LOG_CONTENTS("FindActiveUser Failed: This UserId is Invalid");
+        PRINT_CONTENTS("FindActiveUser Failed: This UserId is Invalid");
     	return std::weak_ptr<User>();
     }
     static std::weak_ptr<User> FindActiveUser(const std::string_view& username)
@@ -26,7 +26,7 @@ public:
         if (it != s_activeUsername.end())
             return s_activeUserMap.find(it->second)->second;
 
-        LOG_CONTENTS("FindActiveUser Failed: This UserName is Invalid");
+        PRINT_CONTENTS("FindActiveUser Failed: This UserName is Invalid");
     	return std::weak_ptr<User>();
     }
 

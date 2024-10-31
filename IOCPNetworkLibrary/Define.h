@@ -4,5 +4,5 @@
 {\
 	std::string file = __FILE__;\
 	file = file.substr(file.find_last_of("/\\") + 1);\
-	printf("[NetworkCore] FILE : %s, LINE : %d\n[NetworkCore] MESSAGE : %s\n\n", file.c_str(), __LINE__, message);\
+	std::cout<<"[NetworkCore] FILE : "<<file.c_str()<<", LINE : "<<__LINE__<<"\n[NetworkCore] MESSAGE : "<<(message)<<std::endl<<std::endl;\
 }

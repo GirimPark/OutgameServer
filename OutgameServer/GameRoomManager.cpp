@@ -50,7 +50,7 @@ void GameRoomManager::HandleCreateRoomRequest(std::shared_ptr<ReceiveStruct> rec
 	auto createRoomRequest = std::make_shared<Protocol::C2S_CreateRoomRequest>();
 	if(!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *createRoomRequest))
 	{
-		LOG_CONTENTS("C2S_CREATE_ROOM_REQUEST: PakcetBuilder::Deserialize() failed");
+		PRINT_CONTENTS("C2S_CREATE_ROOM_REQUEST: PakcetBuilder::Deserialize() failed");
 		return;
 	}
 
@@ -85,7 +85,7 @@ void GameRoomManager::HandleJoinRoomRequest(std::shared_ptr<ReceiveStruct> recei
 	auto joinRoomRequest = std::make_shared<Protocol::C2S_JoinRoomRequest>();
 	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *joinRoomRequest))
 	{
-		LOG_CONTENTS("C2S_JOIN_ROOM_REQUEST: PakcetBuilder::Deserialize() failed");
+		PRINT_CONTENTS("C2S_JOIN_ROOM_REQUEST: PakcetBuilder::Deserialize() failed");
 		return;
 	}
 
@@ -127,7 +127,7 @@ void GameRoomManager::HandleQuitRoomRequest(std::shared_ptr<ReceiveStruct> recei
 	auto quitRoomRequest = std::make_shared<Protocol::C2S_QuitRoomRequest>();
 	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *quitRoomRequest))
 	{
-		LOG_CONTENTS("C2S_QUIT_ROOM_REQUEST: PakcetBuilder::Deserialize() failed");
+		PRINT_CONTENTS("C2S_QUIT_ROOM_REQUEST: PakcetBuilder::Deserialize() failed");
 		return;
 	}
 
@@ -160,7 +160,7 @@ void GameRoomManager::HandleInviteFriendRequest(std::shared_ptr<ReceiveStruct> r
 	auto inviteFriendRequest = std::make_shared<Protocol::C2S_InviteFriendRequest>();
 	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *inviteFriendRequest))
 	{
-		LOG_CONTENTS("C2S_INVITE_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
+		PRINT_CONTENTS("C2S_INVITE_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
 		return;
 	}
 
@@ -194,7 +194,7 @@ void GameRoomManager::HandleStartGameRequest(std::shared_ptr<ReceiveStruct> rece
 	auto startGameRequest = std::make_shared<Protocol::C2S_StartGameRequest>();
 	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *startGameRequest))
 	{
-		LOG_CONTENTS("C2S_START_GAME_REQUEST: PakcetBuilder::Deserialize() failed");
+		PRINT_CONTENTS("C2S_START_GAME_REQUEST: PakcetBuilder::Deserialize() failed");
 		return;
 	}
 
@@ -227,7 +227,7 @@ void GameRoomManager::HandleEndGameRequest(std::shared_ptr<ReceiveStruct> receiv
 	auto endGameRequest = std::make_shared<Protocol::C2S_EndGameRequest>();
 	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *endGameRequest))
 	{
-		LOG_CONTENTS("C2S_END_GAME_REQUEST: PakcetBuilder::Deserialize() failed");
+		PRINT_CONTENTS("C2S_END_GAME_REQUEST: PakcetBuilder::Deserialize() failed");
 		return;
 	}
 

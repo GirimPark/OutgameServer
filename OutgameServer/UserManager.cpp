@@ -124,7 +124,7 @@ void UserManager::HandleLoginRequest(std::shared_ptr<ReceiveStruct> receiveStruc
 	auto loginRequest = std::make_shared<Protocol::C2S_LoginRequest>();
 	if(!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *loginRequest))
 	{
-		LOG_CONTENTS("C2S_LOGIN_REQUEST: PakcetBuilder::Deserialize() failed");
+		PRINT_CONTENTS("C2S_LOGIN_REQUEST: PakcetBuilder::Deserialize() failed");
 		return;
 	}
 
@@ -177,10 +177,10 @@ void UserManager::HandleLogoutRequest(std::shared_ptr<ReceiveStruct> receiveStru
 {
 	if(!LogoutUser(receiveStructure->session))
 	{
-		LOG_CONTENTS("Logout User Failed");
+		PRINT_CONTENTS("Logout User Failed");
 		return;
 	}
-	LOG_CONTENTS("로그아웃 성공");
+	PRINT_CONTENTS("로그아웃 성공");
 
 	// 결과 송신
 	std::shared_ptr<SendStruct> sendStruct = std::make_shared<SendStruct>();
@@ -204,7 +204,7 @@ void UserManager::HandleJoinRequest(std::shared_ptr<ReceiveStruct> receiveStruct
 	auto joinRequest = std::make_shared<Protocol::C2S_JoinRequest>();
 	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *joinRequest))
 	{
-		LOG_CONTENTS("C2S_JOIN_REQUEST: PakcetBuilder::Deserialize() failed");
+		PRINT_CONTENTS("C2S_JOIN_REQUEST: PakcetBuilder::Deserialize() failed");
 		return;
 	}
 
@@ -253,7 +253,7 @@ void UserManager::HandleFindFriendRequest(std::shared_ptr<ReceiveStruct> receive
 	auto findFriendRequest = std::make_shared<Protocol::C2S_FindFriendRequest>();
 	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *findFriendRequest))
 	{
-		LOG_CONTENTS("C2S_FIND_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
+		PRINT_CONTENTS("C2S_FIND_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
 		return;
 	}
 
@@ -292,7 +292,7 @@ void UserManager::HandleAddFriendRequest(std::shared_ptr<ReceiveStruct> receiveS
 	auto addFriendRequest = std::make_shared<Protocol::C2S_AddFriendRequest>();
 	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *addFriendRequest))
 	{
-		LOG_CONTENTS("C2S_ADD_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
+		PRINT_CONTENTS("C2S_ADD_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
 		return;
 	}
 
@@ -326,7 +326,7 @@ void UserManager::HandleCancelAddFriendRequest(std::shared_ptr<ReceiveStruct> re
 	auto cancelAddFriendRequest = std::make_shared<Protocol::C2S_CancelAddFriendRequest>();
 	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *cancelAddFriendRequest))
 	{
-		LOG_CONTENTS("C2S_CANCEL_ADD_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
+		PRINT_CONTENTS("C2S_CANCEL_ADD_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
 		return;
 	}
 
@@ -360,7 +360,7 @@ void UserManager::HandleAcceptFriendRequest(std::shared_ptr<ReceiveStruct> recei
 	auto acceptFriendRequest = std::make_shared<Protocol::C2S_AcceptFriendRequest>();
 	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *acceptFriendRequest))
 	{
-		LOG_CONTENTS("C2S_ACCEPT_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
+		PRINT_CONTENTS("C2S_ACCEPT_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
 		return;
 	}
 
@@ -397,7 +397,7 @@ void UserManager::HandleRefuseFriendRequest(std::shared_ptr<ReceiveStruct> recei
 	auto refuseFriendRequest = std::make_shared<Protocol::C2S_RefuseFriendRequest>();
 	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *refuseFriendRequest))
 	{
-		LOG_CONTENTS("C2S_REFUSE_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
+		PRINT_CONTENTS("C2S_REFUSE_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
 		return;
 	}
 
@@ -432,7 +432,7 @@ void UserManager::HandleDeleteFriendRequest(std::shared_ptr<ReceiveStruct> recei
 	auto deleteFriendRequest = std::make_shared<Protocol::C2S_DelFriendRequest>();
 	if (!PacketBuilder::Instance().DeserializeData(receiveStructure->data, receiveStructure->nReceivedByte, *(receiveStructure->header), *deleteFriendRequest))
 	{
-		LOG_CONTENTS("C2S_DEL_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
+		PRINT_CONTENTS("C2S_DEL_FRIEND_REQUEST: PakcetBuilder::Deserialize() failed");
 		return;
 	}
 
@@ -489,7 +489,7 @@ void UserManager::CreateActiveUser(Session* session, std::string_view name)
 	getFriendBind.BindCol(1, outState);
 	if(!getFriendBind.Execute())
 	{
-		LOG_CONTENTS("getFriendBind.Execute() Failed");
+		PRINT_CONTENTS("getFriendBind.Execute() Failed");
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
 		return;
 	}
@@ -511,7 +511,7 @@ void UserManager::CreateActiveUser(Session* session, std::string_view name)
 	getPendingBind.BindCol(1, outState);
 	if (!getPendingBind.Execute())
 	{
-		LOG_CONTENTS("getPendingBind.Execute() Failed");
+		PRINT_CONTENTS("getPendingBind.Execute() Failed");
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
 		return;
 	}
@@ -547,14 +547,14 @@ bool UserManager::AuthenticateUser(Session* session, const std::string_view& use
 
 	if (!loginRequestBind.Execute())
 	{
-		LOG_CONTENTS("loginRequest Execute Failed");
+		PRINT_CONTENTS("loginRequest Execute Failed");
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
 		return false;
 	}
 
 	if (loginRequestBind.Fetch() != DB_RESULT::SUCCESS)
 	{
-		LOG_CONTENTS("유효하지 않은 ID");
+		PRINT_CONTENTS("유효하지 않은 ID");
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
 		return false;
 	}
@@ -569,20 +569,20 @@ bool UserManager::AuthenticateUser(Session* session, const std::string_view& use
 		// 로그인 중인지 확인
 		if (outState == EUserState::ONLINE || outState == EUserState::IN_GAME)
 		{
-			LOG_CONTENTS("로그인 중인 계정");
+			PRINT_CONTENTS("로그인 중인 계정");
 			return false;
 		}
 		else
 		{
 			// 새 유저 생성, 로그인
 			CreateActiveUser(session, username);
-			LOG_CONTENTS("로그인 성공");
+			PRINT_CONTENTS("로그인 성공");
 			return true;
 		}
 	}
 	else
 	{
-		LOG_CONTENTS("유효하지 않은 Password");
+		PRINT_CONTENTS("유효하지 않은 Password");
 		return false;
 	}
 #else
@@ -638,14 +638,14 @@ bool UserManager::IsAvailableID(const std::string_view& username, const std::str
 
 	if (!joinRequestBind.Execute())
 	{
-		LOG_CONTENTS("joinRequest Execute Failed");
+		PRINT_CONTENTS("joinRequest Execute Failed");
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
 		return false;
 	}
 
 	if (joinRequestBind.Fetch() != DB_RESULT::DB_NO_DATA)
 	{
-		LOG_CONTENTS("중복된 ID");
+		PRINT_CONTENTS("중복된 ID");
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
 		return false;
 	}
@@ -777,7 +777,7 @@ bool UserManager::CancelAddFriend(const std::string_view& username, const std::s
 	cancelRequestBind.BindParam(1, wFriendName.c_str(), wFriendName.size());
 	if (!cancelRequestBind.Execute())
 	{
-		LOG_DB("cancelRequestBind Execute Failed");
+		PRINT_DB("cancelRequestBind Execute Failed");
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
 		return false;
 	}
@@ -825,7 +825,7 @@ bool UserManager::AcceptFriend(const std::string_view& username, const std::stri
 	if (!insertFriendBind.Execute())
 	{
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
-		LOG_DB("insertFriendBind Execute Failed");
+		PRINT_DB("insertFriendBind Execute Failed");
 		return false;
 	}
 
@@ -836,7 +836,7 @@ bool UserManager::AcceptFriend(const std::string_view& username, const std::stri
 	if(!updateMutualBind.Execute())
 	{
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
-		LOG_DB("updateMutualBind Execute Failed");
+		PRINT_DB("updateMutualBind Execute Failed");
 		return false;
 	}
 
@@ -847,13 +847,13 @@ bool UserManager::AcceptFriend(const std::string_view& username, const std::stri
 	if(!checkStateBind.Execute())
 	{
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
-		LOG_DB("checkStateBind Execute Failed");
+		PRINT_DB("checkStateBind Execute Failed");
 		return false;
 	}
 	if(checkStateBind.Fetch() != DB_RESULT::SUCCESS)
 	{
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
-		LOG_DB("checkStateBind Fetch Failed");
+		PRINT_DB("checkStateBind Fetch Failed");
 		return false;
 	}
 
@@ -907,7 +907,7 @@ bool UserManager::RefuseFriend(const std::string_view& username, const std::stri
 
 	if(!deleteRequestBind.Execute())
 	{
-		LOG_DB("deleteRequestBind Execute Failed");
+		PRINT_DB("deleteRequestBind Execute Failed");
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
 		return false;
 	}
@@ -933,7 +933,7 @@ bool UserManager::DeleteFriend(const std::string_view& username, const std::stri
 
 	if (!deleteFriendBind.Execute())
 	{
-		LOG_DB("deleteFriendBind Execute Failed");
+		PRINT_DB("deleteFriendBind Execute Failed");
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
 		return false;
 	}

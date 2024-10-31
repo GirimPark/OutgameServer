@@ -66,7 +66,7 @@ void User::RemoveFriend(const std::string_view& friendName)
 	auto it = m_friendList.find(std::string(friendName.begin(), friendName.end()));
 	if(it == m_friendList.end())
 	{
-		LOG_CONTENTS("RemoveFriend Failed: FriendName is Invalid");
+		PRINT_CONTENTS("RemoveFriend Failed: FriendName is Invalid");
 		return;
 	}
 	m_friendList.erase(it);
@@ -77,7 +77,7 @@ void User::RemovePendingUser(const std::string_view& userName)
 	auto it = m_acceptPendingList.find(std::string(userName.begin(), userName.end()));
 	if (it == m_acceptPendingList.end())
 	{
-		LOG_CONTENTS("RemovePendingUser Failed: UserName is Invalid");
+		PRINT_CONTENTS("RemovePendingUser Failed: UserName is Invalid");
 		return;
 	}
 	m_acceptPendingList.erase(it);

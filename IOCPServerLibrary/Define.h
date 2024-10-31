@@ -10,18 +10,18 @@ typedef unsigned int SessionId;
 #define WVARCHAR_MAX 4000
 #define BINARY_MAX 8000
 
-#define LOG_SERVER_CORE(message) \
+#define PRINT_SERVER_CORE(message) \
 {\
 	std::string file = __FILE__;\
 	file = file.substr(file.find_last_of("/\\") + 1);\
-	printf("[ServerCore] FILE : %s, LINE : %d\n[ServerCore] MESSAGE : %s\n\n", file.c_str(), __LINE__, message);\
+	std::cout<<"[ServerCore] FILE : "<<file.c_str()<<", LINE : "<<__LINE__<<"\n[ServerCore] MESSAGE : "<<(message)<<std::endl<<std::endl;\
 }
 
-#define LOG_DB(message) \
+#define PRINT_DB(message) \
 {\
 	std::string file = __FILE__;\
 	file = file.substr(file.find_last_of("/\\") + 1);\
-	printf("[Database] FILE : %s, LINE : %d\n[Database] MESSAGE : %s\n\n", file.c_str(), __LINE__, message);\
+	std::cout<<"[Database] FILE : "<<file.c_str()<<", LINE : "<<__LINE__<<"\n[Database] MESSAGE : "<<(message)<<std::endl<<std::endl;\
 }
 
 #define CRASH(cause)						\

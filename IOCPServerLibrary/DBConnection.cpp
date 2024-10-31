@@ -9,7 +9,7 @@ bool DBConnection::Connect(SQLHENV henv, const WCHAR* connectionString)
 {
 	if (::SQLAllocHandle(SQL_HANDLE_DBC, henv, &m_connection) != SQL_SUCCESS)
 	{
-		LOG_DB("SQLHDBC : SQLAllocHandle failed");
+		PRINT_DB("SQLHDBC : SQLAllocHandle failed");
 		return false;
 	}
 
@@ -31,14 +31,14 @@ bool DBConnection::Connect(SQLHENV henv, const WCHAR* connectionString)
 		SQL_DRIVER_NOPROMPT
 	)) != (SQL_SUCCESS || SQL_SUCCESS_WITH_INFO))
 	{
-		LOG_DB("SQLDriverConnect failed");
+		PRINT_DB("SQLDriverConnect failed");
 		HandleError(rt);
 		return false;
 	}
 
 	if ((rt=::SQLAllocHandle(SQL_HANDLE_STMT, m_connection, &m_statement)) != SQL_SUCCESS)
 	{
-		LOG_DB("SQLHSTMT : SQLAllocHandle failed");
+		PRINT_DB("SQLHSTMT : SQLAllocHandle failed");
 		HandleError(rt);
 		return false;
 	}
@@ -78,13 +78,13 @@ bool DBConnection::ExecuteFile(const std::string_view fileName)
 	{
 		if(!fs::exists(filePath))
 		{
-			LOG_DB("File does not exist");
+			PRINT_DB("File does not exist");
 			return false;
 		}
 
 		std::ifstream file(filePath);
 		if (!file.is_open()) {
-			LOG_DB("Failed to open file");
+			PRINT_DB("Failed to open file");
 			return false;
 		}
 
@@ -102,7 +102,7 @@ bool DBConnection::ExecuteFile(const std::string_view fileName)
 	}
 	catch (const fs::filesystem_error& e) 
 	{
-		LOG_DB("Filesystem error");
+		PRINT_DB("Filesystem error");
 		return false;
 	}
 }
@@ -321,7 +321,7 @@ void DBConnection::HandleError(SQLRETURN rt)
 		char* msg = new char[msgLen];
 		size_t convertedLen;
 		wcstombs_s(&convertedLen, msg, msgLen, errMsg, msgLen);
-		LOG_DB(msg);
+		PRINT_DB(msg);
 		delete msg;
 
 		index++;

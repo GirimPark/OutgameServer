@@ -1,4 +1,5 @@
 #pragma once
+#include "../UtilityLibrary/Logger.h"
 
 enum class eCompletionKeyType
 {
@@ -112,7 +113,8 @@ public:
 		int rt = WSASend(clientSocket, &sendOverlapped.wsaBuffer, 1, NULL, 0, &sendOverlapped, NULL);
 		if (rt == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
 		{
-			printf("WSASend() failed: %d\n", WSAGetLastError());
+			std::cerr << "WSASend() failed: " << WSAGetLastError() << '\n';
+			LOG_ERROR("WSASend() failed: " + std::to_string(WSAGetLastError()));
 			LeaveCriticalSection(&sendLock);
 			return false;
 		}
@@ -135,7 +137,8 @@ public:
 		int rt = WSARecv(clientSocket, &recvOverlapped.wsaBuffer, 1, &bytesReceived, &flags, &recvOverlapped, NULL);
 		if (rt == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
 		{
-			printf("WSARecv() failed: %d\n", WSAGetLastError());
+			std::cerr << "WSARecv() failed: " << WSAGetLastError() << '\n';
+			LOG_ERROR("WSARecv() failed: " + std::to_string(WSAGetLastError()));
 			LeaveCriticalSection(&recvLock);
 			return false;
 		}

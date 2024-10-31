@@ -7,13 +7,13 @@ bool DBConnectionPool::Connect(int connectionCount, const WCHAR* connectionStrin
 {
 	if (::SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &m_environment) != SQL_SUCCESS)
 	{
-		LOG_DB("SQLHENV: SQLAllocHandle failed");
+		PRINT_DB("SQLHENV: SQLAllocHandle failed");
 		return false;
 	}
 
 	if(::SQLSetEnvAttr(m_environment, SQL_ATTR_ODBC_VERSION, reinterpret_cast<SQLPOINTER>(SQL_OV_ODBC3), 0) != SQL_SUCCESS)
 	{
-		LOG_DB("SQLSetEnvAttr failed");
+		PRINT_DB("SQLSetEnvAttr failed");
 		return false;
 	}
 
@@ -65,7 +65,7 @@ DBConnection* DBConnectionPool::GetConnection()
 		if ((m_getCnt - m_returnCnt) > 5)
 		{
 			LOG_WARNING("DBConnectionPool GetConnectionCount and ReturnConnectionCount have difference over 5 counts");
-			LOG_DB("DBConnectionPool GetConnectionCount and ReturnConnectionCount have difference over 5 counts");
+			PRINT_DB("DBConnectionPool GetConnectionCount and ReturnConnectionCount have difference over 5 counts");
 		}
 		std::this_thread::yield();
 	}
