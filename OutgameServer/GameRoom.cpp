@@ -58,7 +58,8 @@ bool GameRoom::Enter(std::weak_ptr<User> playerRef)
 		return false;
 
 	std::shared_ptr<User> player = playerRef.lock();
-
+	if (!player)
+		return false;
 	player->SetActiveGameRoomRef(shared_from_this());
 	m_players.insert({ player->GetName(), player });
 

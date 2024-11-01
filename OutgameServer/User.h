@@ -20,7 +20,10 @@ public:
 	void UpdateState(EUserState state);
 
 	std::weak_ptr<GameRoom> GetActiveGameRoomRef() const { return m_activeGameRoomRef; }
-	void SetActiveGameRoomRef(std::weak_ptr<GameRoom> gameRoom) { m_activeGameRoomRef = gameRoom; }
+	void SetActiveGameRoomRef(std::weak_ptr<GameRoom> gameRoom)
+	{
+		m_activeGameRoomRef = gameRoom;
+	}
 	void ResetActiveGameRoom() { m_activeGameRoomRef.reset(); }
 
 	void AppendFriend(const std::string_view& friendName, EUserState state) { m_friendList.insert({ std::string(friendName.begin(), friendName.end()), state }); }

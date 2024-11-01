@@ -62,7 +62,7 @@ void GameRoomManager::HandleCreateRoomRequest(std::shared_ptr<ReceiveStruct> rec
 	// data
 	std::shared_ptr<Protocol::S2C_CreateRoomResponse> response = std::make_shared<Protocol::S2C_CreateRoomResponse>();
 	std::shared_ptr<GameRoom> createGameRoom = CreateGameRoom(sendStruct->session->GetSessionId());
-	if(createGameRoom.get())
+	if(createGameRoom)
 	{
 		response->mutable_success()->set_value(true);
 		response->set_roomcode(createGameRoom->GetRoomCode());
@@ -264,10 +264,7 @@ std::shared_ptr<GameRoom> GameRoomManager::CreateGameRoom(SessionId sessionId)
 	std::shared_ptr<GameRoom> gameRoom = std::make_shared<GameRoom>(hostPlayer);
 
 	EnterCriticalSection(&s_gameRoomsLock);
-	auto snapshot = s_activeGameRooms;
-	LeaveCriticalSection(&s_gameRoomsLock);
-
-	while(snapshot.find(gameRoom->GetRoomCode()) != snapshot.end())
+	while(s_activeGameRooms.find(gameRoom->GetRoomCode()) != s_activeGameRooms.end())
 	{
 		gameRoom->RegenerateRoomCode();
 	}
@@ -275,7 +272,11 @@ std::shared_ptr<GameRoom> GameRoomManager::CreateGameRoom(SessionId sessionId)
 	s_activeGameRooms.insert({ gameRoom->GetRoomCode(), gameRoom });
 
 	if (!gameRoom->Enter(hostPlayer))
+	{
+		LeaveCriticalSection(&s_gameRoomsLock);
 		return nullptr;
+	}
+	LeaveCriticalSection(&s_gameRoomsLock);
 
 	return gameRoom;
 }
@@ -379,7 +380,15 @@ bool GameRoomManager::StartGame(SessionId sessionId)
 
 	// Find Room
 	EnterCriticalSection(&s_gameRoomsLock);
-	auto gameRoomIter = s_activeGameRooms.find(player->GetActiveGameRoomRef().lock()->GetRoomCode());
+	std::string roomCode = player->GetActiveGameRoomRef().lock()->GetRoomCode();
+	if (roomCode.empty())
+	{
+		LOG_ERROR("GameRoomManager::StartGame() : RoomCode is Empty");
+		PRINT_CONTENTS("GameRoomManager::StartGame() : RoomCode is Empty");
+		LeaveCriticalSection(&s_gameRoomsLock);
+		return false;
+	}
+	auto gameRoomIter = s_activeGameRooms.find(roomCode);
 	if (gameRoomIter == s_activeGameRooms.end())
 	{
 		LeaveCriticalSection(&s_gameRoomsLock);

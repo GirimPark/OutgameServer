@@ -16,6 +16,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DatabaseTable", "DatabaseTable", "{3E1F8B4E-D44E-4AC9-9816-552C81E2E310}"
 	ProjectSection(SolutionItems) = preProject
 		DatabaseTable\Friends.sql = DatabaseTable\Friends.sql
+		DatabaseTable\StoredProcedures.sql = DatabaseTable\StoredProcedures.sql
 		DatabaseTable\User.sql = DatabaseTable\User.sql
 	EndProjectSection
 EndProject
