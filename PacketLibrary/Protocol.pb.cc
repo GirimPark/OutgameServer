@@ -80,7 +80,7 @@ constexpr S2C_LoginResponse::S2C_LoginResponse(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : friendlist_()
   , pendinglist_()
-  , success_(nullptr){}
+  , response_(0){}
 struct S2C_LoginResponseDefaultTypeInternal {
   constexpr S2C_LoginResponseDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -548,7 +548,7 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_LoginResponse, success_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_LoginResponse, response_),
   PROTOBUF_FIELD_OFFSET(::Protocol::S2C_LoginResponse, friendlist_),
   PROTOBUF_FIELD_OFFSET(::Protocol::S2C_LoginResponse, pendinglist_),
   ~0u,  // no _has_bits_
@@ -887,69 +887,68 @@ const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "ionRequest\"\030\n\026C2S_ValidationResponse\" \n\036"
   "S2C_SessionExpiredNotification\"6\n\020C2S_Lo"
   "ginRequest\022\020\n\010username\030\001 \001(\t\022\020\n\010password"
-  "\030\002 \001(\t\"\225\001\n\021S2C_LoginResponse\022+\n\007success\030"
-  "\001 \001(\0132\032.google.protobuf.BoolValue\022(\n\nfri"
-  "endList\030\002 \003(\0132\024.Protocol.FriendInfo\022)\n\013p"
-  "endingList\030\003 \003(\0132\024.Protocol.FriendInfo\"\023"
-  "\n\021C2S_LogoutRequest\"\024\n\022S2C_LogoutRespons"
-  "e\"5\n\017C2S_JoinRequest\022\020\n\010username\030\001 \001(\t\022\020"
-  "\n\010password\030\002 \001(\t\"\?\n\020S2C_JoinResponse\022+\n\007"
-  "success\030\001 \001(\0132\032.google.protobuf.BoolValu"
-  "e\")\n\025C2S_FindFriendRequest\022\020\n\010username\030\001"
-  " \001(\t\"\203\001\n\026S2C_FindFriendResponse\022)\n\005exist"
-  "\030\001 \001(\0132\032.google.protobuf.BoolValue\022(\n\nfr"
-  "iendInfo\030\002 \001(\0132\024.Protocol.FriendInfo\022\024\n\014"
-  "requestState\030\003 \001(\005\"(\n\024C2S_AddFriendReque"
-  "st\022\020\n\010username\030\001 \001(\t\"D\n\025S2C_AddFriendRes"
-  "ponse\022+\n\007success\030\001 \001(\0132\032.google.protobuf"
-  ".BoolValue\"-\n\031S2O_AddFriendNotification\022"
-  "\020\n\010username\030\001 \001(\t\".\n\032C2S_CancelAddFriend"
-  "Request\022\020\n\010username\030\001 \001(\t\"J\n\033S2C_CancelA"
-  "ddFriendResponse\022+\n\007success\030\001 \001(\0132\032.goog"
-  "le.protobuf.BoolValue\"3\n\037S2O_CancelAddFr"
-  "iendNotification\022\020\n\010username\030\001 \001(\t\"3\n\027C2"
-  "S_AcceptFriendRequest\022\030\n\020acceptedUsernam"
-  "e\030\001 \001(\t\"t\n\030S2C_AcceptFriendResponse\022+\n\007s"
-  "uccess\030\001 \001(\0132\032.google.protobuf.BoolValue"
-  "\022+\n\rnewFriendInfo\030\002 \001(\0132\024.Protocol.Frien"
-  "dInfo\"K\n\034S2O_AcceptFriendNotification\022+\n"
-  "\rnewFriendInfo\030\001 \001(\0132\024.Protocol.FriendIn"
-  "fo\"2\n\027C2S_RefuseFriendRequest\022\027\n\017refused"
-  "Username\030\001 \001(\t\"`\n\030S2C_RefuseFriendRespon"
-  "se\022+\n\007success\030\001 \001(\0132\032.google.protobuf.Bo"
-  "olValue\022\027\n\017refusedUsername\030\002 \001(\t\"*\n\024C2S_"
-  "DelFriendRequest\022\022\n\nfriendName\030\001 \001(\t\"[\n\025"
-  "S2C_DelFriendResponse\022+\n\007success\030\001 \001(\0132\032"
-  ".google.protobuf.BoolValue\022\025\n\rdelFriendN"
-  "ame\030\002 \001(\t\"2\n\031S2O_DelFriendNotification\022\025"
-  "\n\rdelFriendName\030\001 \001(\t\"G\n\033S2O_UpdateState"
-  "Notification\022(\n\nfriendInfo\030\001 \001(\0132\024.Proto"
-  "col.FriendInfo\"\027\n\025C2S_CreateRoomRequest\""
-  "W\n\026S2C_CreateRoomResponse\022+\n\007success\030\001 \001"
-  "(\0132\032.google.protobuf.BoolValue\022\020\n\010roomCo"
-  "de\030\002 \001(\t\"\'\n\023C2S_JoinRoomRequest\022\020\n\010roomC"
-  "ode\030\001 \001(\t\"=\n\024S2C_JoinRoomResponse\022\022\n\nres"
-  "ultCode\030\001 \001(\005\022\021\n\tipAddress\030\002 \001(\t\"\025\n\023C2S_"
-  "QuitRoomRequest\"C\n\024S2C_QuitRoomResponse\022"
-  "+\n\007success\030\001 \001(\0132\032.google.protobuf.BoolV"
-  "alue\"+\n\027C2S_InviteFriendRequest\022\020\n\010usern"
-  "ame\030\001 \001(\t\"`\n\030S2C_InviteFriendResponse\022+\n"
+  "\030\002 \001(\t\"z\n\021S2C_LoginResponse\022\020\n\010response\030"
+  "\001 \001(\005\022(\n\nfriendList\030\002 \003(\0132\024.Protocol.Fri"
+  "endInfo\022)\n\013pendingList\030\003 \003(\0132\024.Protocol."
+  "FriendInfo\"\023\n\021C2S_LogoutRequest\"\024\n\022S2C_L"
+  "ogoutResponse\"5\n\017C2S_JoinRequest\022\020\n\010user"
+  "name\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\"\?\n\020S2C_Join"
+  "Response\022+\n\007success\030\001 \001(\0132\032.google.proto"
+  "buf.BoolValue\")\n\025C2S_FindFriendRequest\022\020"
+  "\n\010username\030\001 \001(\t\"\203\001\n\026S2C_FindFriendRespo"
+  "nse\022)\n\005exist\030\001 \001(\0132\032.google.protobuf.Boo"
+  "lValue\022(\n\nfriendInfo\030\002 \001(\0132\024.Protocol.Fr"
+  "iendInfo\022\024\n\014requestState\030\003 \001(\005\"(\n\024C2S_Ad"
+  "dFriendRequest\022\020\n\010username\030\001 \001(\t\"D\n\025S2C_"
+  "AddFriendResponse\022+\n\007success\030\001 \001(\0132\032.goo"
+  "gle.protobuf.BoolValue\"-\n\031S2O_AddFriendN"
+  "otification\022\020\n\010username\030\001 \001(\t\".\n\032C2S_Can"
+  "celAddFriendRequest\022\020\n\010username\030\001 \001(\t\"J\n"
+  "\033S2C_CancelAddFriendResponse\022+\n\007success\030"
+  "\001 \001(\0132\032.google.protobuf.BoolValue\"3\n\037S2O"
+  "_CancelAddFriendNotification\022\020\n\010username"
+  "\030\001 \001(\t\"3\n\027C2S_AcceptFriendRequest\022\030\n\020acc"
+  "eptedUsername\030\001 \001(\t\"t\n\030S2C_AcceptFriendR"
+  "esponse\022+\n\007success\030\001 \001(\0132\032.google.protob"
+  "uf.BoolValue\022+\n\rnewFriendInfo\030\002 \001(\0132\024.Pr"
+  "otocol.FriendInfo\"K\n\034S2O_AcceptFriendNot"
+  "ification\022+\n\rnewFriendInfo\030\001 \001(\0132\024.Proto"
+  "col.FriendInfo\"2\n\027C2S_RefuseFriendReques"
+  "t\022\027\n\017refusedUsername\030\001 \001(\t\"`\n\030S2C_Refuse"
+  "FriendResponse\022+\n\007success\030\001 \001(\0132\032.google"
+  ".protobuf.BoolValue\022\027\n\017refusedUsername\030\002"
+  " \001(\t\"*\n\024C2S_DelFriendRequest\022\022\n\nfriendNa"
+  "me\030\001 \001(\t\"[\n\025S2C_DelFriendResponse\022+\n\007suc"
+  "cess\030\001 \001(\0132\032.google.protobuf.BoolValue\022\025"
+  "\n\rdelFriendName\030\002 \001(\t\"2\n\031S2O_DelFriendNo"
+  "tification\022\025\n\rdelFriendName\030\001 \001(\t\"G\n\033S2O"
+  "_UpdateStateNotification\022(\n\nfriendInfo\030\001"
+  " \001(\0132\024.Protocol.FriendInfo\"\027\n\025C2S_Create"
+  "RoomRequest\"W\n\026S2C_CreateRoomResponse\022+\n"
   "\007success\030\001 \001(\0132\032.google.protobuf.BoolVal"
-  "ue\022\027\n\017invitedUserName\030\002 \001(\t\"B\n\034S2O_Invit"
-  "eFriendNotification\022\020\n\010username\030\001 \001(\t\022\020\n"
-  "\010roomCode\030\002 \001(\t\"\026\n\024C2S_StartGameRequest\""
-  "D\n\025S2C_StartGameResponse\022+\n\007success\030\001 \001("
-  "\0132\032.google.protobuf.BoolValue\"\024\n\022C2S_End"
-  "GameRequest\"B\n\023S2C_EndGameResponse\022+\n\007su"
-  "ccess\030\001 \001(\0132\032.google.protobuf.BoolValueb"
-  "\006proto3"
+  "ue\022\020\n\010roomCode\030\002 \001(\t\"\'\n\023C2S_JoinRoomRequ"
+  "est\022\020\n\010roomCode\030\001 \001(\t\"=\n\024S2C_JoinRoomRes"
+  "ponse\022\022\n\nresultCode\030\001 \001(\005\022\021\n\tipAddress\030\002"
+  " \001(\t\"\025\n\023C2S_QuitRoomRequest\"C\n\024S2C_QuitR"
+  "oomResponse\022+\n\007success\030\001 \001(\0132\032.google.pr"
+  "otobuf.BoolValue\"+\n\027C2S_InviteFriendRequ"
+  "est\022\020\n\010username\030\001 \001(\t\"`\n\030S2C_InviteFrien"
+  "dResponse\022+\n\007success\030\001 \001(\0132\032.google.prot"
+  "obuf.BoolValue\022\027\n\017invitedUserName\030\002 \001(\t\""
+  "B\n\034S2O_InviteFriendNotification\022\020\n\010usern"
+  "ame\030\001 \001(\t\022\020\n\010roomCode\030\002 \001(\t\"\026\n\024C2S_Start"
+  "GameRequest\"D\n\025S2C_StartGameResponse\022+\n\007"
+  "success\030\001 \001(\0132\032.google.protobuf.BoolValu"
+  "e\"\024\n\022C2S_EndGameRequest\"B\n\023S2C_EndGameRe"
+  "sponse\022+\n\007success\030\001 \001(\0132\032.google.protobu"
+  "f.BoolValueb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Protocol_2eproto_deps[1] = {
   &::descriptor_table_google_2fprotobuf_2fwrappers_2eproto,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Protocol_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Protocol_2eproto = {
-  false, false, 2447, descriptor_table_protodef_Protocol_2eproto, "Protocol.proto", 
+  false, false, 2419, descriptor_table_protodef_Protocol_2eproto, "Protocol.proto", 
   &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 1, 40,
   schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
   file_level_metadata_Protocol_2eproto, file_level_enum_descriptors_Protocol_2eproto, file_level_service_descriptors_Protocol_2eproto,
@@ -1564,19 +1563,8 @@ void C2S_LoginRequest::InternalSwap(C2S_LoginRequest* other) {
 
 class S2C_LoginResponse::_Internal {
  public:
-  static const ::PROTOBUF_NAMESPACE_ID::BoolValue& success(const S2C_LoginResponse* msg);
 };
 
-const ::PROTOBUF_NAMESPACE_ID::BoolValue&
-S2C_LoginResponse::_Internal::success(const S2C_LoginResponse* msg) {
-  return *msg->success_;
-}
-void S2C_LoginResponse::clear_success() {
-  if (GetArenaForAllocation() == nullptr && success_ != nullptr) {
-    delete success_;
-  }
-  success_ = nullptr;
-}
 S2C_LoginResponse::S2C_LoginResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
@@ -1593,16 +1581,12 @@ S2C_LoginResponse::S2C_LoginResponse(const S2C_LoginResponse& from)
       friendlist_(from.friendlist_),
       pendinglist_(from.pendinglist_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  if (from._internal_has_success()) {
-    success_ = new ::PROTOBUF_NAMESPACE_ID::BoolValue(*from.success_);
-  } else {
-    success_ = nullptr;
-  }
+  response_ = from.response_;
   // @@protoc_insertion_point(copy_constructor:Protocol.S2C_LoginResponse)
 }
 
 inline void S2C_LoginResponse::SharedCtor() {
-success_ = nullptr;
+response_ = 0;
 }
 
 S2C_LoginResponse::~S2C_LoginResponse() {
@@ -1614,7 +1598,6 @@ S2C_LoginResponse::~S2C_LoginResponse() {
 
 inline void S2C_LoginResponse::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete success_;
 }
 
 void S2C_LoginResponse::ArenaDtor(void* object) {
@@ -1635,10 +1618,7 @@ void S2C_LoginResponse::Clear() {
 
   friendlist_.Clear();
   pendinglist_.Clear();
-  if (GetArenaForAllocation() == nullptr && success_ != nullptr) {
-    delete success_;
-  }
-  success_ = nullptr;
+  response_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1648,10 +1628,10 @@ const char* S2C_LoginResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESP
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // .google.protobuf.BoolValue success = 1;
+      // int32 response = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_success(), ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          response_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1711,12 +1691,10 @@ uint8_t* S2C_LoginResponse::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .google.protobuf.BoolValue success = 1;
-  if (this->_internal_has_success()) {
+  // int32 response = 1;
+  if (this->_internal_response() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        1, _Internal::success(this), target, stream);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_response(), target);
   }
 
   // repeated .Protocol.FriendInfo friendList = 2;
@@ -1765,11 +1743,9 @@ size_t S2C_LoginResponse::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
-  // .google.protobuf.BoolValue success = 1;
-  if (this->_internal_has_success()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *success_);
+  // int32 response = 1;
+  if (this->_internal_response() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_response());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
@@ -1796,8 +1772,8 @@ void S2C_LoginResponse::MergeFrom(const S2C_LoginResponse& from) {
 
   friendlist_.MergeFrom(from.friendlist_);
   pendinglist_.MergeFrom(from.pendinglist_);
-  if (from._internal_has_success()) {
-    _internal_mutable_success()->::PROTOBUF_NAMESPACE_ID::BoolValue::MergeFrom(from._internal_success());
+  if (from._internal_response() != 0) {
+    _internal_set_response(from._internal_response());
   }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -1818,7 +1794,7 @@ void S2C_LoginResponse::InternalSwap(S2C_LoginResponse* other) {
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   friendlist_.InternalSwap(&other->friendlist_);
   pendinglist_.InternalSwap(&other->pendinglist_);
-  swap(success_, other->success_);
+  swap(response_, other->response_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_LoginResponse::GetMetadata() const {

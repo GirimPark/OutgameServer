@@ -22,7 +22,8 @@ GameRoom::~GameRoom()
 {
 	for(auto& playerIter : m_players)
 	{
-		playerIter.second.lock()->ResetActiveGameRoom();
+		if(std::shared_ptr<User> user = playerIter.second.lock())
+			user->ResetActiveGameRoom();
 	}
 
 	m_players.clear();

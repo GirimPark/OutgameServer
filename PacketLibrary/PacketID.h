@@ -75,6 +75,16 @@ enum EUserState
 	END_USER_STATE
 };
 
+enum ELoginResponse
+{
+	LOGIN_SUCCESS,
+
+	WRONG_ID,
+	WRONG_PW,
+	ALREADY_LOGIN,
+	SERVER_FAILED
+};
+
 enum ERequestState
 {
 	NON,

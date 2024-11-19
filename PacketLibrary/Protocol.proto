@@ -33,7 +33,7 @@ message C2S_LoginRequest
 }
 message S2C_LoginResponse
 {
-	google.protobuf.BoolValue success = 1;
+	int32 response = 1;
 	repeated FriendInfo friendList = 2;
 	repeated FriendInfo pendingList = 3;
 }

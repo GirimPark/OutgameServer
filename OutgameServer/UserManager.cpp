@@ -136,12 +136,15 @@ void UserManager::HandleLoginRequest(std::shared_ptr<ReceiveStruct> receiveStruc
 	// data
 	std::shared_ptr<Protocol::S2C_LoginResponse> response = std::make_shared<Protocol::S2C_LoginResponse>();
 	// 요청 데이터 인증 확인
-	if (AuthenticateUser(sendStruct->session, loginRequest->username(), loginRequest->password()))
+	ELoginResponse loginRes = AuthenticateUser(sendStruct->session, loginRequest->username(), loginRequest->password());
+	response->set_response(loginRes);
+	switch (loginRes)
 	{
-		response->mutable_success()->set_value(true);
+	case ELoginResponse::LOGIN_SUCCESS:
+		{
 		// friendList
 		std::shared_ptr<User> user = s_activeUserMap.find(sendStruct->session->GetSessionId())->second;
-		for(const auto& friendInfo : user->GetFriendListRef())
+		for (const auto& friendInfo : user->GetFriendListRef())
 		{
 			Protocol::FriendInfo* protoFriendInfo = response->add_friendlist();
 			protoFriendInfo->set_username(friendInfo.first);
@@ -157,13 +160,16 @@ void UserManager::HandleLoginRequest(std::shared_ptr<ReceiveStruct> receiveStruc
 		}
 
 		sendStruct->session->SetState(eSessionStateType::REGISTER);
-
-	}
-	else
-	{
-		response->mutable_success()->set_value(false);
+		break;
+		}
+	case ELoginResponse::WRONG_ID:
+	case ELoginResponse::WRONG_PW:
+	case ELoginResponse::ALREADY_LOGIN:
+	case ELoginResponse::SERVER_FAILED:
 		sendStruct->session->SetState(eSessionStateType::CLOSE);
+		break;
 	}
+	
 	sendStruct->data = response;
 	// header
 	std::string serializedString;
@@ -530,7 +536,7 @@ void UserManager::CreateActiveUser(Session* session, std::string_view name)
 	user->UpdateState(EUserState::ONLINE);
 }
 
-bool UserManager::AuthenticateUser(Session* session, const std::string_view& username, const std::string_view& password)
+ELoginResponse UserManager::AuthenticateUser(Session* session, const std::string_view& username, const std::string_view& password)
 {
 #ifdef DB_INCLUDE_VERSION
 	// UserDB 조회, validation 확인
@@ -549,14 +555,14 @@ bool UserManager::AuthenticateUser(Session* session, const std::string_view& use
 	{
 		PRINT_CONTENTS("loginRequest Execute Failed");
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
-		return false;
+		return ELoginResponse::SERVER_FAILED;
 	}
 
 	if (loginRequestBind.Fetch() != DB_RESULT::SUCCESS)
 	{
 		PRINT_CONTENTS("유효하지 않은 ID");
 		DBConnectionPool::Instance().ReturnConnection(dbConn);
-		return false;
+		return ELoginResponse::WRONG_ID;
 	}
 
 	DBConnectionPool::Instance().ReturnConnection(dbConn);
@@ -570,30 +576,30 @@ bool UserManager::AuthenticateUser(Session* session, const std::string_view& use
 		if (outState == EUserState::ONLINE || outState == EUserState::IN_GAME)
 		{
 			PRINT_CONTENTS("로그인 중인 계정");
-			return false;
+			return ELoginResponse::ALREADY_LOGIN;
 		}
 		else
 		{
 			// 새 유저 생성, 로그인
 			CreateActiveUser(session, username);
 			PRINT_CONTENTS("로그인 성공");
-			return true;
+			return ELoginResponse::LOGIN_SUCCESS;
 		}
 	}
 	else
 	{
 		PRINT_CONTENTS("유효하지 않은 Password");
-		return false;
+		return ELoginResponse::WRONG_PW;
 	}
 #else
 	if ((username == "host" || username == "guest")
 		&& password == "1234")
 	{
 		CreateActiveUser(session, username);
-		return true;
+		return ELoginResponse::LOGIN_SUCCESS;
 	}
 	else
-		return false;
+		return ELoginResponse::SERVER_FAILED;
 #endif
 }
 
@@ -614,7 +620,7 @@ bool UserManager::LogoutUser(Session* session)
 #endif
 
 	// active User Map에서 해당 유저 정리
-	iter->second->UpdateState(EUserState::OFFLINE);
+	iter->second->UpdateState(EUserState::OFFLINE); 
 
 	s_activeUsername.unsafe_erase(iter->second->GetName());
 	s_activeUserMap.unsafe_erase(iter);

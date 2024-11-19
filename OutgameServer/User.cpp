@@ -10,13 +10,20 @@ User::User(Session* session, std::string_view name)
 	, m_state(EUserState::ONLINE)
 
 {
+	InitializeCriticalSection(&m_userInfoLock);
+}
+
+User::~User()
+{
+	DeleteCriticalSection(&m_userInfoLock);
 }
 
 void User::UpdateState(EUserState state)
 {
-#ifdef DB_INCLUDE_VERSION
+	EnterCriticalSection(&m_userInfoLock);
 	m_state = state;
 
+#ifdef DB_INCLUDE_VERSION
 	std::wstring wUsername = std::wstring(m_name.begin(), m_name.end());
 	int dbState = state;
 	DBConnection* dbConn = DBConnectionPool::Instance().GetConnection();
@@ -59,10 +66,40 @@ void User::UpdateState(EUserState state)
 
 		OutgameServer::Instance().InsertSendTask(sendStruct);
 	}
+	LeaveCriticalSection(&m_userInfoLock);
+}
+
+void User::SetActiveGameRoomRef(std::weak_ptr<GameRoom> gameRoom)
+{
+	EnterCriticalSection(&m_userInfoLock);
+	m_activeGameRoomRef = gameRoom;
+	LeaveCriticalSection(&m_userInfoLock);
+}
+
+void User::ResetActiveGameRoom()
+{
+	EnterCriticalSection(&m_userInfoLock);
+	m_activeGameRoomRef.reset();
+	LeaveCriticalSection(&m_userInfoLock);
+}
+
+void User::AppendFriend(const std::string_view& friendName, EUserState state)
+{
+	EnterCriticalSection(&m_userInfoLock);
+	m_friendList.insert({ std::string(friendName.begin(), friendName.end()), state });
+	LeaveCriticalSection(&m_userInfoLock);
+}
+
+void User::AppendPendingUser(const std::string_view& userName, EUserState state)
+{
+	EnterCriticalSection(&m_userInfoLock);
+	m_acceptPendingList.insert({ std::string(userName.begin(), userName.end()), state });
+	LeaveCriticalSection(&m_userInfoLock);
 }
 
 void User::RemoveFriend(const std::string_view& friendName)
 {
+	EnterCriticalSection(&m_userInfoLock);
 	auto it = m_friendList.find(std::string(friendName.begin(), friendName.end()));
 	if(it == m_friendList.end())
 	{
@@ -70,10 +107,12 @@ void User::RemoveFriend(const std::string_view& friendName)
 		return;
 	}
 	m_friendList.erase(it);
+	LeaveCriticalSection(&m_userInfoLock);
 }
 
 void User::RemovePendingUser(const std::string_view& userName)
 {
+	EnterCriticalSection(&m_userInfoLock);
 	auto it = m_acceptPendingList.find(std::string(userName.begin(), userName.end()));
 	if (it == m_acceptPendingList.end())
 	{
@@ -81,4 +120,5 @@ void User::RemovePendingUser(const std::string_view& userName)
 		return;
 	}
 	m_acceptPendingList.erase(it);
+	LeaveCriticalSection(&m_userInfoLock);
 }

@@ -9,7 +9,7 @@ class User
 {
 public:
 	User(Session* session, std::string_view name);
-	~User() = default;
+	~User();
 
 	Session* GetSession() const { return m_session; }
 
@@ -20,14 +20,11 @@ public:
 	void UpdateState(EUserState state);
 
 	std::weak_ptr<GameRoom> GetActiveGameRoomRef() const { return m_activeGameRoomRef; }
-	void SetActiveGameRoomRef(std::weak_ptr<GameRoom> gameRoom)
-	{
-		m_activeGameRoomRef = gameRoom;
-	}
-	void ResetActiveGameRoom() { m_activeGameRoomRef.reset(); }
+	void SetActiveGameRoomRef(std::weak_ptr<GameRoom> gameRoom);
+	void ResetActiveGameRoom();
 
-	void AppendFriend(const std::string_view& friendName, EUserState state) { m_friendList.insert({ std::string(friendName.begin(), friendName.end()), state }); }
-	void AppendPendingUser(const std::string_view& userName, EUserState state) { m_acceptPendingList.insert({ std::string(userName.begin(), userName.end()), state }); }
+	void AppendFriend(const std::string_view& friendName, EUserState state);
+	void AppendPendingUser(const std::string_view& userName, EUserState state);
 	void RemoveFriend(const std::string_view& friendName);
 	void RemovePendingUser(const std::string_view& userName);
 
@@ -47,5 +44,7 @@ private:
 	// weak_ptr lock시 항상 유효성 확인할 것
 	std::unordered_map<std::string, EUserState> m_friendList;
 	std::unordered_map<std::string, EUserState> m_acceptPendingList;
+
+	CRITICAL_SECTION m_userInfoLock;
 };
 

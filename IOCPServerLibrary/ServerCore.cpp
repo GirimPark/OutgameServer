@@ -471,8 +471,6 @@ void ServerCore::HandleAcceptCompletion(int nReceivedByte)
     }
 
     char addr[INET_ADDRSTRLEN];
-    inet_ntop(AF_INET, &localAddr->sin_addr, addr, INET_ADDRSTRLEN);
-    PRINT_SERVER_CORE("AcceptCompletion Local Address: " + std::string(addr));
     inet_ntop(AF_INET, &remoteAddr->sin_addr, addr, INET_ADDRSTRLEN);
     PRINT_SERVER_CORE("AcceptCompletion Remote Address: " + std::string(addr));
 

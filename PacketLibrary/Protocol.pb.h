@@ -1030,7 +1030,7 @@ class S2C_LoginResponse final :
   enum : int {
     kFriendListFieldNumber = 2,
     kPendingListFieldNumber = 3,
-    kSuccessFieldNumber = 1,
+    kResponseFieldNumber = 1,
   };
   // repeated .Protocol.FriendInfo friendList = 2;
   int friendlist_size() const;
@@ -1068,23 +1068,14 @@ class S2C_LoginResponse final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::FriendInfo >&
       pendinglist() const;
 
-  // .google.protobuf.BoolValue success = 1;
-  bool has_success() const;
+  // int32 response = 1;
+  void clear_response();
+  int32_t response() const;
+  void set_response(int32_t value);
   private:
-  bool _internal_has_success() const;
+  int32_t _internal_response() const;
+  void _internal_set_response(int32_t value);
   public:
-  void clear_success();
-  const ::PROTOBUF_NAMESPACE_ID::BoolValue& success() const;
-  PROTOBUF_NODISCARD ::PROTOBUF_NAMESPACE_ID::BoolValue* release_success();
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* mutable_success();
-  void set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success);
-  private:
-  const ::PROTOBUF_NAMESPACE_ID::BoolValue& _internal_success() const;
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* _internal_mutable_success();
-  public:
-  void unsafe_arena_set_allocated_success(
-      ::PROTOBUF_NAMESPACE_ID::BoolValue* success);
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* unsafe_arena_release_success();
 
   // @@protoc_insertion_point(class_scope:Protocol.S2C_LoginResponse)
  private:
@@ -1095,7 +1086,7 @@ class S2C_LoginResponse final :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::FriendInfo > friendlist_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::FriendInfo > pendinglist_;
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* success_;
+  int32_t response_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Protocol_2eproto;
 };
@@ -6453,90 +6444,24 @@ inline void C2S_LoginRequest::set_allocated_password(std::string* password) {
 
 // S2C_LoginResponse
 
-// .google.protobuf.BoolValue success = 1;
-inline bool S2C_LoginResponse::_internal_has_success() const {
-  return this != internal_default_instance() && success_ != nullptr;
+// int32 response = 1;
+inline void S2C_LoginResponse::clear_response() {
+  response_ = 0;
 }
-inline bool S2C_LoginResponse::has_success() const {
-  return _internal_has_success();
+inline int32_t S2C_LoginResponse::_internal_response() const {
+  return response_;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_LoginResponse::_internal_success() const {
-  const ::PROTOBUF_NAMESPACE_ID::BoolValue* p = success_;
-  return p != nullptr ? *p : reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::BoolValue&>(
-      ::PROTOBUF_NAMESPACE_ID::_BoolValue_default_instance_);
+inline int32_t S2C_LoginResponse::response() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_LoginResponse.response)
+  return _internal_response();
 }
-inline const ::PROTOBUF_NAMESPACE_ID::BoolValue& S2C_LoginResponse::success() const {
-  // @@protoc_insertion_point(field_get:Protocol.S2C_LoginResponse.success)
-  return _internal_success();
-}
-inline void S2C_LoginResponse::unsafe_arena_set_allocated_success(
-    ::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
-  }
-  success_ = success;
-  if (success) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S2C_LoginResponse.success)
-}
-inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_LoginResponse::release_success() {
+inline void S2C_LoginResponse::_internal_set_response(int32_t value) {
   
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
-  success_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
+  response_ = value;
 }
-inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_LoginResponse::unsafe_arena_release_success() {
-  // @@protoc_insertion_point(field_release:Protocol.S2C_LoginResponse.success)
-  
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* temp = success_;
-  success_ = nullptr;
-  return temp;
-}
-inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_LoginResponse::_internal_mutable_success() {
-  
-  if (success_ == nullptr) {
-    auto* p = CreateMaybeMessage<::PROTOBUF_NAMESPACE_ID::BoolValue>(GetArenaForAllocation());
-    success_ = p;
-  }
-  return success_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::BoolValue* S2C_LoginResponse::mutable_success() {
-  ::PROTOBUF_NAMESPACE_ID::BoolValue* _msg = _internal_mutable_success();
-  // @@protoc_insertion_point(field_mutable:Protocol.S2C_LoginResponse.success)
-  return _msg;
-}
-inline void S2C_LoginResponse::set_allocated_success(::PROTOBUF_NAMESPACE_ID::BoolValue* success) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(success_);
-  }
-  if (success) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<
-            ::PROTOBUF_NAMESPACE_ID::MessageLite>::GetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(success));
-    if (message_arena != submessage_arena) {
-      success = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, success, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  success_ = success;
-  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_LoginResponse.success)
+inline void S2C_LoginResponse::set_response(int32_t value) {
+  _internal_set_response(value);
+  // @@protoc_insertion_point(field_set:Protocol.S2C_LoginResponse.response)
 }
 
 // repeated .Protocol.FriendInfo friendList = 2;

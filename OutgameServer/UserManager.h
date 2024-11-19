@@ -49,7 +49,7 @@ private:
     // 새 유저 생성(todo 풀에서 할당 받는 형태로 변경)
     void CreateActiveUser(Session* session, std::string_view name);
     // 로그인 입력 정보 인증
-    bool AuthenticateUser(Session* session, const std::string_view& username, const std::string_view& password);
+    ELoginResponse AuthenticateUser(Session* session, const std::string_view& username, const std::string_view& password);
     // 로그아웃
     bool LogoutUser(Session* session);
     // 아이디 중복 확인
